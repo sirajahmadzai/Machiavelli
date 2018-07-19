@@ -1,4 +1,4 @@
-package Java;
+package models;
 
 public class Ace extends Card {
 

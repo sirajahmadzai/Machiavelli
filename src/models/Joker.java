@@ -1,4 +1,4 @@
-package Java;
+package models;
 
 public class Joker extends Card {
 
