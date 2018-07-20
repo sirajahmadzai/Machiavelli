@@ -5,7 +5,7 @@ import models.Suit;
 public class Joker extends Changeable {
 
     public Joker(Suit suit, int pointValue, String name, int rank) {
-        super(suit, pointValue, name,rank);
+        super(suit, pointValue, name, rank);
     }
 
 

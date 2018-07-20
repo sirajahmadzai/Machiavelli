@@ -9,5 +9,4 @@ public class Basic extends Card {
     }
 
 
-
 }
