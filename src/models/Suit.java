@@ -2,6 +2,14 @@ package models;
 
 public enum Suit {
 
-    name;
+    CLUB,
+
+    DIAMOND,
+
+    SPADE,
+
+    HEART,
+
+    JOKER
 
 }

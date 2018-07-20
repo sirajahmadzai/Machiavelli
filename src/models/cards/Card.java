@@ -29,9 +29,11 @@ public abstract class Card {
         return name;
     }
 
-    public int getRank(){
+    public int getRank() {
         return rank;
-    };
+    }
+
+    ;
 
     class InvalidCardRankException extends Exception {
         public InvalidCardRankException() {
