@@ -1,8 +1,6 @@
 package models.cards;
 
 
-import models.Suit;
-
 public abstract class Card {
 
     private Suit suit;

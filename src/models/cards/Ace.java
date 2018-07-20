@@ -1,7 +1,5 @@
 package models.cards;
 
-import models.Suit;
-
 public class Ace extends Changeable {
 
     public Ace(Suit suit, int pointValue, String name, int rank) {

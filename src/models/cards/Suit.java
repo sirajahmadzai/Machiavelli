@@ -1,4 +1,4 @@
-package models;
+package models.cards;
 
 public enum Suit {
 
