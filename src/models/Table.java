@@ -1,6 +1,7 @@
 package models;
 
-import java.lang.reflect.Array;
+import models.cards.Card;
+
 import java.util.ArrayList;
 
 public class Table {
