@@ -2,13 +2,13 @@ package models.cards;
 
 public enum Suit {
 
-    CLUB,
+    CLUBS,
 
-    DIAMOND,
+    DIAMONDS,
 
-    SPADE,
+    SPADES,
 
-    HEART,
+    HEARTS,
 
     JOKER
 
