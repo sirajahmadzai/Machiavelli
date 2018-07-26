@@ -51,12 +51,12 @@ public class Machiavelli {
         set1.getCards().addAll(set2.getCards());
     }
 
-    public void splitSet(int pos) {
-
+    public void splitSet(Set set, int pos) {
+        set.getCards().remove(pos);
     }
 
-    public Card splitSetRemove(int pos) {
-        return null;
+    public Card splitSetRemove(Set set, int pos) {
+        return set.getCards().remove(pos);
     }
 
     public void prependCard(Set set, Card card) {
@@ -93,9 +93,9 @@ public class Machiavelli {
         }
     }
 
-    private void pickPlayerTurn() {
+    private Player pickPlayerTurn() {
         int currPlayerID = (new Random()).nextInt(players.size());
+
+        return players.get(currPlayerID);
     }
-
-
 }
