@@ -1,13 +1,8 @@
 package models;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-import models.cards.Basic;
 import models.cards.Card;
-import models.cards.Joker;
-import models.cards.Suit;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 public class Machiavelli {
@@ -30,8 +25,30 @@ public class Machiavelli {
     }
 
 
-    public void mergeSet() {
+    public void drawCardFromDeck(int playerID) {
+        players.get(playerID).getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
+    }
 
+    /**
+     * remove card from the current player's hand then add it to the play area later on
+     */
+    public Card playCard(int playerID, int cardID) {
+        return players.get(playerID).getHand().remove(cardID);
+    }
+
+    /**
+     * how should cards be stored in the play area? can we use an ArrayList, that we we won't need to pass a Card parameter type
+     *
+     * @param playerID
+     * @param setID
+     * @return
+     */
+    public boolean playCardFromPlayArea(int playerID, int setID, int cardID) {
+        return players.get(playerID).getHand().add(table.getSets().get(setID).getCards().remove(cardID));
+    }
+
+    public void mergeSet(Set set1, Set set2) {
+        set1.getCards().addAll(set2.getCards());
     }
 
     public void splitSet(int pos) {
@@ -42,10 +59,12 @@ public class Machiavelli {
         return null;
     }
 
-    public void prependCard(Card card) {
+    public void prependCard(Set set, Card card) {
+        set.getCards().add(0, card);
     }
 
-    public void appendCard(Card card) {
+    public void appendCard(Set set, Card card) {
+        set.getCards().add(card);
 
     }
 
@@ -73,4 +92,10 @@ public class Machiavelli {
             }
         }
     }
+
+    private void pickPlayerTurn() {
+        int currPlayerID = (new Random()).nextInt(players.size());
+    }
+
+
 }

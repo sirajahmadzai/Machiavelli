@@ -83,4 +83,8 @@ public class Table {
         else if (rank == 15) return 20;
         else throw new InvalidArgumentException(new String[]{"Invalid rank"});
     }
+
+    public ArrayList<Set> getSets() {
+        return sets;
+    }
 }
