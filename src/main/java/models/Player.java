@@ -10,7 +10,6 @@ public class Player {
     private String name;
 
 
-
     private ArrayList<Card> hand;
     private int pointValue;
 
@@ -27,5 +26,21 @@ public class Player {
 
     public int getPlayerID() {
         return playerID;
+    }
+
+    public void setHand(ArrayList<Card> hand) {
+        this.hand = hand;
+    }
+
+    public void setPointValue(int pointValue) {
+        this.pointValue = pointValue;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPointValue() {
+        return pointValue;
     }
 }
