@@ -25,8 +25,17 @@ public class Machiavelli {
     }
 
 
+    public Table getTable() {
+        return table;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+
     public Card drawCardFromDeck() {
-       return table.getDeck().remove(table.getDeck().size() - 1);
+        return table.getDeck().remove(table.getDeck().size() - 1);
     }
 
     /**

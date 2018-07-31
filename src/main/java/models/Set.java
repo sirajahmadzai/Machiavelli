@@ -8,12 +8,15 @@ public class Set {
 
     private ArrayList<Card> cards;
 
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
 
     public Set(ArrayList<Card> cards) {
 
         this.cards = cards;
     }
+
+
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+
 }

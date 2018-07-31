@@ -87,4 +87,8 @@ public class Table {
     public ArrayList<Set> getSets() {
         return sets;
     }
+
+    public ArrayList<Card> getCardsInPlay() {
+        return cardsInPlay;
+    }
 }
