@@ -4,7 +4,10 @@ import models.cards.Suit;
 
 public class BasicTest extends TestCase {
 
-    public void testBasic(){
+    /**
+     * tests construction of Basic card object
+     */
+    public void testBasic() {
         Suit INITIAL_SUIT = Suit.CLUBS;
         int INITIAL_POINT_VALUE = 5;
         String INITIAL_NAME = "5";

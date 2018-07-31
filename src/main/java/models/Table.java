@@ -11,6 +11,9 @@ import java.util.Collections;
 
 public class Table {
 
+    /********************************
+     ******** PRIVATES **************
+     ********************************/
     private ArrayList<Card> deck;
     private ArrayList<Set> sets;
 
@@ -19,6 +22,9 @@ public class Table {
      */
     private ArrayList<Card> cardsInPlay;
 
+    /**
+     * CONSTRUCTOR
+     */
     public Table() {
         sets = new ArrayList<>();
         cardsInPlay = new ArrayList<>();
@@ -26,10 +32,36 @@ public class Table {
     }
 
 
+    /**
+     * gets deck
+     *
+     * @return
+     */
     public ArrayList<Card> getDeck() {
         return deck;
     }
 
+    /**
+     * gets sets
+     *
+     * @return
+     */
+    public ArrayList<Set> getSets() {
+        return sets;
+    }
+
+    /**
+     * gets cardsInPlay
+     *
+     * @return
+     */
+    public ArrayList<Card> getCardsInPlay() {
+        return cardsInPlay;
+    }
+
+    /**
+     * creates a deck from two standard decks
+     */
     private void initMachiavelliDeck() {
         //2 heart of 2s
         //2 spade of 2s
@@ -41,6 +73,11 @@ public class Table {
         shuffleDeck();
     }
 
+    /**
+     * generates a standard deck
+     *
+     * @return
+     */
     private ArrayList<Card> generateStandardDeck() {
         ArrayList<Card> standardDeck = new ArrayList<>();
         for (int rank = 1; rank <= 14; rank++) {
@@ -63,10 +100,20 @@ public class Table {
         return standardDeck;
     }
 
+    /**
+     * Shuffles the deck
+     */
     public void shuffleDeck() {
         Collections.shuffle(deck);
     }
 
+    /**
+     * gets cardName by rank
+     *
+     * @param rank
+     * @return
+     * @throws InvalidArgumentException
+     */
     private String getCardNameByRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return String.valueOf(rank);
         if (rank == 11) return "Jack";
@@ -76,19 +123,18 @@ public class Table {
         else throw new InvalidArgumentException(new String[]{"invalid rank"});
     }
 
+    /**
+     * gets cardValue by rank
+     *
+     * @param rank
+     * @return
+     * @throws InvalidArgumentException
+     */
     private int getCardValueByRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return rank;
         else if (rank > 10 && rank < 14) return 10;
         else if (rank == 1 || rank == 14) return 15;
         else if (rank == 15) return 20;
         else throw new InvalidArgumentException(new String[]{"Invalid rank"});
-    }
-
-    public ArrayList<Set> getSets() {
-        return sets;
-    }
-
-    public ArrayList<Card> getCardsInPlay() {
-        return cardsInPlay;
     }
 }

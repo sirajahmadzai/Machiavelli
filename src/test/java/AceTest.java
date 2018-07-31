@@ -5,7 +5,10 @@ import models.cards.Suit;
 
 public class AceTest extends TestCase {
 
-    public void testAce(){
+    /**
+     * tests construction of Ace object
+     */
+    public void testAce() {
         Suit INITIAL_SUIT = Suit.SPADES;
         int INITIAL_POINT_VALUE = 14;
         String INITIAL_NAME = "Ace";
@@ -19,16 +22,8 @@ public class AceTest extends TestCase {
         assertEquals(INITIAL_RANK, ace.getRank());
     }
 
-    public void testGetSuit(){
-        Suit suit = Suit.HEARTS;
-        Ace ace = new Ace(suit, 15, "Ace", 14);
 
-        assertEquals(suit, ace.getSuit());
-    }
-
-
-
-    public void testChangeRank(){
+    public void testChangeRank() {
 
     }
 

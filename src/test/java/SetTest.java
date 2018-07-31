@@ -8,7 +8,10 @@ import java.util.ArrayList;
 
 public class SetTest extends TestCase {
 
-    public void testSet(){
+    /**
+     * tests construction of Set object
+     */
+    public void testSet() {
         Card card1 = new Basic(Suit.CLUBS, 5, "5", 5);
         Card card2 = new Basic(Suit.SPADES, 5, "5", 5);
         Card card3 = new Basic(Suit.HEARTS, 5, "5", 5);

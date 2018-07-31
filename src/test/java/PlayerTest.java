@@ -6,7 +6,10 @@ import java.util.ArrayList;
 
 public class PlayerTest extends TestCase {
 
-    public void testPlayer(){
+    /**
+     * tests construction of Player object
+     */
+    public void testPlayer() {
 
         //cards for testing hand
         Card card1 = new Basic(Suit.CLUBS, 5, "5", 5);
@@ -16,7 +19,6 @@ public class PlayerTest extends TestCase {
         Card card5 = new Basic(Suit.CLUBS, 7, "7", 7);
         Card card6 = new Basic(Suit.CLUBS, 8, "8", 8);
         Card card7 = new Basic(Suit.CLUBS, 9, "9", 9);
-
 
 
         int INITIAL_PLAYER_ID = 1;
