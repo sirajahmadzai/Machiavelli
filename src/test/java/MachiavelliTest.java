@@ -9,7 +9,14 @@ import java.util.ArrayList;
 
 public class MachiavelliTest extends TestCase {
 
-    public void testDrawCardFromDeck(){
+    /**
+     * tests construction of Machiavelli object
+     */
+    public void testMachiavelli() {
+
+    }
+
+    public void testDrawCardFromDeck() {
 
         Machiavelli game = new Machiavelli(2);
 
@@ -32,46 +39,45 @@ public class MachiavelliTest extends TestCase {
         assertEquals(card1, game.drawCardFromDeck());
 
 
+    }
+
+    public void testPlayCard() {
 
     }
 
-    public void testPlayCard(){
+    public void testPlayCardFromPlayArea() {
 
     }
 
-    public void testPlayCardFromPlayArea(){
+    public void testMergeSet() {
 
     }
 
-    public void testMergeSet(){
+    public void testSplitSet() {
 
     }
 
-    public void testSplitSet(){
+    public void testSplitSetRemove() {
 
     }
 
-    public void testSplitSetRemove(){
+    public void testPrependCard() {
 
     }
 
-    public void testPrependCard(){
+    public void testAppendCard() {
 
     }
 
-    public void testAppendCard(){
+    public void testVerifyTable() {
 
     }
 
-    public void testVerifyTable(){
+    public void testDealHands() {
 
     }
 
-    public void testDealHands(){
-
-    }
-
-    public void testPickPlayerTurn(){
+    public void testPickPlayerTurn() {
         Player p1 = new Player(0, "Siraj");
         Player p2 = new Player(1, "Steph");
         Player p3 = new Player(2, "player3");

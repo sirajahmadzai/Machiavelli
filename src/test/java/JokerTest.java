@@ -4,13 +4,16 @@ import models.cards.Suit;
 
 public class JokerTest extends TestCase {
 
-    public void testJoker(){
+    /**
+     * tests construction of Joker object
+     */
+    public void testJoker() {
         Suit suit = Suit.JOKER;
         int pointValue = 20;
         String name = "Joker";
         int rank = 15;
 
-        Joker joker = new Joker(suit,20,name,rank);
+        Joker joker = new Joker(suit, 20, name, rank);
 
         assertEquals(suit, joker.getSuit());
         assertEquals(pointValue, joker.getPointValue());
@@ -18,7 +21,7 @@ public class JokerTest extends TestCase {
         assertEquals(rank, joker.getRank());
     }
 
-    public void testChangeRank(){
+    public void testChangeRank() {
 
     }
 }
