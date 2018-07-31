@@ -25,8 +25,8 @@ public class Machiavelli {
     }
 
 
-    public void drawCardFromDeck(int playerID) {
-        players.get(playerID).getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
+    public Card drawCardFromDeck() {
+       return table.getDeck().remove(table.getDeck().size() - 1);
     }
 
     /**
@@ -93,7 +93,7 @@ public class Machiavelli {
         }
     }
 
-    private Player pickPlayerTurn() {
+    public Player getRandomPlayer() {
         int currPlayerID = (new Random()).nextInt(players.size());
 
         return players.get(currPlayerID);
