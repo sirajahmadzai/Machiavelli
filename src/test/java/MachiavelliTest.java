@@ -23,14 +23,16 @@ public class MachiavelliTest extends TestCase {
 
         Table table = new Table();
         Basic card1 = new Basic(Suit.CLUBS, 10, "Jack", 10);
-        Basic card2 = new Basic(Suit.CLUBS, 10, "Queen", 10);
+        Basic card2 = new Basic(Suit.HEARTS, 10, "Queen", 10);
 
         table.getDeck().add(card1);
         table.getDeck().add(card2);
 
-        assertEquals(card1, game.drawCardFromDeck());
         assertEquals(card2, game.drawCardFromDeck());
-        
+        assertEquals(card1, game.drawCardFromDeck());
+
+
+
     }
 
     public void testPlayCard(){
