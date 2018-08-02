@@ -10,8 +10,8 @@ public class Basic extends Card {
      * @param name
      * @param rank
      */
-    public Basic(Suit suit, int pointValue, String name, int rank) {
-        super(suit, pointValue, name, rank);
+    public Basic(Suit suit, int pointValue, String name, int rank, int id) {
+        super(suit, pointValue, name, rank, id);
     }
 
 

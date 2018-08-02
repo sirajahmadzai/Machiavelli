@@ -3,9 +3,12 @@ import models.Machiavelli;
 import models.Player;
 import models.Table;
 import models.cards.Basic;
+import models.cards.Card;
 import models.cards.Suit;
+import sun.management.counter.perf.PerfLongArrayCounter;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MachiavelliTest extends TestCase {
 
@@ -13,6 +16,21 @@ public class MachiavelliTest extends TestCase {
      * tests construction of Machiavelli object
      */
     public void testMachiavelli() {
+
+        Table INITIAL_TABLE = new Table();
+
+        ArrayList<Player> INITIAL_LIST_OF_PLAYERS = new ArrayList<>();
+
+        int INITIAL_NUM_OF_PLAYERS = 2;
+
+        Machiavelli game = new Machiavelli(2);
+
+        game.setTable(INITIAL_TABLE);
+        game.setPlayers(INITIAL_LIST_OF_PLAYERS);
+
+        assertEquals(INITIAL_TABLE, game.getTable());
+        assertEquals(INITIAL_LIST_OF_PLAYERS, game.getPlayers());
+
 
     }
 
@@ -29,20 +47,30 @@ public class MachiavelliTest extends TestCase {
         players.add(p2);
 
         Table table = new Table();
-        Basic card1 = new Basic(Suit.CLUBS, 10, "Jack", 10);
-        Basic card2 = new Basic(Suit.HEARTS, 10, "Queen", 10);
+        Basic card1 = new Basic(Suit.CLUBS, 10, "Jack", 10, -1);
+        Basic card2 = new Basic(Suit.HEARTS, 10, "Queen", 10, -1);
 
         table.getDeck().add(card1);
         table.getDeck().add(card2);
 
-        assertEquals(card2, game.drawCardFromDeck());
         assertEquals(card1, game.drawCardFromDeck());
+        assertEquals(card2, game.drawCardFromDeck());
 
 
     }
 
     public void testPlayCard() {
+        int INITIAL_NUM_OF_PLAYERS = 2;
+        int INITIAL_PLAYER_ID = 1;
 
+        int INITIAL_CARD_ID = 1;
+
+        Machiavelli game = new Machiavelli(INITIAL_NUM_OF_PLAYERS);
+
+
+        Card card = game.playCard(INITIAL_PLAYER_ID, INITIAL_CARD_ID);
+
+        assertEquals(INITIAL_CARD_ID, card.getId());
     }
 
     public void testPlayCardFromPlayArea() {
@@ -78,20 +106,26 @@ public class MachiavelliTest extends TestCase {
     }
 
     public void testPickPlayerTurn() {
+        int INITIAL_NUM = 1;
         Player p1 = new Player(0, "Siraj");
         Player p2 = new Player(1, "Steph");
         Player p3 = new Player(2, "player3");
         Player p4 = new Player(3, "player4");
         ArrayList<Player> players = new ArrayList<>();
 
-        players.add(0, p1);
-        players.add(1, p2);
-        players.add(2, p3);
-        players.add(3, p4);
+        players.add(p1);
+        players.add(p2);
+        players.add(p3);
+        players.add(p4);
+
 
         Machiavelli game = new Machiavelli(4);
-        assertEquals(p1, game.getRandomPlayer());
+        INITIAL_NUM = game.getRandomPlayer().getPlayerID();
 
+        if (INITIAL_NUM == 0) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
+        else if (INITIAL_NUM == 1) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
+        else if (INITIAL_NUM == 2) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
+        else if (INITIAL_NUM == 3) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
 
     }
 

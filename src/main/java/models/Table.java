@@ -93,20 +93,26 @@ public class Table {
      */
     private ArrayList<Card> generateStandardDeck() {
         ArrayList<Card> standardDeck = new ArrayList<>();
+        int cardID = 0;
         for (int rank = 1; rank <= 14; rank++) {
             try {
-                standardDeck.add(new Basic(Suit.CLUBS, getCardValueByRank(rank), getCardNameByRank(rank), rank));
-                standardDeck.add(new Basic(Suit.DIAMONDS, getCardValueByRank(rank), getCardNameByRank(rank), rank));
-                standardDeck.add(new Basic(Suit.HEARTS, getCardValueByRank(rank), getCardNameByRank(rank), rank));
-                standardDeck.add(new Basic(Suit.SPADES, getCardValueByRank(rank), getCardNameByRank(rank), rank));
+                standardDeck.add(new Basic(Suit.CLUBS, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                cardID++;
+                standardDeck.add(new Basic(Suit.DIAMONDS, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                cardID++;
+                standardDeck.add(new Basic(Suit.HEARTS, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                cardID++;
+                standardDeck.add(new Basic(Suit.SPADES, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                cardID++;
             } catch (InvalidArgumentException e) {
                 e.printStackTrace();
             }
         }
 
         try {
-            standardDeck.add(new Joker(Suit.JOKER, getCardValueByRank(15), "Joker", 15));
-            standardDeck.add(new Joker(Suit.JOKER, getCardValueByRank(15), "Joker", 15));
+            standardDeck.add(new Joker(Suit.JOKER, getCardValueByRank(15), "Joker", 15, cardID));
+            cardID++;
+            standardDeck.add(new Joker(Suit.JOKER, getCardValueByRank(15), "Joker", 15, cardID));
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
@@ -154,14 +160,14 @@ public class Table {
     public boolean decksDifferent(Table table1, Table tabl2) {
         for (int j = 0; j < 104; j++) {
 
-            if (!table1.getCard(j).equals(tabl2.getCard(j))) return true;
+            if (!table1.getCardByIndex(j).equals(tabl2.getCardByIndex(j))) return true;
 
         }
 
         return false;
     }
 
-    public Card getCard(int j) {
+    public Card getCardByIndex(int j) {
         return deck.get(j);
     }
 

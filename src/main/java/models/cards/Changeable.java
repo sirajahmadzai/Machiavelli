@@ -10,8 +10,8 @@ public abstract class Changeable extends Card {
      * @param name
      * @param rank
      */
-    public Changeable(Suit suit, int pointValue, String name, int rank) {
-        super(suit, pointValue, name, rank);
+    public Changeable(Suit suit, int pointValue, String name, int rank, int id) {
+        super(suit, pointValue, name, rank, id);
     }
 
     /**

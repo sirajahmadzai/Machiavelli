@@ -10,8 +10,8 @@ public class Joker extends Changeable {
      * @param name
      * @param rank
      */
-    public Joker(Suit suit, int pointValue, String name, int rank) {
-        super(suit, pointValue, name, rank);
+    public Joker(Suit suit, int pointValue, String name, int rank, int id) {
+        super(suit, pointValue, name, rank, id);
     }
 
 

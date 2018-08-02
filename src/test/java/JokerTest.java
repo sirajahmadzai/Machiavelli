@@ -13,7 +13,7 @@ public class JokerTest extends TestCase {
         String name = "Joker";
         int rank = 15;
 
-        Joker joker = new Joker(suit, 20, name, rank);
+        Joker joker = new Joker(suit, 20, name, rank, -1);
 
         assertEquals(suit, joker.getSuit());
         assertEquals(pointValue, joker.getPointValue());

@@ -12,10 +12,10 @@ public class SetTest extends TestCase {
      * tests construction of Set object
      */
     public void testSet() {
-        Card card1 = new Basic(Suit.CLUBS, 5, "5", 5);
-        Card card2 = new Basic(Suit.SPADES, 5, "5", 5);
-        Card card3 = new Basic(Suit.HEARTS, 5, "5", 5);
-        Card card4 = new Basic(Suit.DIAMONDS, 5, "5", 5);
+        Card card1 = new Basic(Suit.CLUBS, 5, "5", 5, -1);
+        Card card2 = new Basic(Suit.SPADES, 5, "5", 5, -1);
+        Card card3 = new Basic(Suit.HEARTS, 5, "5", 5, -1);
+        Card card4 = new Basic(Suit.DIAMONDS, 5, "5", 5, -1);
         ArrayList<Card> INITAL_CARDS = new ArrayList<>();
 
         INITAL_CARDS.add(card1);

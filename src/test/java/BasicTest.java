@@ -13,7 +13,7 @@ public class BasicTest extends TestCase {
         String INITIAL_NAME = "5";
         int INITIAL_RANK = 5;
 
-        Basic basicCard = new Basic(INITIAL_SUIT, INITIAL_POINT_VALUE, INITIAL_NAME, INITIAL_RANK);
+        Basic basicCard = new Basic(INITIAL_SUIT, INITIAL_POINT_VALUE, INITIAL_NAME, INITIAL_RANK, -1);
 
         assertEquals(INITIAL_SUIT, basicCard.getSuit());
         assertEquals(INITIAL_POINT_VALUE, basicCard.getPointValue());

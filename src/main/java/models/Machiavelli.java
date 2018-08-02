@@ -51,6 +51,14 @@ public class Machiavelli {
         return players;
     }
 
+    public void setTable(Table table) {
+        this.table = table;
+    }
+
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
 
     /***************************************
      *************** HELPERS **************

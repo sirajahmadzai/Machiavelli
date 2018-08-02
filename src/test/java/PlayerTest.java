@@ -12,13 +12,13 @@ public class PlayerTest extends TestCase {
     public void testPlayer() {
 
         //cards for testing hand
-        Card card1 = new Basic(Suit.CLUBS, 5, "5", 5);
-        Card card2 = new Ace(Suit.CLUBS, 14, "Ace", 14);
-        Card card3 = new Joker(Suit.JOKER, 15, "Joker", 15);
-        Card card4 = new Basic(Suit.CLUBS, 6, "6", 6);
-        Card card5 = new Basic(Suit.CLUBS, 7, "7", 7);
-        Card card6 = new Basic(Suit.CLUBS, 8, "8", 8);
-        Card card7 = new Basic(Suit.CLUBS, 9, "9", 9);
+        Card card1 = new Basic(Suit.CLUBS, 5, "5", 5, -1);
+        Card card2 = new Ace(Suit.CLUBS, 14, "Ace", 14, -1);
+        Card card3 = new Joker(Suit.JOKER, 15, "Joker", 15, -1);
+        Card card4 = new Basic(Suit.CLUBS, 6, "6", 6, -1);
+        Card card5 = new Basic(Suit.CLUBS, 7, "7", 7, -1);
+        Card card6 = new Basic(Suit.CLUBS, 8, "8", 8, -1);
+        Card card7 = new Basic(Suit.CLUBS, 9, "9", 9, -1);
 
 
         int INITIAL_PLAYER_ID = 1;
