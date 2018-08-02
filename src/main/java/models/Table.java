@@ -26,6 +26,7 @@ public class Table {
      * CONSTRUCTOR
      */
     public Table() {
+        deck = new ArrayList<>();
         sets = new ArrayList<>();
         cardsInPlay = new ArrayList<>();
         initMachiavelliDeck();
@@ -57,6 +58,18 @@ public class Table {
      */
     public ArrayList<Card> getCardsInPlay() {
         return cardsInPlay;
+    }
+
+    public void setDeck(ArrayList<Card> deck) {
+        this.deck = deck;
+    }
+
+    public void setSets(ArrayList<Set> sets) {
+        this.sets = sets;
+    }
+
+    public void setCardsInPlay(ArrayList<Card> cardsInPlay) {
+        this.cardsInPlay = cardsInPlay;
     }
 
     /**
@@ -114,7 +127,7 @@ public class Table {
      * @return
      * @throws InvalidArgumentException
      */
-    private String getCardNameByRank(int rank) throws InvalidArgumentException {
+    public String getCardNameByRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return String.valueOf(rank);
         if (rank == 11) return "Jack";
         else if (rank == 12) return "Queen";
@@ -130,11 +143,27 @@ public class Table {
      * @return
      * @throws InvalidArgumentException
      */
-    private int getCardValueByRank(int rank) throws InvalidArgumentException {
+    public int getCardValueByRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return rank;
         else if (rank > 10 && rank < 14) return 10;
         else if (rank == 1 || rank == 14) return 15;
         else if (rank == 15) return 20;
         else throw new InvalidArgumentException(new String[]{"Invalid rank"});
     }
+
+    public boolean decksDifferent(Table table1, Table tabl2) {
+        for (int j = 0; j < 104; j++) {
+
+            if (!table1.getCard(j).equals(tabl2.getCard(j))) return true;
+
+        }
+
+        return false;
+    }
+
+    public Card getCard(int j) {
+        return deck.get(j);
+    }
+
+
 }
