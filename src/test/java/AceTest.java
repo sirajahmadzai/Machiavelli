@@ -14,7 +14,7 @@ public class AceTest extends TestCase {
         String INITIAL_NAME = "Ace";
         int INITIAL_RANK = 14;
 
-        Ace ace = new Ace(INITIAL_SUIT, INITIAL_POINT_VALUE, INITIAL_NAME, INITIAL_RANK);
+        Ace ace = new Ace(INITIAL_SUIT, INITIAL_POINT_VALUE, INITIAL_NAME, INITIAL_RANK, -1);
 
         assertEquals(INITIAL_SUIT, ace.getSuit());
         assertEquals(INITIAL_POINT_VALUE, ace.getPointValue());

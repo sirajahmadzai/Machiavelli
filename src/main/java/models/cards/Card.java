@@ -10,6 +10,7 @@ public abstract class Card {
     private Suit suit;
     private int pointValue;
     private String name;
+    private int id;
 
     /******************************
      ********** PROTECTEDS ********
@@ -24,11 +25,12 @@ public abstract class Card {
      * @param name
      * @param rank
      */
-    public Card(Suit suit, int pointValue, String name, int rank) {
+    public Card(Suit suit, int pointValue, String name, int rank, int id) {
         this.suit = suit;
         this.pointValue = pointValue;
         this.name = name;
         this.rank = rank;
+        this.id = id;
     }
 
     /***************************************
@@ -46,6 +48,10 @@ public abstract class Card {
      */
     public int getPointValue() {
         return pointValue;
+    }
+
+    public int getId() {
+        return id;
     }
 
     /**
