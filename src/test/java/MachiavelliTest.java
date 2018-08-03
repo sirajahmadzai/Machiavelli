@@ -1,6 +1,8 @@
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import junit.framework.TestCase;
 import models.Machiavelli;
 import models.Player;
+import models.Set;
 import models.Table;
 import models.cards.Basic;
 import models.cards.Card;
@@ -90,11 +92,32 @@ public class MachiavelliTest extends TestCase {
     }
 
     public void testPrependCard() {
+        ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
+
+        Set INITIAL_SET = new Set(INITIAL_LIST_OF_CARDS);
+
+        Card CARD_TO_ADD = new Basic(Suit.DIAMONDS, 5, "5", 5, 1);
+
+        Machiavelli game = new Machiavelli(2);
+
+        game.appendCard(INITIAL_SET, CARD_TO_ADD);
+
+        assertEquals(CARD_TO_ADD, INITIAL_SET.getCards().get(0));
 
     }
 
     public void testAppendCard() {
+        ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
 
+        Set INITIAL_SET = new Set(INITIAL_LIST_OF_CARDS);
+
+        Card CARD_TO_ADD = new Basic(Suit.DIAMONDS, 5, "5", 5, 1);
+
+        Machiavelli game = new Machiavelli(2);
+
+        game.appendCard(INITIAL_SET, CARD_TO_ADD);
+
+        assertEquals(CARD_TO_ADD, INITIAL_SET.getCards().get(INITIAL_SET.getCards().size() - 1));
     }
 
     public void testVerifyTable() {
@@ -105,27 +128,7 @@ public class MachiavelliTest extends TestCase {
 
     }
 
-    public void testPickPlayerTurn() {
-        int INITIAL_NUM = 1;
-        Player p1 = new Player(0, "Siraj");
-        Player p2 = new Player(1, "Steph");
-        Player p3 = new Player(2, "player3");
-        Player p4 = new Player(3, "player4");
-        ArrayList<Player> players = new ArrayList<>();
-
-        players.add(p1);
-        players.add(p2);
-        players.add(p3);
-        players.add(p4);
-
-
-        Machiavelli game = new Machiavelli(4);
-        INITIAL_NUM = game.getRandomPlayer().getPlayerID();
-
-        if (INITIAL_NUM == 0) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
-        else if (INITIAL_NUM == 1) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
-        else if (INITIAL_NUM == 2) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
-        else if (INITIAL_NUM == 3) assertEquals(players.get(INITIAL_NUM), game.getRandomPlayer());
+    public void testGetRandomPlayer() {
 
     }
 
