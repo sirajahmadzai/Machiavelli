@@ -96,23 +96,25 @@ public class Table {
         int cardID = 0;
         for (int rank = 1; rank <= 14; rank++) {
             try {
-                standardDeck.add(new Basic(Suit.CLUBS, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.CLUBS, rank, cardID));
                 cardID++;
-                standardDeck.add(new Basic(Suit.DIAMONDS, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.DIAMONDS, rank, cardID));
                 cardID++;
-                standardDeck.add(new Basic(Suit.HEARTS, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.HEARTS, rank, cardID));
                 cardID++;
-                standardDeck.add(new Basic(Suit.SPADES, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.SPADES, rank, cardID));
                 cardID++;
             } catch (InvalidArgumentException e) {
                 e.printStackTrace();
             }
         }
 
+
         try {
-            standardDeck.add(new Joker(Suit.JOKER, standardDeck.get(cardID).getCardValueByRank(15), "Joker", 15, cardID));
+            int rank = 15;
+            standardDeck.add(new Joker(Suit.JOKER, rank, cardID));
             cardID++;
-            standardDeck.add(new Joker(Suit.JOKER, standardDeck.get(cardID).getCardValueByRank(15), "Joker", 15, cardID));
+            standardDeck.add(new Joker(Suit.JOKER, rank, cardID));
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }

@@ -1,17 +1,18 @@
 package models.cards;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 public class Joker extends Changeable {
+
 
     /**
      * CONSTRUCTOR
      *
      * @param suit
-     * @param pointValue
-     * @param name
      * @param rank
      */
-    public Joker(Suit suit, int pointValue, String name, int rank, int id) {
-        super(suit, pointValue, name, rank, id);
+    public Joker(Suit suit, int rank, int id) throws InvalidArgumentException {
+        super(suit, rank, id);
     }
 
 

@@ -1,17 +1,24 @@
 package models.cards;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 public abstract class Changeable extends Card {
 
+    private int initialRank;
     /**
      * CONSTRUCTOR
      *
      * @param suit
-     * @param pointValue
-     * @param name
+
      * @param rank
      */
-    public Changeable(Suit suit, int pointValue, String name, int rank, int id) {
-        super(suit, pointValue, name, rank, id);
+    public Changeable(Suit suit, int rank, int id) throws InvalidArgumentException {
+        super(suit, rank, id);
+        initialRank = rank;
+    }
+
+    public int getInitialRank(){
+        return initialRank;
     }
 
     /**
@@ -21,4 +28,5 @@ public abstract class Changeable extends Card {
      * @throws InvalidCardRankException
      */
     public abstract void changeRank(int rank) throws InvalidCardRankException;
+
 }
