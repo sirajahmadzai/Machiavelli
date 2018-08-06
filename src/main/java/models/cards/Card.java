@@ -23,14 +23,14 @@ public abstract class Card {
      * CONSTRUCTOR
      *
      * @param suit
-     * @param pointValue
-     * @param name
      * @param rank
+     * @param id
      */
-    public Card(Suit suit, int pointValue, String name, int rank, int id) {
+    public Card(Suit suit, int rank, int id) throws InvalidArgumentException {
+        if (suit == null) throw new InvalidArgumentException(new String[]{"Suit was null"});
         this.suit = suit;
-        this.pointValue = pointValue;
-        this.name = name;
+        this.pointValue = getCardValueByInitialRank(rank);
+        this.name = getCardNameByInitialRank(rank);
         this.rank = rank;
         this.id = id;
     }
@@ -77,12 +77,13 @@ public abstract class Card {
      * @return
      * @throws InvalidArgumentException
      */
-    public String getCardNameByRank(int rank) throws InvalidArgumentException {
+    private String getCardNameByInitialRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return String.valueOf(rank);
         if (rank == 11) return "Jack";
         else if (rank == 12) return "Queen";
         else if (rank == 13) return "King";
         else if (rank == 1 || rank == 14) return "Ace";
+        else if (rank == 15) return "Joker";
         else throw new InvalidArgumentException(new String[]{"invalid rank"});
     }
 
@@ -93,7 +94,7 @@ public abstract class Card {
      * @return
      * @throws InvalidArgumentException
      */
-    public int getCardValueByRank(int rank) throws InvalidArgumentException {
+    private int getCardValueByInitialRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return rank;
         else if (rank > 10 && rank < 14) return 10;
         else if (rank == 1 || rank == 14) return 15;

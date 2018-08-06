@@ -1,17 +1,17 @@
 package models.cards;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 public class Basic extends Card {
 
     /**
      * CONSTRUCTOR
      *
      * @param suit
-     * @param pointValue
-     * @param name
      * @param rank
      */
-    public Basic(Suit suit, int pointValue, String name, int rank, int id) {
-        super(suit, pointValue, name, rank, id);
+    public Basic(Suit suit, int rank, int id) throws InvalidArgumentException {
+        super(suit, rank, id);
     }
 
 
