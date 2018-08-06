@@ -12,19 +12,19 @@ public class SetTest extends TestCase {
      * tests construction of Set object
      */
     public void testSet() {
-        Card card1 = new Basic(Suit.CLUBS, 5, "5", 5, -1);
-        Card card2 = new Basic(Suit.SPADES, 5, "5", 5, -1);
-        Card card3 = new Basic(Suit.HEARTS, 5, "5", 5, -1);
-        Card card4 = new Basic(Suit.DIAMONDS, 5, "5", 5, -1);
-        ArrayList<Card> INITAL_CARDS = new ArrayList<>();
+        final Card CARD1 = new Basic(Suit.CLUBS, 5, "5", 5, -1);
+        final Card CARD2 = new Basic(Suit.SPADES, 5, "5", 5, -1);
+        final Card CARD3 = new Basic(Suit.HEARTS, 5, "5", 5, -1);
+        final Card CARD4 = new Basic(Suit.DIAMONDS, 5, "5", 5, -1);
+        final ArrayList<Card> INITIAL_CARDS = new ArrayList<>();
 
-        INITAL_CARDS.add(card1);
-        INITAL_CARDS.add(card2);
-        INITAL_CARDS.add(card3);
-        INITAL_CARDS.add(card4);
+        INITIAL_CARDS.add(CARD1);
+        INITIAL_CARDS.add(CARD2);
+        INITIAL_CARDS.add(CARD3);
+        INITIAL_CARDS.add(CARD4);
 
-        Set set = new Set(INITAL_CARDS);
+        final Set INITIAL_SET = new Set(INITIAL_CARDS);
 
-        assertEquals(INITAL_CARDS, set.getCards());
+        assertEquals(INITIAL_CARDS, INITIAL_SET.getCards());
     }
 }

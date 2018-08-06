@@ -1,6 +1,8 @@
 package models.cards;
 
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 public abstract class Card {
 
     /***************************************
@@ -66,6 +68,37 @@ public abstract class Card {
      */
     public int getRank() {
         return rank;
+    }
+
+    /**
+     * gets cardName by rank
+     *
+     * @param rank
+     * @return
+     * @throws InvalidArgumentException
+     */
+    public String getCardNameByRank(int rank) throws InvalidArgumentException {
+        if (rank >= 2 && rank <= 10) return String.valueOf(rank);
+        if (rank == 11) return "Jack";
+        else if (rank == 12) return "Queen";
+        else if (rank == 13) return "King";
+        else if (rank == 1 || rank == 14) return "Ace";
+        else throw new InvalidArgumentException(new String[]{"invalid rank"});
+    }
+
+    /**
+     * gets cardValue by rank
+     *
+     * @param rank
+     * @return
+     * @throws InvalidArgumentException
+     */
+    public int getCardValueByRank(int rank) throws InvalidArgumentException {
+        if (rank >= 2 && rank <= 10) return rank;
+        else if (rank > 10 && rank < 14) return 10;
+        else if (rank == 1 || rank == 14) return 15;
+        else if (rank == 15) return 20;
+        else throw new InvalidArgumentException(new String[]{"invalid rank"});
     }
 
 

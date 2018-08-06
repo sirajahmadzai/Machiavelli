@@ -19,58 +19,58 @@ public class MachiavelliTest extends TestCase {
      */
     public void testMachiavelli() {
 
-        Table INITIAL_TABLE = new Table();
+        final Table INITIAL_TABLE = new Table();
 
-        ArrayList<Player> INITIAL_LIST_OF_PLAYERS = new ArrayList<>();
+        final ArrayList<Player> INITIAL_LIST_OF_PLAYERS = new ArrayList<>();
 
-        int INITIAL_NUM_OF_PLAYERS = 2;
+        final int NUM_OF_PLAYERS = 2;
 
-        Machiavelli game = new Machiavelli(2);
+        final Machiavelli INITIAL_GAME = new Machiavelli(NUM_OF_PLAYERS);
 
-        game.setTable(INITIAL_TABLE);
-        game.setPlayers(INITIAL_LIST_OF_PLAYERS);
+        INITIAL_GAME.setTable(INITIAL_TABLE);
+        INITIAL_GAME.setPlayers(INITIAL_LIST_OF_PLAYERS);
 
-        assertEquals(INITIAL_TABLE, game.getTable());
-        assertEquals(INITIAL_LIST_OF_PLAYERS, game.getPlayers());
+        assertEquals(INITIAL_TABLE, INITIAL_GAME.getTable());
+        assertEquals(INITIAL_LIST_OF_PLAYERS, INITIAL_GAME.getPlayers());
 
 
     }
 
     public void testDrawCardFromDeck() {
 
-        Machiavelli game = new Machiavelli(2);
+        final Machiavelli INITIAL_GAME = new Machiavelli(2);
 
-        Player p1 = new Player(0, "siraj");
-        Player p2 = new Player(1, "steph");
+        final Player PLAYER1 = new Player(0, "siraj");
+        final Player PLAYER2 = new Player(1, "steph");
 
-        ArrayList<Player> players = new ArrayList<>();
+        final ArrayList<Player> INITIAL_PLAYERS = new ArrayList<>();
 
-        players.add(p1);
-        players.add(p2);
+        INITIAL_PLAYERS.add(PLAYER1);
+        INITIAL_PLAYERS.add(PLAYER2);
 
-        Table table = new Table();
-        Basic card1 = new Basic(Suit.CLUBS, 10, "Jack", 10, -1);
-        Basic card2 = new Basic(Suit.HEARTS, 10, "Queen", 10, -1);
+        final Table INITIAL_TABLE = new Table();
+        final Basic CARD1 = new Basic(Suit.CLUBS, 10, "Jack", 10, -1);
+        final Basic CARD2 = new Basic(Suit.HEARTS, 10, "Queen", 10, -1);
 
-        table.getDeck().add(card1);
-        table.getDeck().add(card2);
+        INITIAL_TABLE.getDeck().add(CARD1);
+        INITIAL_TABLE.getDeck().add(CARD2);
 
-        assertEquals(card1, game.drawCardFromDeck());
-        assertEquals(card2, game.drawCardFromDeck());
+        assertEquals(CARD1, INITIAL_GAME.drawCardFromDeck());
+        assertEquals(CARD2, INITIAL_GAME.drawCardFromDeck());
 
 
     }
 
     public void testPlayCard() {
-        int INITIAL_NUM_OF_PLAYERS = 2;
-        int INITIAL_PLAYER_ID = 1;
+       final int INITIAL_NUM_OF_PLAYERS = 2;
+        final int INITIAL_PLAYER_ID = 1;
 
-        int INITIAL_CARD_ID = 1;
+        final int INITIAL_CARD_ID = 1;
 
-        Machiavelli game = new Machiavelli(INITIAL_NUM_OF_PLAYERS);
+        final Machiavelli INITIAL_GAME = new Machiavelli(INITIAL_NUM_OF_PLAYERS);
 
 
-        Card card = game.playCard(INITIAL_PLAYER_ID, INITIAL_CARD_ID);
+        Card card = INITIAL_GAME.playCard(INITIAL_PLAYER_ID, INITIAL_CARD_ID);
 
         assertEquals(INITIAL_CARD_ID, card.getId());
     }
@@ -92,30 +92,30 @@ public class MachiavelliTest extends TestCase {
     }
 
     public void testPrependCard() {
-        ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
+        final ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
 
-        Set INITIAL_SET = new Set(INITIAL_LIST_OF_CARDS);
+        final Set INITIAL_SET = new Set(INITIAL_LIST_OF_CARDS);
 
-        Card CARD_TO_ADD = new Basic(Suit.DIAMONDS, 5, "5", 5, 1);
+        final Card CARD_TO_ADD = new Basic(Suit.DIAMONDS, 5, "5", 5, 1);
 
-        Machiavelli game = new Machiavelli(2);
+        final Machiavelli INITIAL_GAME = new Machiavelli(2);
 
-        game.appendCard(INITIAL_SET, CARD_TO_ADD);
+        INITIAL_GAME.prependCard(INITIAL_SET, CARD_TO_ADD);
 
         assertEquals(CARD_TO_ADD, INITIAL_SET.getCards().get(0));
 
     }
 
     public void testAppendCard() {
-        ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
+        final ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
 
-        Set INITIAL_SET = new Set(INITIAL_LIST_OF_CARDS);
+        final Set INITIAL_SET = new Set(INITIAL_LIST_OF_CARDS);
 
-        Card CARD_TO_ADD = new Basic(Suit.DIAMONDS, 5, "5", 5, 1);
+        final Card CARD_TO_ADD = new Basic(Suit.DIAMONDS, 5, "5", 5, 1);
 
-        Machiavelli game = new Machiavelli(2);
+        final Machiavelli INITIAL_GAME = new Machiavelli(2);
 
-        game.appendCard(INITIAL_SET, CARD_TO_ADD);
+        INITIAL_GAME.appendCard(INITIAL_SET, CARD_TO_ADD);
 
         assertEquals(CARD_TO_ADD, INITIAL_SET.getCards().get(INITIAL_SET.getCards().size() - 1));
     }

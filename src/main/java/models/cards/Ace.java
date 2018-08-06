@@ -32,4 +32,5 @@ public class Ace extends Changeable {
             throw new InvalidCardRankException();
         }
     }
+
 }
