@@ -8,17 +8,17 @@ public class JokerTest extends TestCase {
      * tests construction of Joker object
      */
     public void testJoker() {
-        Suit suit = Suit.JOKER;
-        int pointValue = 20;
-        String name = "Joker";
-        int rank = 15;
+        final Suit suit = Suit.JOKER;
+        final int pointValue = 20;
+        final String name = "Joker";
+        final int rank = 15;
 
-        Joker joker = new Joker(suit, 20, name, rank, -1);
+        final Joker JOKER_CARD = new Joker(suit, 20, name, rank, -1);
 
-        assertEquals(suit, joker.getSuit());
-        assertEquals(pointValue, joker.getPointValue());
-        assertEquals(name, joker.getName());
-        assertEquals(rank, joker.getRank());
+        assertEquals(suit, JOKER_CARD.getSuit());
+        assertEquals(pointValue, JOKER_CARD.getPointValue());
+        assertEquals(name, JOKER_CARD.getName());
+        assertEquals(rank, JOKER_CARD.getRank());
     }
 
     public void testChangeRank() {

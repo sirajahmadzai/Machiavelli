@@ -96,13 +96,13 @@ public class Table {
         int cardID = 0;
         for (int rank = 1; rank <= 14; rank++) {
             try {
-                standardDeck.add(new Basic(Suit.CLUBS, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.CLUBS, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
                 cardID++;
-                standardDeck.add(new Basic(Suit.DIAMONDS, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.DIAMONDS, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
                 cardID++;
-                standardDeck.add(new Basic(Suit.HEARTS, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.HEARTS, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
                 cardID++;
-                standardDeck.add(new Basic(Suit.SPADES, getCardValueByRank(rank), getCardNameByRank(rank), rank, cardID));
+                standardDeck.add(new Basic(Suit.SPADES, standardDeck.get(cardID).getCardValueByRank(rank), standardDeck.get(cardID).getCardNameByRank(rank), rank, cardID));
                 cardID++;
             } catch (InvalidArgumentException e) {
                 e.printStackTrace();
@@ -110,9 +110,9 @@ public class Table {
         }
 
         try {
-            standardDeck.add(new Joker(Suit.JOKER, getCardValueByRank(15), "Joker", 15, cardID));
+            standardDeck.add(new Joker(Suit.JOKER, standardDeck.get(cardID).getCardValueByRank(15), "Joker", 15, cardID));
             cardID++;
-            standardDeck.add(new Joker(Suit.JOKER, getCardValueByRank(15), "Joker", 15, cardID));
+            standardDeck.add(new Joker(Suit.JOKER, standardDeck.get(cardID).getCardValueByRank(15), "Joker", 15, cardID));
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
@@ -126,36 +126,6 @@ public class Table {
         Collections.shuffle(deck);
     }
 
-    /**
-     * gets cardName by rank
-     *
-     * @param rank
-     * @return
-     * @throws InvalidArgumentException
-     */
-    public String getCardNameByRank(int rank) throws InvalidArgumentException {
-        if (rank >= 2 && rank <= 10) return String.valueOf(rank);
-        if (rank == 11) return "Jack";
-        else if (rank == 12) return "Queen";
-        else if (rank == 13) return "King";
-        else if (rank == 1 || rank == 14) return "Ace";
-        else throw new InvalidArgumentException(new String[]{"invalid rank"});
-    }
-
-    /**
-     * gets cardValue by rank
-     *
-     * @param rank
-     * @return
-     * @throws InvalidArgumentException
-     */
-    public int getCardValueByRank(int rank) throws InvalidArgumentException {
-        if (rank >= 2 && rank <= 10) return rank;
-        else if (rank > 10 && rank < 14) return 10;
-        else if (rank == 1 || rank == 14) return 15;
-        else if (rank == 15) return 20;
-        else throw new InvalidArgumentException(new String[]{"Invalid rank"});
-    }
 
     public boolean decksDifferent(Table table1, Table tabl2) {
         for (int j = 0; j < 104; j++) {
