@@ -62,7 +62,7 @@ public class MachiavelliTest extends TestCase {
     }
 
     public void testPlayCard() {
-       final int INITIAL_NUM_OF_PLAYERS = 2;
+        final int INITIAL_NUM_OF_PLAYERS = 2;
         final int INITIAL_PLAYER_ID = 1;
 
         final int INITIAL_CARD_ID = 1;
