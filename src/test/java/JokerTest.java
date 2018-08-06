@@ -1,3 +1,4 @@
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import junit.framework.TestCase;
 import models.cards.Joker;
 import models.cards.Suit;
@@ -13,12 +14,19 @@ public class JokerTest extends TestCase {
         final String name = "Joker";
         final int rank = 15;
 
-        final Joker JOKER_CARD = new Joker(suit, 20, name, rank, -1);
 
-        assertEquals(suit, JOKER_CARD.getSuit());
-        assertEquals(pointValue, JOKER_CARD.getPointValue());
-        assertEquals(name, JOKER_CARD.getName());
-        assertEquals(rank, JOKER_CARD.getRank());
+        try {
+           final Joker JOKER_CARD = new Joker(suit, rank, -1);
+
+            assertEquals(suit, JOKER_CARD.getSuit());
+            assertEquals(pointValue, JOKER_CARD.getPointValue());
+            assertEquals(name, JOKER_CARD.getName());
+            assertEquals(rank, JOKER_CARD.getRank());
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void testChangeRank() {
