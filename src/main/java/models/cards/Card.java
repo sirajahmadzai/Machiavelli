@@ -77,7 +77,7 @@ public abstract class Card {
      * @return
      * @throws InvalidArgumentException
      */
-    private String getCardNameByInitialRank(int rank) throws InvalidArgumentException {
+    String getCardNameByInitialRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return String.valueOf(rank);
         if (rank == 11) return "Jack";
         else if (rank == 12) return "Queen";
@@ -94,7 +94,7 @@ public abstract class Card {
      * @return
      * @throws InvalidArgumentException
      */
-    private int getCardValueByInitialRank(int rank) throws InvalidArgumentException {
+    int getCardValueByInitialRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return rank;
         else if (rank > 10 && rank < 14) return 10;
         else if (rank == 1 || rank == 14) return 15;
