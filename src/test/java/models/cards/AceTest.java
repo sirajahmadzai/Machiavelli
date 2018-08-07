@@ -67,7 +67,7 @@ public class AceTest {
         final int INITIAL_RANK = 1;
         final int INITIAL_ID = 1;
 
-        Ace ACE_CARD;
+        final Ace ACE_CARD;
 
         try {
             ACE_CARD = new Ace(INITIAL_SUIT, INITIAL_RANK, INITIAL_ID);

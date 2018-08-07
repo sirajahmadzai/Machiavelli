@@ -1,20 +1,16 @@
-import com.sun.javaws.exceptions.InvalidArgumentException;
-import junit.framework.TestCase;
-import models.Set;
-import models.Table;
-import models.cards.Basic;
-import models.cards.Card;
-import models.cards.Suit;
+package models;
 
+import models.cards.Card;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class TableTest extends TestCase {
+import static org.junit.Assert.*;
 
-    /**
-     * tests construction of Table object
-     */
-    public void testTable() {
+public class TableTest {
+
+    @Test
+    public void testConstructor() {
         final ArrayList<Card> INITIAL_DECK = new ArrayList<>();
         final ArrayList<Set> INITIAL_SETS = new ArrayList<>();
         final ArrayList<Card> INITIAL_CARDS_IN_PLAY = new ArrayList<>();
@@ -27,23 +23,33 @@ public class TableTest extends TestCase {
         assertEquals(INITIAL_DECK, table.getDeck());
         assertEquals(INITIAL_SETS, table.getSets());
         assertEquals(INITIAL_CARDS_IN_PLAY, table.getCardsInPlay());
-
     }
 
-    public void testInitMachiavelliDeck() {
-
+    @Test
+    public void setDeck() {
     }
 
-    public void testGenerateStandardDeck() {
-
+    @Test
+    public void setSets() {
     }
 
-    public void testShuffleDeck() {
+    @Test
+    public void setCardsInPlay() {
+    }
+
+    @Test
+    public void shuffleDeck() {
         final Table table = new Table();
         table.shuffleDeck();
         Table table2 = new Table();
         assertTrue(table.decksDifferent(table, table2));
     }
 
+    @Test
+    public void decksDifferent() {
+    }
 
+    @Test
+    public void getCardByIndex() {
+    }
 }
