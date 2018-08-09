@@ -3,12 +3,13 @@ package models.cards;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class JokerTest {
 
     @Test
-    public void testConstructor(){
+    public void testConstructor() {
         final Suit INITIAL_SUIT = Suit.JOKER;
         final int INITIAL_RANK = 15;
         final int INITIAL_ID = 1;
@@ -20,16 +21,17 @@ public class JokerTest {
             final String EXPECTED_NAME = "Joker";
 
 
-            assertEquals("getSuit() != INITIAL_SUIT",INITIAL_SUIT, JOKER_CARD.getSuit());
+            assertEquals("getSuit() != INITIAL_SUIT", INITIAL_SUIT, JOKER_CARD.getSuit());
             assertEquals("getPointValue() != EXPECTED_POINT_VALUE", EXPECTED_POINT_VALUE, JOKER_CARD.getPointValue());
-            assertEquals("getName() != EXPECTED_NAME",EXPECTED_NAME, JOKER_CARD.getName());
-            assertEquals("getRank() != INITIAL_RANK",INITIAL_RANK, JOKER_CARD.getRank());
-            assertEquals("getId() != INITIAL_ID",INITIAL_ID, JOKER_CARD.getId());
+            assertEquals("getName() != EXPECTED_NAME", EXPECTED_NAME, JOKER_CARD.getName());
+            assertEquals("getRank() != INITIAL_RANK", INITIAL_RANK, JOKER_CARD.getRank());
+            assertEquals("getId() != INITIAL_ID", INITIAL_ID, JOKER_CARD.getId());
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
 
     }
+
     @Test
     public void changeRank() {
         final Suit INITIAL_SUIT = Suit.JOKER;
