@@ -4,7 +4,7 @@ import models.cards.Card;
 
 import java.util.ArrayList;
 
-public class Set {
+public class CardSet {
 
     /********************************
      ******** PRIVATES **************
@@ -17,7 +17,7 @@ public class Set {
      *
      * @param cards
      */
-    public Set(ArrayList<Card> cards) {
+    public CardSet(ArrayList<Card> cards) {
 
         this.cards = cards;
     }
