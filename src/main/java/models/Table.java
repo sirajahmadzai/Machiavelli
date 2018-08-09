@@ -15,7 +15,7 @@ class Table {
      ******** PRIVATES **************
      ********************************/
     private ArrayList<Card> deck;
-    private ArrayList<Set> sets;
+    private ArrayList<CardSet> cardSets;
 
     /**
      * cards that have been taken from a set that have to be played
@@ -27,7 +27,7 @@ class Table {
      */
     Table() {
         deck = new ArrayList<>();
-        sets = new ArrayList<>();
+        cardSets = new ArrayList<>();
         cardsInPlay = new ArrayList<>();
         initMachiavelliDeck();
     }
@@ -43,12 +43,12 @@ class Table {
     }
 
     /**
-     * gets sets
+     * gets cardSets
      *
      * @return
      */
-    ArrayList<Set> getSets() {
-        return sets;
+    ArrayList<CardSet> getCardSets() {
+        return cardSets;
     }
 
     /**
@@ -64,8 +64,8 @@ class Table {
         this.deck = deck;
     }
 
-    void setSets(ArrayList<Set> sets) {
-        this.sets = sets;
+    void setCardSets(ArrayList<CardSet> cardSets) {
+        this.cardSets = cardSets;
     }
 
     void setCardsInPlay(ArrayList<Card> cardsInPlay) {
