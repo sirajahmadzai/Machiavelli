@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class SetTest {
+public class CardSetTest {
 
     @Test
     public void testConstructor() {
@@ -41,9 +41,9 @@ public class SetTest {
             INITIAL_CARDS.add(CARD3);
             INITIAL_CARDS.add(CARD4);
 
-            final Set INITIAL_SET = new Set(INITIAL_CARDS);
+            final CardSet INITIAL_Card_SET = new CardSet(INITIAL_CARDS);
 
-            assertEquals(INITIAL_CARDS, INITIAL_SET.getCards());
+            assertEquals(INITIAL_CARDS, INITIAL_Card_SET.getCards());
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
