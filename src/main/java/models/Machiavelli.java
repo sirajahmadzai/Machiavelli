@@ -103,7 +103,6 @@ public class Machiavelli {
     }
 
     /**
-     *
      * @param cardSet
      * @param i
      * @return
@@ -116,11 +115,11 @@ public class Machiavelli {
         CardSet result2 = new CardSet(list2);
 
         AtomicInteger count = new AtomicInteger();
-        for (Card next : cardSet.getCards()){
+        for (Card next : cardSet.getCards()) {
             int index = count.getAndIncrement();
-            if (index < i){
+            if (index < i) {
                 result1.getCards().add(next);
-            }else{
+            } else {
                 result2.getCards().add(next);
             }
         }
