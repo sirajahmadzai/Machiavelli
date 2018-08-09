@@ -9,7 +9,7 @@ import models.cards.Suit;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Table {
+class Table {
 
     /********************************
      ******** PRIVATES **************
@@ -25,7 +25,7 @@ public class Table {
     /**
      * CONSTRUCTOR
      */
-    public Table() {
+    Table() {
         deck = new ArrayList<>();
         sets = new ArrayList<>();
         cardsInPlay = new ArrayList<>();
@@ -38,7 +38,7 @@ public class Table {
      *
      * @return
      */
-    public ArrayList<Card> getDeck() {
+    ArrayList<Card> getDeck() {
         return deck;
     }
 
@@ -47,7 +47,7 @@ public class Table {
      *
      * @return
      */
-    public ArrayList<Set> getSets() {
+    ArrayList<Set> getSets() {
         return sets;
     }
 
@@ -56,19 +56,19 @@ public class Table {
      *
      * @return
      */
-    public ArrayList<Card> getCardsInPlay() {
+    ArrayList<Card> getCardsInPlay() {
         return cardsInPlay;
     }
 
-    public void setDeck(ArrayList<Card> deck) {
+    void setDeck(ArrayList<Card> deck) {
         this.deck = deck;
     }
 
-    public void setSets(ArrayList<Set> sets) {
+    void setSets(ArrayList<Set> sets) {
         this.sets = sets;
     }
 
-    public void setCardsInPlay(ArrayList<Card> cardsInPlay) {
+    void setCardsInPlay(ArrayList<Card> cardsInPlay) {
         this.cardsInPlay = cardsInPlay;
     }
 
@@ -124,12 +124,12 @@ public class Table {
     /**
      * Shuffles the deck
      */
-    public void shuffleDeck() {
+    void shuffleDeck() {
         Collections.shuffle(deck);
     }
 
 
-    public boolean decksDifferent(Table table1, Table tabl2) {
+    boolean decksDifferent(Table table1, Table tabl2) {
         for (int j = 0; j < 104; j++) {
 
             if (!table1.getCardByIndex(j).equals(tabl2.getCardByIndex(j))) return true;
@@ -139,7 +139,7 @@ public class Table {
         return false;
     }
 
-    public Card getCardByIndex(int j) {
+    private Card getCardByIndex(int j) {
         return deck.get(j);
     }
 

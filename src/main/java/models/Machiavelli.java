@@ -3,6 +3,7 @@ package models;
 import models.cards.Card;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Machiavelli {
@@ -40,22 +41,22 @@ public class Machiavelli {
      *
      * @return
      */
-    public Table getTable() {
+    Table getTable() {
         return table;
     }
 
     /**
      * @return
      */
-    public ArrayList<Player> getPlayers() {
+    ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public void setTable(Table table) {
+    void setTable(Table table) {
         this.table = table;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
+    void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
@@ -66,15 +67,15 @@ public class Machiavelli {
     /**
      * @return
      */
-    public Card drawCardFromDeck() {
+    Card drawCardFromDeck() {
         return table.getDeck().remove(table.getDeck().size() - 1);
     }
 
     /**
      * remove card from the current player's hand then add it to the play area later on
      */
-    public Card playCard(int playerID, int cardID) {
-        return players.get(playerID).getHand().remove(cardID);
+    Card playCard(int indexOfPlayer, int indexOfCard) {
+        return players.get(indexOfPlayer).getHand().remove(indexOfCard);
     }
 
     //TODO : how should cards be stored in the play area? can we use an ArrayList, that we we won't need to pass a Card parameter type
@@ -82,12 +83,12 @@ public class Machiavelli {
     /**
      * current player takes a card fro mthe playArea
      *
-     * @param playerID
-     * @param setID
+     * @param indexOfPlayer
+     * @param indexOfSet
      * @return
      */
-    public boolean playCardFromPlayArea(int playerID, int setID, int cardID) {
-        return players.get(playerID).getHand().add(table.getSets().get(setID).getCards().remove(cardID));
+    public boolean playCardFromPlayArea(int indexOfPlayer, int indexOfSet, int indexOfCard) {
+        return players.get(indexOfPlayer).getHand().add(table.getSets().get(indexOfSet).getCards().remove(indexOfCard));
     }
 
     /**
@@ -96,29 +97,35 @@ public class Machiavelli {
      * @param set1
      * @param set2
      */
-    public void mergeSet(Set set1, Set set2) {
-        set1.getCards().addAll(set2.getCards());
+    public boolean mergeSet(Set set1, Set set2) {
+       return set1.getCards().addAll(set2.getCards());
     }
 
     /**
-     * splits a set into two sets
      *
      * @param set
-     * @param pos
+     * @param from
+     * @param to
      */
-    public void splitSet(Set set, int pos) {
-        set.getCards().remove(pos);
+    Set splitSet(Set set, int from, int to) {
+    List<Card> subList = set.getCards().subList(from, to);
+
+    return new Set(new ArrayList<>(subList));
     }
 
     /**
-     * splits a set into two and removes the card at the splitting index
      *
      * @param set
-     * @param pos
+     * @param from
+     * @param to
+     * @param cardToRemove
      * @return
      */
-    public Card splitSetRemove(Set set, int pos) {
-        return set.getCards().remove(pos);
+     Set splitSetRemove(Set set, int from, int to, int cardToRemove) {
+         set.getCards().remove(cardToRemove);
+         List<Card> subList = set.getCards().subList(from, to);
+
+         return new Set(new ArrayList<>(subList));
     }
 
     /**
@@ -127,7 +134,7 @@ public class Machiavelli {
      * @param set
      * @param card
      */
-    public void prependCard(Set set, Card card) {
+    void prependCard(Set set, Card card) {
         set.getCards().add(0, card);
     }
 
@@ -137,7 +144,7 @@ public class Machiavelli {
      * @param set
      * @param card
      */
-    public void appendCard(Set set, Card card) {
+    void appendCard(Set set, Card card) {
         set.getCards().add(card);
 
     }
