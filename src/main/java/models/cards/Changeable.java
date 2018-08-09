@@ -5,11 +5,11 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 public abstract class Changeable extends Card {
 
     private int initialRank;
+
     /**
      * CONSTRUCTOR
      *
      * @param suit
-
      * @param rank
      */
     public Changeable(Suit suit, int rank, int id) throws InvalidArgumentException {
@@ -17,7 +17,7 @@ public abstract class Changeable extends Card {
         initialRank = rank;
     }
 
-    public int getInitialRank(){
+    public int getInitialRank() {
         return initialRank;
     }
 

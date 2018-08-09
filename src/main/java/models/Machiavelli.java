@@ -98,34 +98,32 @@ public class Machiavelli {
      * @param set2
      */
     public boolean mergeSet(Set set1, Set set2) {
-       return set1.getCards().addAll(set2.getCards());
+        return set1.getCards().addAll(set2.getCards());
     }
 
     /**
-     *
      * @param set
      * @param from
      * @param to
      */
     Set splitSet(Set set, int from, int to) {
-    List<Card> subList = set.getCards().subList(from, to);
+        List<Card> subList = set.getCards().subList(from, to);
 
-    return new Set(new ArrayList<>(subList));
+        return new Set(new ArrayList<>(subList));
     }
 
     /**
-     *
      * @param set
      * @param from
      * @param to
      * @param cardToRemove
      * @return
      */
-     Set splitSetRemove(Set set, int from, int to, int cardToRemove) {
-         set.getCards().remove(cardToRemove);
-         List<Card> subList = set.getCards().subList(from, to);
+    Set splitSetRemove(Set set, int from, int to, int cardToRemove) {
+        set.getCards().remove(cardToRemove);
+        List<Card> subList = set.getCards().subList(from, to);
 
-         return new Set(new ArrayList<>(subList));
+        return new Set(new ArrayList<>(subList));
     }
 
     /**
