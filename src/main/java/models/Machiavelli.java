@@ -5,6 +5,7 @@ import models.cards.Card;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Machiavelli {
 
@@ -88,62 +89,79 @@ public class Machiavelli {
      * @return
      */
     public boolean playCardFromPlayArea(int indexOfPlayer, int indexOfSet, int indexOfCard) {
-        return players.get(indexOfPlayer).getHand().add(table.getSets().get(indexOfSet).getCards().remove(indexOfCard));
+        return players.get(indexOfPlayer).getHand().add(table.getCardSets().get(indexOfSet).getCards().remove(indexOfCard));
     }
 
     /**
      * merges two sets
      *
-     * @param set1
-     * @param set2
+     * @param cardSet1
+     * @param cardSet2
      */
-    public boolean mergeSet(Set set1, Set set2) {
-        return set1.getCards().addAll(set2.getCards());
+    public boolean mergeSet(CardSet cardSet1, CardSet cardSet2) {
+        return cardSet1.getCards().addAll(cardSet2.getCards());
     }
 
     /**
-     * @param set
-     * @param from
-     * @param to
+     *
+     * @param cardSet
+     * @param i
+     * @return
      */
-    Set splitSet(Set set, int from, int to) {
-        List<Card> subList = set.getCards().subList(from, to);
+    void splitSet(CardSet cardSet, int i) {
 
-        return new Set(new ArrayList<>(subList));
+        ArrayList<Card> list1 = new ArrayList<>();
+        ArrayList<Card> list2 = new ArrayList<>();
+        CardSet result1 = new CardSet(list1);
+        CardSet result2 = new CardSet(list2);
+
+        AtomicInteger count = new AtomicInteger();
+        for (Card next : cardSet.getCards()){
+            int index = count.getAndIncrement();
+            if (index < i){
+                result1.getCards().add(next);
+            }else{
+                result2.getCards().add(next);
+            }
+        }
+        ArrayList<CardSet> listOfCardSets = new ArrayList<>();
+        listOfCardSets.add(result1);
+        listOfCardSets.add(result2);
+        table.setCardSets(listOfCardSets);
     }
 
     /**
-     * @param set
+     * @param cardSet
      * @param from
      * @param to
      * @param cardToRemove
      * @return
      */
-    Set splitSetRemove(Set set, int from, int to, int cardToRemove) {
-        set.getCards().remove(cardToRemove);
-        List<Card> subList = set.getCards().subList(from, to);
+    CardSet splitSetRemove(CardSet cardSet, int from, int to, int cardToRemove) {
+        cardSet.getCards().remove(cardToRemove);
+        List<Card> subList = cardSet.getCards().subList(from, to);
 
-        return new Set(new ArrayList<>(subList));
+        return new CardSet(new ArrayList<>(subList));
     }
 
     /**
      * add a card to the front
      *
-     * @param set
+     * @param cardSet
      * @param card
      */
-    void prependCard(Set set, Card card) {
-        set.getCards().add(0, card);
+    void prependCard(CardSet cardSet, Card card) {
+        cardSet.getCards().add(0, card);
     }
 
     /**
      * add a card to the back
      *
-     * @param set
+     * @param cardSet
      * @param card
      */
-    void appendCard(Set set, Card card) {
-        set.getCards().add(card);
+    void appendCard(CardSet cardSet, Card card) {
+        cardSet.getCards().add(card);
 
     }
 
