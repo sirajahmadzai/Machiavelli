@@ -1,9 +1,7 @@
 package models;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
-import models.cards.Basic;
-import models.cards.Card;
-import models.cards.Suit;
+import models.cards.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,19 +13,11 @@ public class MachiavelliTest {
 
     @Test
     public void testConstructor() {
-        final Table INITIAL_TABLE = new Table();
-
-        final ArrayList<Player> INITIAL_LIST_OF_PLAYERS = new ArrayList<>();
-
         final int NUM_OF_PLAYERS = 2;
 
-        final Machiavelli INITIAL_GAME = new Machiavelli(NUM_OF_PLAYERS);
+        final Machiavelli GAME = new Machiavelli(NUM_OF_PLAYERS);
 
-        INITIAL_GAME.setTable(INITIAL_TABLE);
-        INITIAL_GAME.setPlayers(INITIAL_LIST_OF_PLAYERS);
-
-        assertEquals("getTable() != INITIAL_TABLE", INITIAL_TABLE, INITIAL_GAME.getTable());
-        assertEquals("getPlayers() != INITIAL_LIST_OF_PLAYERS", INITIAL_LIST_OF_PLAYERS, INITIAL_GAME.getPlayers());
+//        TODO: prove the game has players, table and deals hannds
     }
 
 
@@ -68,18 +58,18 @@ public class MachiavelliTest {
         final Machiavelli GAME = new Machiavelli(NUM_OF_PLAYERS);
 
         final int PLAYER1_ID = 0;
-        final int PLAYER2_ID = 1;
+//        final int PLAYER2_ID = 1;
 
         final String PLAYER1_NAME = "siraj";
-        final String PLAYER2_NAME = "steph";
+//        final String PLAYER2_NAME = "steph";
 
         final Player PLAYER1 = new Player(PLAYER1_ID, PLAYER1_NAME);
-        final Player PLAYER2 = new Player(PLAYER2_ID, PLAYER2_NAME);
+//        final Player PLAYER2 = new Player(PLAYER2_ID, PLAYER2_NAME);
 
         final ArrayList<Player> PLAYERS = new ArrayList<>();
 
         PLAYERS.add(PLAYER1);
-        PLAYERS.add(PLAYER2);
+//        PLAYERS.add(PLAYER2);
 
         GAME.setPlayers(PLAYERS);
 
@@ -104,15 +94,19 @@ public class MachiavelliTest {
             TABLE.getDeck().add(CARD1);
             TABLE.getDeck().add(CARD2);
 
-            assertEquals("drawCardFromDeck() != CARD1", CARD2, GAME.drawCardFromDeck());
-            assertEquals("drawCardFromDeck() != CARD2", CARD1, GAME.drawCardFromDeck());
+            assertEquals("", CARD2, TABLE.getDeck().get(TABLE.getDeck().size() - 1));
+
+            GAME.drawCardFromDeck(PLAYER1);
+
+            assertEquals("drawCardFromDeck() != CARD1", -1, TABLE.getDeck().indexOf(CARD2));
+            assertEquals("", CARD2, GAME.getPlayers().get(PLAYER1_ID).getHand().get(GAME.getPlayers().get(PLAYER1_ID).getHand().size() - 1));
         } catch (InvalidArgumentException e) {
             fail("Unexpected Exception");
         }
     }
 
     @Test
-    public void playCard() {
+    public void removeCardFromHand() {
         final int INITIAL_NUM_OF_PLAYERS = 2;
 
         final int INITIAL_PLAYER_ID = 1;
@@ -144,8 +138,16 @@ public class MachiavelliTest {
             final int INDEX_OF_EXPECTED_CARD = 0;
 
             GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(EXPECTED_CARD);
+            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(new Joker(Suit.JOKER, 15, 2));
+            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(new Ace(Suit.CLUBS, 14, 3));
 
-            assertEquals(EXPECTED_CARD, GAME.playCard(INDEX_OF_PLAYER1, INDEX_OF_EXPECTED_CARD));
+            assertEquals("", EXPECTED_CARD, GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().get(INDEX_OF_EXPECTED_CARD));
+
+            final Card CARD_REMOVED = GAME.removeCardFromHand(INDEX_OF_PLAYER1, INDEX_OF_EXPECTED_CARD);
+
+            assertEquals(EXPECTED_CARD, CARD_REMOVED);
+
+            assertEquals("", -1, GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().indexOf(EXPECTED_CARD));
         } catch (InvalidArgumentException e) {
             fail("Unexpected Exception");
         }
@@ -153,67 +155,72 @@ public class MachiavelliTest {
 
     }
 
+//    @Test
+//    public void playCardFromPlayArea() {
+//
+//        final int NUM_OF_PLAYERS = 2;
+//
+//        final int PLAYER_ID = 1;
+//
+//        final int CARD_ID = 1;
+//
+//        final Suit SUIT = Suit.CLUBS;
+//
+//        final int RANK = 5;
+//
+//        final String PLAYER_NAME = "PLAYER1";
+//
+//        final Player PLAYER1 = new Player(PLAYER_ID, PLAYER_NAME);
+//
+//        final ArrayList<Player> players = new ArrayList<>();
+//
+//        players.add(PLAYER1);
+//
+//        try {
+//
+//            final Card EXPECTED_CARD = new Basic(SUIT, RANK, CARD_ID);
+//
+//            final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
+//
+//            LIST_OF_CARDS.add(EXPECTED_CARD);
+//
+//            final Machiavelli GAME = new Machiavelli(NUM_OF_PLAYERS);
+//
+//            GAME.setPlayers(players);
+//
+//            final Table TABLE = new Table();
+//
+//            final CardSet CARD_SET = new CardSet(LIST_OF_CARDS);
+//
+//            final ArrayList<CardSet> LIST_OF_CARD_SETS = new ArrayList<>();
+//
+//            LIST_OF_CARD_SETS.add(CARD_SET);
+//
+//            TABLE.setCardSets(LIST_OF_CARD_SETS);
+//
+//            GAME.setTable(TABLE);
+//
+//            final int INDEX_OF_PLAYER1 = 0;
+//
+//            final int INDEX_OF_EXPECTED_CARD = 0;
+//
+//            final int INDEX_OF_SET = 0;
+//
+//            assertEquals("", EXPECTED_CARD, GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().get(INDEX_OF_EXPECTED_CARD));
+//            assertEquals("", CARD_SET);
+//
+//            GAME.playCardFromPlayArea(INDEX_OF_PLAYER1, INDEX_OF_SET, INDEX_OF_EXPECTED_CARD);
+//
+//            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(TABLE.getCardSets().get(INDEX_OF_SET).getCards().get(INDEX_OF_EXPECTED_CARD));
+//            assertEquals("playCardFromPlayArea() != CARD_ADDED", EXPECTED_CARD, );
+//        } catch (InvalidArgumentException e) {
+//            fail("Unexpected Exception");
+//        }
+//
+//    }
+
     @Test
-    public void playCardFromPlayArea() {
-
-        final int INITIAL_NUM_OF_PLAYERS = 2;
-
-        final int INITIAL_PLAYER_ID = 1;
-
-        final int INITIAL_CARD_ID = 1;
-
-        final Suit SUIT = Suit.CLUBS;
-
-        final int RANK = 5;
-
-        final String PLAYER_NAME = "PLAYER1";
-
-        final Player PLAYER1 = new Player(INITIAL_PLAYER_ID, PLAYER_NAME);
-
-        final ArrayList<Player> players = new ArrayList<>();
-
-        players.add(PLAYER1);
-
-        try {
-
-            final Card EXPECTED_CARD = new Basic(SUIT, RANK, INITIAL_CARD_ID);
-
-            final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
-
-            LIST_OF_CARDS.add(EXPECTED_CARD);
-
-            final Machiavelli GAME = new Machiavelli(INITIAL_NUM_OF_PLAYERS);
-
-            GAME.setPlayers(players);
-
-            final Table TABLE = new Table();
-
-            final CardSet CardSET = new CardSet(LIST_OF_CARDS);
-
-            final ArrayList<CardSet> LIST_OF_Card_SETS = new ArrayList<>();
-
-            LIST_OF_Card_SETS.add(CardSET);
-
-            TABLE.setCardSets(LIST_OF_Card_SETS);
-
-            GAME.setTable(TABLE);
-
-            final int INDEX_OF_PLAYER1 = 0;
-
-            final int INDEX_OF_EXPECTED_CARD = 0;
-
-            final int INDEX_OF_SET = 0;
-
-            final boolean CARD_ADDED = GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(TABLE.getCardSets().get(INDEX_OF_SET).getCards().get(INDEX_OF_EXPECTED_CARD));
-            assertEquals("playCardFromPlayArea() != CARD_ADDED", CARD_ADDED, GAME.playCardFromPlayArea(INDEX_OF_PLAYER1, INDEX_OF_SET, INDEX_OF_EXPECTED_CARD));
-        } catch (InvalidArgumentException e) {
-            fail("Unexpected Exception");
-        }
-
-    }
-
-    @Test
-    public void mergeSet() {
+    public void mergeSetAppend() {
         final int RANK = 5;
         final int ID1 = 1;
         final int ID2 = 2;
@@ -354,7 +361,7 @@ public class MachiavelliTest {
     }
 
     @Test
-    public void splitSetRemove() {
+    public void removeCard() {
 
         final int RANK = 5;
         final int ID1 = 1;
