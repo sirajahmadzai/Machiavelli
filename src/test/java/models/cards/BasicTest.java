@@ -4,26 +4,27 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class BasicTest {
 
     @Test
     public void testConstructor() {
-        final Suit INITIAL_SUIT = Suit.CLUBS;
-        final int INITIAL_POINT_VALUE = 5;
-        final String INITIAL_NAME = "5";
-        final int INITIAL_RANK = 5;
+        final Suit SUIT = Suit.CLUBS;
+        final int POINT_VALUE = 5;
+        final String CARD_NAME = "5";
+        final int RANK = 5;
 
         final Basic BASIC_CARD;
         try {
-            BASIC_CARD = new Basic(INITIAL_SUIT, INITIAL_RANK, -1);
+            BASIC_CARD = new Basic(SUIT, RANK, -1);
 
-            assertEquals(INITIAL_SUIT, BASIC_CARD.getSuit());
-            assertEquals(INITIAL_POINT_VALUE, BASIC_CARD.getPointValue());
-            assertEquals(INITIAL_NAME, BASIC_CARD.getName());
-            assertEquals(INITIAL_RANK, BASIC_CARD.getRank());
+            assertEquals(SUIT, BASIC_CARD.getSuit());
+            assertEquals(POINT_VALUE, BASIC_CARD.getPointValue());
+            assertEquals(CARD_NAME, BASIC_CARD.getName());
+            assertEquals(RANK, BASIC_CARD.getRank());
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            fail("Unexpected Exception");
         }
     }
 
@@ -43,13 +44,13 @@ public class BasicTest {
                 try {
                     assertEquals(INITIAL_CARD_NAME, INITIAL_CARD.getCardNameByInitialRank(INITIAL_RANK));
                 } catch (InvalidArgumentException e) {
-                    e.printStackTrace();
+                    fail("Unexpected Exception");
                 }
             } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+                fail("Unexpected Exception");
             }
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            fail("Unexpected Exception");
         }
     }
 
@@ -68,13 +69,13 @@ public class BasicTest {
                 try {
                     assertEquals(INITIAL_RANK, INITIAL_CARD.getCardValueByInitialRank(INITIAL_RANK));
                 } catch (InvalidArgumentException e) {
-                    e.printStackTrace();
+                    fail("Unexpected Exception");
                 }
             } catch (InvalidArgumentException e) {
-                e.printStackTrace();
+                fail("Unexpected Exception");
             }
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            fail("Unexpected Exception");
         }
     }
 }

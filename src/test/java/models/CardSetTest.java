@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CardSetTest {
 
@@ -34,20 +35,18 @@ public class CardSetTest {
             final Card CARD2 = new Basic(SUIT2, RANK2, ID2);
             final Card CARD3 = new Basic(SUIT3, RANK3, ID3);
             final Card CARD4 = new Basic(SUIT4, RANK4, ID4);
-            final ArrayList<Card> INITIAL_CARDS = new ArrayList<>();
+            final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
 
-            INITIAL_CARDS.add(CARD1);
-            INITIAL_CARDS.add(CARD2);
-            INITIAL_CARDS.add(CARD3);
-            INITIAL_CARDS.add(CARD4);
+            LIST_OF_CARDS.add(CARD1);
+            LIST_OF_CARDS.add(CARD2);
+            LIST_OF_CARDS.add(CARD3);
+            LIST_OF_CARDS.add(CARD4);
 
-            final CardSet INITIAL_Card_SET = new CardSet(INITIAL_CARDS);
+            final CardSet INITIAL_Card_SET = new CardSet(LIST_OF_CARDS);
 
-            assertEquals(INITIAL_CARDS, INITIAL_Card_SET.getCards());
+            assertEquals(LIST_OF_CARDS, INITIAL_Card_SET.getCards());
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            fail("Unexpected Exception");
         }
-
     }
-
 }
