@@ -3,7 +3,6 @@ package models;
 import models.cards.Card;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -73,7 +72,7 @@ public class Machiavelli {
     }
 
     /**
-     * remove card from the current player's hand then add it to the play area later on
+     * removeCard card from the current player's hand then add it to the play area later on
      */
     Card playCard(int indexOfPlayer, int indexOfCard) {
         return players.get(indexOfPlayer).getHand().remove(indexOfCard);
@@ -88,18 +87,19 @@ public class Machiavelli {
      * @param indexOfSet
      * @return
      */
-    public boolean playCardFromPlayArea(int indexOfPlayer, int indexOfSet, int indexOfCard) {
+    boolean playCardFromPlayArea(int indexOfPlayer, int indexOfSet, int indexOfCard) {
         return players.get(indexOfPlayer).getHand().add(table.getCardSets().get(indexOfSet).getCards().remove(indexOfCard));
     }
 
     /**
      * merges two sets
      *
-     * @param cardSet1
-     * @param cardSet2
+     * @param setToKeep
+     * @param setToAppend
      */
-    public boolean mergeSet(CardSet cardSet1, CardSet cardSet2) {
-        return cardSet1.getCards().addAll(cardSet2.getCards());
+    void mergeSetAppend(CardSet setToKeep, CardSet setToAppend) {
+        setToKeep.getCards().addAll(setToAppend.getCards());
+        table.getCardSets().remove(setToAppend);
     }
 
     /**
@@ -131,16 +131,29 @@ public class Machiavelli {
 
     /**
      * @param cardSet
-     * @param from
-     * @param to
-     * @param cardToRemove
-     * @return
+     * @param i
      */
-    CardSet splitSetRemove(CardSet cardSet, int from, int to, int cardToRemove) {
-        cardSet.getCards().remove(cardToRemove);
-        List<Card> subList = cardSet.getCards().subList(from, to);
+    void removeCard(CardSet cardSet, int i) {
+        ArrayList<Card> list1 = new ArrayList<>();
+        ArrayList<Card> list2 = new ArrayList<>();
+        CardSet result1 = new CardSet(list1);
+        CardSet result2 = new CardSet(list2);
 
-        return new CardSet(new ArrayList<>(subList));
+        AtomicInteger count = new AtomicInteger();
+        for (Card next : cardSet.getCards()) {
+            int index = count.getAndIncrement();
+            if (index < i) {
+                result1.getCards().add(next);
+            } else {
+                result2.getCards().add(next);
+            }
+        }
+        ArrayList<CardSet> listOfCardSets = new ArrayList<>();
+        listOfCardSets.add(result1);
+        listOfCardSets.add(result2);
+        table.setCardSets(listOfCardSets);
+
+        table.getCardsInPlay().add(cardSet.getCards().remove(i));
     }
 
     /**
