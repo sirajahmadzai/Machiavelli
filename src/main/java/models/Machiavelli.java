@@ -67,29 +67,29 @@ public class Machiavelli {
     /**
      * @return
      */
-    Card drawCardFromDeck() {
-        return table.getDeck().remove(table.getDeck().size() - 1);
+    void drawCardFromDeck(Player player) {
+        player.getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
     }
 
     /**
      * removeCard card from the current player's hand then add it to the play area later on
      */
-    Card playCard(int indexOfPlayer, int indexOfCard) {
+    Card removeCardFromHand(int indexOfPlayer, int indexOfCard) {
         return players.get(indexOfPlayer).getHand().remove(indexOfCard);
     }
 
-    //TODO : how should cards be stored in the play area? can we use an ArrayList, that we we won't need to pass a Card parameter type
-
-    /**
-     * current player takes a card fro mthe playArea
-     *
-     * @param indexOfPlayer
-     * @param indexOfSet
-     * @return
-     */
-    boolean playCardFromPlayArea(int indexOfPlayer, int indexOfSet, int indexOfCard) {
-        return players.get(indexOfPlayer).getHand().add(table.getCardSets().get(indexOfSet).getCards().remove(indexOfCard));
-    }
+//    //TODO : how should cards be stored in the play area? can we use an ArrayList, that we we won't need to pass a Card parameter type
+//
+//    /**
+//     * current player takes a card fro mthe playArea
+//     *
+//     * @param indexOfPlayer
+//     * @param indexOfSet
+//     * @return
+//     */
+//    void playCardFromPlayArea(int indexOfPlayer, int indexOfSet, int indexOfCard) {
+//        players.get(indexOfPlayer).getHand().add(table.getCardSets().get(indexOfSet).getCards().remove(indexOfCard));
+//    }
 
     /**
      * merges two sets
