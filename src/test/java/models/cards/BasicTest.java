@@ -30,7 +30,6 @@ public class BasicTest {
 
     @Test
     public void testGetCardNameByRank() {
-
         final int INITIAL_RANK = 5;
 
 
@@ -52,8 +51,6 @@ public class BasicTest {
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Test
@@ -79,9 +76,5 @@ public class BasicTest {
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
-
-
     }
-
-
 }
