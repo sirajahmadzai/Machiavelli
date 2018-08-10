@@ -221,6 +221,18 @@ public class MachiavelliTest {
 
     @Test
     public void mergeSetAppend() {
+
+        final int INITIAL_SIZE_OF_CARD_SETS = 2;
+        final int EXPECTED_SIZE_OF_CARD_SETS = 1;
+        final int SIZE_OF_EXPECTED_CARD_SET = 8;
+        final int INDEX_OF_CARD1 = 0;
+        final int INDEX_OF_CARD4 = 3;
+        final int INITIAL_INDEX_OF_CARD5 = 0;
+        final int INITIAL_INDEX_OF_CARD8 = 3;
+        final int EXPECTED_INDEX_OF_CARD5 = 4;
+        final int EXPECTED_INDEX_OF_CARD8 = 7;
+        final int INDEX_OF_CARD_SET_TO_KEEP = 0;
+
         final int RANK = 5;
         final int ID1 = 1;
         final int ID2 = 2;
@@ -266,32 +278,31 @@ public class MachiavelliTest {
 
             Machiavelli GAME = new Machiavelli(NUM_OF_PLAYERS);
 
-
-//            CARD_SET_TO_KEEP.getCards().addAll(CARD_SET_TO_APPEND.getCards());
             final Table TABLE = new Table();
             TABLE.getCardSets().add(CARD_SET_TO_KEEP);
             TABLE.getCardSets().add(CARD_SET_TO_APPEND);
 
-            assertEquals("", CARD1, CARD_SET_TO_KEEP.getCards().get(0));
-            assertEquals("", CARD4, CARD_SET_TO_KEEP.getCards().get(3));
+            assertEquals("CARD1 != first card in CARD_SET_TO_KEEP", CARD1, CARD_SET_TO_KEEP.getCards().get(INDEX_OF_CARD1));
+            assertEquals("CARD4 != last card in CARD_SET_TO_KEEP", CARD4, CARD_SET_TO_KEEP.getCards().get(INDEX_OF_CARD4));
 
-            assertEquals("", CARD5, CARD_SET_TO_APPEND.getCards().get(0));
-            assertEquals("", CARD8, CARD_SET_TO_APPEND.getCards().get(3));
+            assertEquals("CARD5 != first card in CARD_SET_TO_APPEND", CARD5, CARD_SET_TO_APPEND.getCards().get(INITIAL_INDEX_OF_CARD5));
+            assertEquals("CARD8 != last card in CARD_SET_TO_APPEND", CARD8, CARD_SET_TO_APPEND.getCards().get(INITIAL_INDEX_OF_CARD8));
 
             GAME.setTable(TABLE);
 
-            assertEquals("mergeSetAppend() != SET_MERGED", 2, GAME.getTable().getCardSets().size());
+
+            assertEquals("size of card sets != INITIAL_SIZE_OF_CARD_SETS", INITIAL_SIZE_OF_CARD_SETS, GAME.getTable().getCardSets().size());
 
             GAME.mergeSetAppend(CARD_SET_TO_KEEP, CARD_SET_TO_APPEND);
 
-            assertEquals("mergeSetAppend() != SET_MERGED", CARD_SET_TO_KEEP, GAME.getTable().getCardSets().get(0));
-            assertEquals("mergeSetAppend() != SET_MERGED", 1, GAME.getTable().getCardSets().size());
-            assertEquals("", 8, GAME.getTable().getCardSets().get(0).getCards().size());
+            assertEquals("CARD_SET_TO_KEEP != first set in card sets", CARD_SET_TO_KEEP, GAME.getTable().getCardSets().get(INDEX_OF_CARD_SET_TO_KEEP));
+            assertEquals("EXPECTED_SIZE_OF_CARD_SETS != size of card sets", EXPECTED_SIZE_OF_CARD_SETS, GAME.getTable().getCardSets().size());
+            assertEquals("EXPECTED_SIZE_OF_CARD_SET_TO_KEEP != size of CARD_SET_TO_KEEP", SIZE_OF_EXPECTED_CARD_SET, GAME.getTable().getCardSets().get(INDEX_OF_CARD_SET_TO_KEEP).getCards().size());
 
-            assertEquals("", CARD1, TABLE.getCardSets().get(0).getCards().get(0));
-            assertEquals("", CARD4, TABLE.getCardSets().get(0).getCards().get(3));
-            assertEquals("", CARD5, TABLE.getCardSets().get(0).getCards().get(4));
-            assertEquals("", CARD8, TABLE.getCardSets().get(0).getCards().get(7));
+            assertEquals("CARD1 != first card in CARD_SET_TO_KEEP", CARD1, TABLE.getCardSets().get(INDEX_OF_CARD_SET_TO_KEEP).getCards().get(INDEX_OF_CARD1));
+            assertEquals("CARD4 != 4th card in CARD_SET_TO_KEEP", CARD4, TABLE.getCardSets().get(INDEX_OF_CARD_SET_TO_KEEP).getCards().get(INDEX_OF_CARD4));
+            assertEquals("CARD5 != 5th card in CARD_SET_TO_KEEP", CARD5, TABLE.getCardSets().get(INDEX_OF_CARD_SET_TO_KEEP).getCards().get(EXPECTED_INDEX_OF_CARD5));
+            assertEquals("CARD4 != last card in CARD_SET_TO_KEEP", CARD8, TABLE.getCardSets().get(INDEX_OF_CARD_SET_TO_KEEP).getCards().get(EXPECTED_INDEX_OF_CARD8));
 
 
         } catch (InvalidArgumentException e) {
@@ -329,7 +340,7 @@ public class MachiavelliTest {
             TABLE.setCardSets(LIST_OF_CARD_SETS);
 
 
-            final int INDEX = 1;
+            final int INDEX_TO_SPLIT_SET_AT = 1;
             final int NUM_OF_PLAYERS = 2;
             final int EXPECTED_NUM_OF_CARD_SETS = 2;
             final int EXPECTED_SIZE_OF_SET1 = 1;
@@ -346,7 +357,7 @@ public class MachiavelliTest {
 
             GAME.setTable(TABLE);
 
-            GAME.splitSet(INITIAL_Card_SET, INDEX);
+            GAME.splitSet(INITIAL_Card_SET, INDEX_TO_SPLIT_SET_AT);
 
             assertEquals("size of sets != EXPECTED_NUM_OF_CARD_SETS", EXPECTED_NUM_OF_CARD_SETS, GAME.getTable().getCardSets().size());
             assertEquals("size of set1 != EXPECTED_SIZE_OF_SET1", EXPECTED_SIZE_OF_SET1, GAME.getTable().getCardSets().get(INDEX_OF_SET1).getCards().size());
@@ -375,23 +386,23 @@ public class MachiavelliTest {
             final Card CARD4 = new Basic(Suit.SPADES, RANK, ID4);
 
 
-            final ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
-            INITIAL_LIST_OF_CARDS.add(CARD1);
-            INITIAL_LIST_OF_CARDS.add(CARD2);
-            INITIAL_LIST_OF_CARDS.add(CARD3);
-            INITIAL_LIST_OF_CARDS.add(CARD4);
+            final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
+            LIST_OF_CARDS.add(CARD1);
+            LIST_OF_CARDS.add(CARD2);
+            LIST_OF_CARDS.add(CARD3);
+            LIST_OF_CARDS.add(CARD4);
 
-            final CardSet INITIAL_Card_SET = new CardSet(INITIAL_LIST_OF_CARDS);
+            final CardSet CARD_SET = new CardSet(LIST_OF_CARDS);
             final ArrayList<CardSet> LIST_OF_CARD_SETS = new ArrayList<>();
 
-            LIST_OF_CARD_SETS.add(INITIAL_Card_SET);
+            LIST_OF_CARD_SETS.add(CARD_SET);
 
             final Table TABLE = new Table();
 
             TABLE.setCardSets(LIST_OF_CARD_SETS);
 
 
-            final int INDEX = 1;
+            final int INDEX_OF_CARD_TO_REMOVE = 1;
             final int NUM_OF_PLAYERS = 2;
             final int EXPECTED_NUM_OF_CARD_SETS = 2;
             final int EXPECTED_SIZE_OF_SET1 = 1;
@@ -408,18 +419,18 @@ public class MachiavelliTest {
 
             GAME.setTable(TABLE);
 
-            final Card CARD_TO_REMOVE = INITIAL_Card_SET.getCards().get(INDEX);
+            final Card CARD_TO_REMOVE = CARD_SET.getCards().get(INDEX_OF_CARD_TO_REMOVE);
 
-            GAME.removeCard(INITIAL_Card_SET, INDEX);
+            GAME.removeCard(CARD_SET, INDEX_OF_CARD_TO_REMOVE);
 
 
-            assertEquals("getTable().getCardSets.size() != EXPECTED_Card_SET", EXPECTED_NUM_OF_CARD_SETS, GAME.getTable().getCardSets().size());
-            assertEquals("getTable().getCardSets.get().getCards().size() != EXPECTED_SIZE_OF_SET1", EXPECTED_SIZE_OF_SET1, GAME.getTable().getCardSets().get(INDEX_OF_SET1).getCards().size());
-            assertEquals("getTable().getCardSets.get().getCards().size() != EXPECTED_SIZE_OF_SET2", EXPECTED_SIZE_OF_SET2, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().size());
+            assertEquals("size of cards sets on TABLE != EXPECTED_NUM_OF_CARD_SETS", EXPECTED_NUM_OF_CARD_SETS, GAME.getTable().getCardSets().size());
+            assertEquals("size of SET1 != EXPECTED_SIZE_OF_SET1", EXPECTED_SIZE_OF_SET1, GAME.getTable().getCardSets().get(INDEX_OF_SET1).getCards().size());
+            assertEquals("size of SET2 != EXPECTED_SIZE_OF_SET2", EXPECTED_SIZE_OF_SET2, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().size());
             assertEquals("card at INDEX_OF_CARD1 != CARD1", CARD1, GAME.getTable().getCardSets().get(INDEX_OF_SET1).getCards().get(INDEX_OF_CARD1));
-            assertEquals("card at INDEX_OF_CARD1 != CARD2", CARD2, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD2));
-            assertEquals("card at INDEX_OF_CARD1 != CARD3", CARD3, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD3));
-            assertEquals("card at INDEX_OF_CARD1 != CARD4", CARD4, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD4));
+            assertEquals("card at INDEX_OF_CARD2 != CARD2", CARD2, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD2));
+            assertEquals("card at INDEX_OF_CARD3 != CARD3", CARD3, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD3));
+            assertEquals("card at INDEX_OF_CARD4 != CARD4", CARD4, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD4));
             assertEquals("", CARD_TO_REMOVE, TABLE.getCardsInPlay().get(TABLE.getCardsInPlay().size() - 1));
         } catch (InvalidArgumentException e) {
             fail("Unexpected Exception");
@@ -429,27 +440,47 @@ public class MachiavelliTest {
 
     @Test
     public void prependCard() {
-        final ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
+        final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
 
-        final CardSet INITIAL_Card_SET = new CardSet(INITIAL_LIST_OF_CARDS);
+        final CardSet CARD_SET = new CardSet(LIST_OF_CARDS);
 
-        final Card CARD_TO_PREPEND;
         try {
+            final Suit SUIT_OF_CARD_TO_PREPEND = Suit.DIAMONDS;
+            final int RANK_OF_CARD_TO_PREPEND = 5;
+            final int ID_OF_CARD_TO_PREPEND = 1;
 
-            CARD_TO_PREPEND = new Basic(Suit.DIAMONDS, 5, 1);
 
-            INITIAL_Card_SET.getCards().add(new Basic(Suit.SPADES, 5, 2));
-            INITIAL_Card_SET.getCards().add(new Basic(Suit.DIAMONDS, 8, 3));
-            INITIAL_Card_SET.getCards().add(new Basic(Suit.HEARTS, 9, 4));
+            final Card CARD_TO_PREPEND = new Basic(SUIT_OF_CARD_TO_PREPEND, RANK_OF_CARD_TO_PREPEND, ID_OF_CARD_TO_PREPEND);
+
+            final Suit SUIT1 = Suit.SPADES;
+            final int RANK1 = 5;
+            final int ID1 = 2;
+
+            final Suit SUIT2 = Suit.DIAMONDS;
+            final int RANK2 = 8;
+            final int ID2 = 3;
+
+            final Suit SUIT3 = Suit.HEARTS;
+            final int RANK3 = 9;
+            final int ID3 = 5;
+
+            final Card CARD1 = new Basic(SUIT1, RANK1, ID1);
+            final Card CARD2 = new Basic(SUIT2, RANK2, ID2);
+            final Card CARD3 = new Basic(SUIT3, RANK3, ID3);
+
+
+            CARD_SET.getCards().add(CARD1);
+            CARD_SET.getCards().add(CARD2);
+            CARD_SET.getCards().add(CARD3);
 
             final Machiavelli GAME = new Machiavelli(2);
 
-            assertEquals("getCards().get() != CARD_TO_PREPEND", 2, INITIAL_Card_SET.getCards().get(0).getId());
+            assertEquals("CARD1 != first card in CARD_SET", 2, CARD_SET.getCards().get(0).getId());
 
-            GAME.prependCard(INITIAL_Card_SET, CARD_TO_PREPEND);
+            GAME.prependCard(CARD_SET, CARD_TO_PREPEND);
 
-            assertEquals("getCards().get() != CARD_TO_PREPEND", CARD_TO_PREPEND, INITIAL_Card_SET.getCards().get(0));
-            assertEquals("getCards().get() != CARD_TO_PREPEND", 2, INITIAL_Card_SET.getCards().get(1).getId());
+            assertEquals("CARD_TO_PREPEND != first card in CARD_SET", CARD_TO_PREPEND, CARD_SET.getCards().get(0));
+            assertEquals("CARD1 != card after CARD_TO_PREPEND", 2, CARD_SET.getCards().get(1).getId());
 
 
         } catch (InvalidArgumentException e) {
@@ -460,27 +491,48 @@ public class MachiavelliTest {
     @Test
     public void appendCard() {
 
-        final ArrayList<Card> INITIAL_LIST_OF_CARDS = new ArrayList<>();
+        final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
 
-        final CardSet INITIAL_Card_SET = new CardSet(INITIAL_LIST_OF_CARDS);
+        final CardSet CARD_SET = new CardSet(LIST_OF_CARDS);
 
-        final Card CARD_TO_APPEND;
+
         try {
-            CARD_TO_APPEND = new Basic(Suit.DIAMONDS, 5, 1);
+            final Suit SUIT_OF_CARD_TO_APPEND = Suit.DIAMONDS;
+            final int RANK_OF_CARD_TO_APPEND = 5;
+            final int ID_OF_CARD_TO_APPEND = 1;
 
+            final Card CARD_TO_APPEND = new Basic(SUIT_OF_CARD_TO_APPEND, RANK_OF_CARD_TO_APPEND, ID_OF_CARD_TO_APPEND);
 
-            INITIAL_Card_SET.getCards().add(new Basic(Suit.SPADES, 5, 2));
-            INITIAL_Card_SET.getCards().add(new Basic(Suit.DIAMONDS, 8, 3));
-            INITIAL_Card_SET.getCards().add(new Basic(Suit.HEARTS, 9, 4));
+            final Suit SUIT1 = Suit.SPADES;
+            final int RANK1 = 5;
+            final int ID1 = 2;
 
-            assertEquals("", 4, INITIAL_Card_SET.getCards().get(INITIAL_Card_SET.getCards().size() - 1).getId());
+            final Suit SUIT2 = Suit.DIAMONDS;
+            final int RANK2 = 8;
+            final int ID2 = 3;
 
-            final Machiavelli INITIAL_GAME = new Machiavelli(2);
+            final Suit SUIT3 = Suit.HEARTS;
+            final int RANK3 = 9;
+            final int ID3 = 5;
 
-            INITIAL_GAME.appendCard(INITIAL_Card_SET, CARD_TO_APPEND);
+            final Card CARD1 = new Basic(SUIT1, RANK1, ID1);
+            final Card CARD2 = new Basic(SUIT2, RANK2, ID2);
+            final Card CARD3 = new Basic(SUIT3, RANK3, ID3);
 
-            assertEquals("getCards().get() != CARD_TO_APPEND ", CARD_TO_APPEND, INITIAL_Card_SET.getCards().get(INITIAL_Card_SET.getCards().size() - 1));
-            assertEquals("", 4, INITIAL_Card_SET.getCards().get(INITIAL_Card_SET.getCards().size() - 2).getId());
+            CARD_SET.getCards().add(CARD1);
+            CARD_SET.getCards().add(CARD2);
+            CARD_SET.getCards().add(CARD3);
+
+            assertEquals("CARD4 != ID of last card in CARD_SET", 4, CARD_SET.getCards().get(CARD_SET.getCards().size() - 1).getId());
+
+            final int NUM_OF_PLAYERS = 2;
+
+            final Machiavelli INITIAL_GAME = new Machiavelli(NUM_OF_PLAYERS);
+
+            INITIAL_GAME.appendCard(CARD_SET, CARD_TO_APPEND);
+
+            assertEquals("last card in CARD_SET != CARD_TO_APPEND ", CARD_TO_APPEND, CARD_SET.getCards().get(CARD_SET.getCards().size() - 1));
+            assertEquals("CARD != second last card in CARD_SET", 4, CARD_SET.getCards().get(CARD_SET.getCards().size() - 2).getId());
         } catch (InvalidArgumentException e) {
             fail("Unexpected Exception");
         }
