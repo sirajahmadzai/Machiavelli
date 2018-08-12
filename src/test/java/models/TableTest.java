@@ -1,12 +1,16 @@
 package models;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+import models.cards.Basic;
 import models.cards.Card;
+import models.cards.Joker;
+import models.cards.Suit;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TableTest {
 
@@ -28,29 +32,77 @@ public class TableTest {
 
     @Test
     public void setDeck() {
+        final ArrayList<Card> DECK = new ArrayList<>();
+
+        final Suit SUIT = Suit.SPADES;
+        final int RANK = 4;
+        final int CARD_ID = 1;
+
+        try {
+            final Card CARD = new Basic(SUIT, RANK, CARD_ID);
+
+            DECK.add(CARD);
+
+            final Table TABLE = new Table();
+
+            TABLE.setDeck(DECK);
+
+            assertEquals("getDeck() != DECK", DECK, TABLE.getDeck());
+        } catch (InvalidArgumentException e) {
+            fail("Unexpected Exception!");
+        }
     }
 
     @Test
-    public void setSets() {
+    public void setCardSets() {
+        final Suit SUIT = Suit.SPADES;
+        final int RANK = 4;
+        final int CARD_ID = 1;
+
+        try {
+            final Card CARD = new Basic(SUIT, RANK, CARD_ID);
+            final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
+
+            LIST_OF_CARDS.add(CARD);
+
+            final CardSet CARD_SET = new CardSet(LIST_OF_CARDS);
+
+            final ArrayList<CardSet> LIST_OF_CARD_SETS = new ArrayList<>();
+
+            LIST_OF_CARD_SETS.add(CARD_SET);
+
+            final Table TABLE = new Table();
+
+            TABLE.setCardSets(LIST_OF_CARD_SETS);
+
+            assertEquals("getCardSets() != LIST_OF_CARD_SETS", LIST_OF_CARD_SETS, TABLE.getCardSets());
+        } catch (InvalidArgumentException e) {
+            fail("Unexpected Exception");
+        }
     }
 
     @Test
     public void setCardsInPlay() {
-    }
 
-    @Test
-    public void shuffleDeck() {
-        final Table table = new Table();
-        table.shuffleDeck();
-        Table table2 = new Table();
-        assertTrue(table.decksDifferent(table, table2));
-    }
+        final Suit SUIT = Suit.JOKER;
+        final int RANK = 15;
+        final int CARD_ID = 1;
 
-    @Test
-    public void decksDifferent() {
-    }
+        try {
+            final Card CARD = new Joker(SUIT, RANK, CARD_ID);
 
-    @Test
-    public void getCardByIndex() {
+
+            final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();
+
+            LIST_OF_CARDS.add(CARD);
+
+            final Table TABLE = new Table();
+
+            TABLE.setCardsInPlay(LIST_OF_CARDS);
+
+            assertEquals("getCardsInPlay() != LIST_OF_CARDS", LIST_OF_CARDS, TABLE.getCardsInPlay());
+        } catch (InvalidArgumentException e) {
+            fail("Unexpected Exception!");
+        }
     }
 }
