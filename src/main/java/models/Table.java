@@ -127,21 +127,4 @@ class Table {
     void shuffleDeck() {
         Collections.shuffle(deck);
     }
-
-
-    boolean decksDifferent(Table table1, Table tabl2) {
-        for (int j = 0; j < 104; j++) {
-
-            if (!table1.getCardByIndex(j).equals(tabl2.getCardByIndex(j))) return true;
-
-        }
-
-        return false;
-    }
-
-    private Card getCardByIndex(int j) {
-        return deck.get(j);
-    }
-
-
 }

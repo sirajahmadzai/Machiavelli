@@ -7,20 +7,21 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class PlayerTest {
 
     @Test
     public void testConstructor() {
-        final int INITIAL_POINT_VALUE = 0;
+        final int POINT_VALUE = 0;
 
-        final int INITIAL_PLAYER_ID = 1;
+        final int PLAYER_ID = 1;
 
-        final String INITIAL_NAME = "player1";
+        final String PLAYER_NAME = "player1";
 
-        final ArrayList<Card> INITIAL_HAND = new ArrayList<>();
+        final ArrayList<Card> PLAYER_HAND = new ArrayList<>();
 
-        final Player PLAYER = new Player(INITIAL_PLAYER_ID, INITIAL_NAME);
+        final Player PLAYER = new Player(PLAYER_ID, PLAYER_NAME);
 
         final Suit SUIT1 = Suit.CLUBS;
         final Suit SUIT2 = Suit.DIAMONDS;
@@ -57,33 +58,67 @@ public class PlayerTest {
             final Card CARD6 = new Basic(SUIT6, RANK6, ID16);
             final Card CARD7 = new Basic(SUIT7, RANK7, ID7);
 
-            INITIAL_HAND.add(CARD1);
-            INITIAL_HAND.add(CARD2);
-            INITIAL_HAND.add(CARD3);
-            INITIAL_HAND.add(CARD4);
-            INITIAL_HAND.add(CARD5);
-            INITIAL_HAND.add(CARD6);
-            INITIAL_HAND.add(CARD7);
+            PLAYER_HAND.add(CARD1);
+            PLAYER_HAND.add(CARD2);
+            PLAYER_HAND.add(CARD3);
+            PLAYER_HAND.add(CARD4);
+            PLAYER_HAND.add(CARD5);
+            PLAYER_HAND.add(CARD6);
+            PLAYER_HAND.add(CARD7);
 
-            assertEquals("", INITIAL_PLAYER_ID, PLAYER.getPlayerID());
-            assertEquals("", INITIAL_NAME, PLAYER.getName());
+            assertEquals("getPlayerID() != PLAYER_ID", PLAYER_ID, PLAYER.getPlayerID());
+            assertEquals("getName() != PLAYER_NAME", PLAYER_NAME, PLAYER.getName());
 
-            PLAYER.setHand(INITIAL_HAND);
-            PLAYER.setPointValue(INITIAL_POINT_VALUE);
+            PLAYER.setHand(PLAYER_HAND);
+            PLAYER.setPointValue(POINT_VALUE);
 
-            assertEquals("", INITIAL_HAND, PLAYER.getHand());
-            assertEquals("", INITIAL_POINT_VALUE, PLAYER.getPointValue());
+            assertEquals("getHand() != PLAYER_HAND", PLAYER_HAND, PLAYER.getHand());
+            assertEquals("getPointValue() != POINT_VALUE", POINT_VALUE, PLAYER.getPointValue());
 
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            fail("Unexpected Exception!");
         }
     }
 
     @Test
     public void setHand() {
+        ArrayList<Card> PLAYER_HAND = new ArrayList<>();
+
+        final Suit SUIT = Suit.CLUBS;
+        final int RANK = 6;
+        final int CARD_ID = 1;
+
+        try {
+            final Card CARD = new Basic(SUIT, RANK, CARD_ID);
+
+            PLAYER_HAND.add(CARD);
+
+            final int PLAYER_ID = 1;
+
+            final String PLAYER_NAME = "siraj";
+            final Player PLAYER = new Player(PLAYER_ID, PLAYER_NAME);
+
+            PLAYER.setHand(PLAYER_HAND);
+
+
+            assertEquals("getHand() != PLAYER_HAND", PLAYER_HAND, PLAYER.getHand());
+        } catch (InvalidArgumentException e) {
+            fail("Unexpected Exception!");
+        }
+
     }
 
     @Test
     public void setPointValue() {
+        final int PLAYER_ID = 1;
+        final String PLAYER_NAME = "siraj";
+
+        final Player PLAYER = new Player(PLAYER_ID, PLAYER_NAME);
+
+        final int POINT_VALUE = 10;
+
+        PLAYER.setPointValue(POINT_VALUE);
+
+        assertEquals("getPointValue() != POINT_VALUE", POINT_VALUE, PLAYER.getPointValue());
     }
 }
