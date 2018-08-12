@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class TableTest {
 
@@ -36,21 +35,5 @@ public class TableTest {
 
     @Test
     public void setCardsInPlay() {
-    }
-
-    @Test
-    public void shuffleDeck() {
-        final Table table = new Table();
-        table.shuffleDeck();
-        Table table2 = new Table();
-        assertTrue(table.decksDifferent(table, table2));
-    }
-
-    @Test
-    public void decksDifferent() {
-    }
-
-    @Test
-    public void getCardByIndex() {
     }
 }
