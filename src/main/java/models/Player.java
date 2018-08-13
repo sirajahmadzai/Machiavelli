@@ -4,7 +4,7 @@ import models.cards.Card;
 
 import java.util.ArrayList;
 
-class Player {
+public class Player {
 
     /********************************
      ******** PRIVATES **************
@@ -20,7 +20,7 @@ class Player {
      * @param playerID
      * @param name
      */
-    Player(int playerID, String name) {
+   public Player(int playerID, String name) {
         this.playerID = playerID;
         this.name = name;
         hand = new ArrayList<>();
@@ -32,7 +32,7 @@ class Player {
      *
      * @return
      */
-    int getPlayerID() {
+    public int getPlayerID() {
         return playerID;
     }
 
@@ -41,7 +41,7 @@ class Player {
      *
      * @return
      */
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -50,7 +50,7 @@ class Player {
      *
      * @return
      */
-    ArrayList<Card> getHand() {
+    public ArrayList<Card> getHand() {
         return hand;
     }
 
@@ -59,7 +59,7 @@ class Player {
      *
      * @return
      */
-    int getPointValue() {
+    public int getPointValue() {
         return pointValue;
     }
 
@@ -68,7 +68,7 @@ class Player {
      *
      * @param hand
      */
-    void setHand(ArrayList<Card> hand) {
+    public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
     }
 
@@ -77,7 +77,7 @@ class Player {
      *
      * @param pointValue
      */
-    void setPointValue(int pointValue) {
+    public void setPointValue(int pointValue) {
         this.pointValue = pointValue;
     }
 }
