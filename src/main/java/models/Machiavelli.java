@@ -78,19 +78,6 @@ public class Machiavelli {
         return players.get(indexOfPlayer).getHand().remove(indexOfCard);
     }
 
-//    //TODO : how should cards be stored in the play area? can we use an ArrayList, that we we won't need to pass a Card parameter type
-//
-//    /**
-//     * current player takes a card fro mthe playArea
-//     *
-//     * @param indexOfPlayer
-//     * @param indexOfSet
-//     * @return
-//     */
-//    void playCardFromPlayArea(int indexOfPlayer, int indexOfSet, int indexOfCard) {
-//        players.get(indexOfPlayer).getHand().add(table.getCardSets().get(indexOfSet).getCards().remove(indexOfCard));
-//    }
-
     /**
      * merges two sets
      *
