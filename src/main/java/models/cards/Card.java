@@ -48,7 +48,7 @@ public abstract class Card {
     /**
      * @return
      */
-    public int getPointValue() {
+    int getPointValue() {
         return pointValue;
     }
 
@@ -59,7 +59,7 @@ public abstract class Card {
     /**
      * @return
      */
-    public String getName() {
+    String getName() {
         return name;
     }
 
@@ -107,7 +107,7 @@ public abstract class Card {
      * Custom exception handling class
      */
     class InvalidCardRankException extends Exception {
-        public InvalidCardRankException() {
+        InvalidCardRankException() {
             super("Invalid rank");
         }
     }
