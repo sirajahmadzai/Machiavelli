@@ -9,7 +9,7 @@ import models.cards.Suit;
 import java.util.ArrayList;
 import java.util.Collections;
 
-class Table {
+public class Table {
 
     /********************************
      ******** PRIVATES **************
