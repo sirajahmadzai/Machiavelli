@@ -25,7 +25,7 @@ public class Table {
     /**
      * CONSTRUCTOR
      */
-    Table() {
+    public Table() {
         deck = new ArrayList<>();
         cardSets = new ArrayList<>();
         cardsInPlay = new ArrayList<>();
@@ -33,12 +33,15 @@ public class Table {
     }
 
 
+    /*******************************************
+     **************GETTERS*********************
+     ******************************************/
     /**
      * gets deck
      *
      * @return
      */
-    ArrayList<Card> getDeck() {
+    public ArrayList<Card> getDeck() {
         return deck;
     }
 
@@ -47,7 +50,7 @@ public class Table {
      *
      * @return
      */
-    ArrayList<CardSet> getCardSets() {
+    public ArrayList<CardSet> getCardSets() {
         return cardSets;
     }
 
@@ -56,22 +59,49 @@ public class Table {
      *
      * @return
      */
-    ArrayList<Card> getCardsInPlay() {
+    public ArrayList<Card> getCardsInPlay() {
         return cardsInPlay;
     }
 
-    void setDeck(ArrayList<Card> deck) {
+    /*******************************************
+     ******************SETTERS******************
+     ******************************************/
+
+    /**
+     * @param deck
+     */
+    public void setDeck(ArrayList<Card> deck) {
         this.deck = deck;
     }
 
-    void setCardSets(ArrayList<CardSet> cardSets) {
+    /**
+     * @param cardSets
+     */
+    public void setCardSets(ArrayList<CardSet> cardSets) {
         this.cardSets = cardSets;
     }
 
-    void setCardsInPlay(ArrayList<Card> cardsInPlay) {
+    /**
+     * @param cardsInPlay
+     */
+    public void setCardsInPlay(ArrayList<Card> cardsInPlay) {
         this.cardsInPlay = cardsInPlay;
     }
 
+    /***********************************************
+     ****************PUBLIC MODIFIERS***************
+     ***********************************************/
+    /**
+     * Shuffles the deck
+     */
+    public void shuffleDeck() {
+        Collections.shuffle(deck);
+    }
+
+
+    /***************************************************
+     * *************PRIVATE HELPERS*********************
+     ***************************************************/
     /**
      * creates a deck from two standard decks
      */
@@ -119,12 +149,5 @@ public class Table {
             e.printStackTrace();
         }
         return standardDeck;
-    }
-
-    /**
-     * Shuffles the deck
-     */
-    void shuffleDeck() {
-        Collections.shuffle(deck);
     }
 }
