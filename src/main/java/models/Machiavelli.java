@@ -41,40 +41,66 @@ public class Machiavelli {
      *
      * @return
      */
-    Table getTable() {
+    public Table getTable() {
         return table;
     }
 
     /**
      * @return
      */
-    ArrayList<Player> getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    void setTable(Table table) {
+    /**
+     * gets a random player from players ArrayList
+     *
+     * @return
+     */
+    public Player getRandomPlayer() {
+        int currPlayerID = (new Random()).nextInt(players.size());
+
+        return players.get(currPlayerID);
+    }
+
+    /***************************************
+     *************** SETTERS **************
+     **************************************/
+
+    /**
+     * @param table
+     */
+    public void setTable(Table table) {
         this.table = table;
     }
 
-    void setPlayers(ArrayList<Player> players) {
+    /**
+     * @param players
+     */
+    public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 
 
     /***************************************
-     *************** HELPERS **************
+     *************** PUBLIC MODIFIERS **************
      **************************************/
+
     /**
-     * @return
+     * @param player
      */
-    void drawCardFromDeck(Player player) {
+    public void drawCardFromDeck(Player player) {
         player.getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
     }
 
     /**
      * removeCard card from the current player's hand then add it to the play area later on
+     *
+     * @param indexOfPlayer
+     * @param indexOfCard
+     * @return
      */
-    Card removeCardFromHand(int indexOfPlayer, int indexOfCard) {
+    public Card removeCardFromHand(int indexOfPlayer, int indexOfCard) {
         return players.get(indexOfPlayer).getHand().remove(indexOfCard);
     }
 
@@ -84,7 +110,7 @@ public class Machiavelli {
      * @param setToKeep
      * @param setToAppend
      */
-    void mergeSetAppend(CardSet setToKeep, CardSet setToAppend) {
+    public void mergeSetAppend(CardSet setToKeep, CardSet setToAppend) {
         setToKeep.getCards().addAll(setToAppend.getCards());
         table.getCardSets().remove(setToAppend);
     }
@@ -94,7 +120,7 @@ public class Machiavelli {
      * @param i
      * @return
      */
-    void splitSet(CardSet cardSet, int i) {
+    public void splitSet(CardSet cardSet, int i) {
 
         ArrayList<Card> list1 = new ArrayList<>();
         ArrayList<Card> list2 = new ArrayList<>();
@@ -120,7 +146,7 @@ public class Machiavelli {
      * @param cardSet
      * @param i
      */
-    void removeCard(CardSet cardSet, int i) {
+    public void removeCard(CardSet cardSet, int i) {
         ArrayList<Card> list1 = new ArrayList<>();
         ArrayList<Card> list2 = new ArrayList<>();
         CardSet result1 = new CardSet(list1);
@@ -149,7 +175,7 @@ public class Machiavelli {
      * @param cardSet
      * @param card
      */
-    void prependCard(CardSet cardSet, Card card) {
+    public void prependCard(CardSet cardSet, Card card) {
         cardSet.getCards().add(0, card);
     }
 
@@ -159,11 +185,14 @@ public class Machiavelli {
      * @param cardSet
      * @param card
      */
-    void appendCard(CardSet cardSet, Card card) {
+    public void appendCard(CardSet cardSet, Card card) {
         cardSet.getCards().add(card);
 
     }
 
+    /***************************************
+     *************** PRIVATE HELPERS **************
+     **************************************/
     /**
      *
      */
@@ -193,16 +222,5 @@ public class Machiavelli {
                 playerCounter++;
             }
         }
-    }
-
-    /**
-     * gets a random player from players ArrayList
-     *
-     * @return
-     */
-    public Player getRandomPlayer() {
-        int currPlayerID = (new Random()).nextInt(players.size());
-
-        return players.get(currPlayerID);
     }
 }
