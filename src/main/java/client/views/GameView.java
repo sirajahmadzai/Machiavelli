@@ -1,4 +1,4 @@
-package views;
+package client.views;
 
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class GameView {
+public class GameView extends View{
 
 
     /*************************************************************
