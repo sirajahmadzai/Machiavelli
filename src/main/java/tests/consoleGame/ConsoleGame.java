@@ -1,10 +1,7 @@
 package tests.consoleGame;
 
-import models.CardSet;
 import models.Machiavelli;
 import models.Player;
-import models.Table;
-import models.cards.Card;
 
 import java.util.Scanner;
 
@@ -22,14 +19,12 @@ public class ConsoleGame {
 
                 if (numOfPlayers < 2 || numOfPlayers > 4) {
                     System.out.println("Error number out of range!");
-                }
-                else {
+                } else {
 
                     Machiavelli machiavelli = new Machiavelli(numOfPlayers);
                     System.out.println("time to select a random player to start the game!");
                     Player randomPlayer = machiavelli.getRandomPlayer();
                     System.out.println("random player is Player" + randomPlayer.getPlayerID());
-
 
 
                     /**********************

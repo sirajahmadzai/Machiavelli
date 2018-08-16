@@ -1,5 +1,6 @@
 package client;
 
+import client.views.*;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +9,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import client.views.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class GameView extends View{
+public class GameView extends View {
 
 
     /*************************************************************
