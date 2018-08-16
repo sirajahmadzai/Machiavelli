@@ -1,7 +1,11 @@
-package models;
+package server;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
-import models.cards.*;
+import server.models.cards.*;
+import server.models.CardSet;
+import server.models.Machiavelli;
+import server.models.Player;
+import server.models.Table;
 import org.junit.Test;
 
 import java.util.ArrayList;

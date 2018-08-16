@@ -1,4 +1,4 @@
-package models.cards;
+package server.models.cards;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
