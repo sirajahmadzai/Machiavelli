@@ -1,10 +1,10 @@
 package server.models;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
-import server.models.cards.Suit;
 import server.models.cards.Basic;
 import server.models.cards.Card;
 import server.models.cards.Joker;
+import server.models.cards.Suit;
 
 import java.util.ArrayList;
 import java.util.Collections;
