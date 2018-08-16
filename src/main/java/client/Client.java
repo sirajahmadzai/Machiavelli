@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client extends Task<Void>/* implements Runnable*/ {
 
@@ -47,37 +46,37 @@ public class Client extends Task<Void>/* implements Runnable*/ {
 //            Scanner scanner = new Scanner(response);
 //            String cmd = scanner.next();
 //            if (cmd.equals(ServerCommand.SHOW_PLAYER_SELECTION_VIEW.toString())) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        app.showPlayerSelectionView();
-                    }
-                });
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                app.showPlayerSelectionView();
+            }
+        });
 
 //            } else if (cmd.equals(ServerCommand.WAIT_FOR_SETUP.toString())) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        app.showWaitingView();
-                    }
-                });
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                app.showWaitingView();
+            }
+        });
 
 
 //            } else if (cmd.equals(ServerCommand.SHOW_GAMEVIEW.toString())) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        //javaFX doesn't let you rerun a view that is already running
-                        if (app.getActiveView() instanceof GameView) {
-                            //do nothing
-                        } else {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                //javaFX doesn't let you rerun a view that is already running
+                if (app.getActiveView() instanceof GameView) {
+                    //do nothing
+                } else {
 //                            int numOfPlayers = scanner.nextInt();
 //                            app.showGameView(numOfPlayers);
 
-                        }
+                }
 
-                    }
-                });
+            }
+        });
 //            } else if (cmd.equals(ServerCommand.PROMPT_FLIP_STORY.toString())) {
 //                UICon.waitUntilCardIsClicked();
 //                out.println(ClientCommand.STORY_DECK_CLICKED);

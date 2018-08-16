@@ -44,7 +44,7 @@ public class Server {
 
 //                while (playerClientHandlers.size() == 1 && tempNum == -1) {
 //                    tempNum = clientHandler.checkForMessageInt();
-                }
+            }
 
 
 //                if (tempNum != -1) {
