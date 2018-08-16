@@ -1,11 +1,13 @@
-package models;
+package server;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
-import models.cards.Basic;
-import models.cards.Card;
-import models.cards.Joker;
-import models.cards.Suit;
+import server.models.cards.Basic;
+import server.models.cards.Card;
+import server.models.cards.Joker;
+import server.models.cards.Suit;
 import org.junit.Test;
+import server.models.CardSet;
+import server.models.Table;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,7 @@
 package tests.consoleGame;
 
-import models.Machiavelli;
-import models.Player;
+import server.models.Machiavelli;
+import server.models.Player;
 
 import java.util.Scanner;
 
