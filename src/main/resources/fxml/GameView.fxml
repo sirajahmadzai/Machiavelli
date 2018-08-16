@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-image: url('game.jpg');" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GameView">
+<BorderPane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-image: url('game.jpg');" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.views.GameView">
     <bottom>
         <HBox fx:id="bottomPlayer" alignment="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="120.0" BorderPane.alignment="BOTTOM_CENTER">
             <BorderPane.margin>
