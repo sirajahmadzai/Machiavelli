@@ -17,7 +17,7 @@ public class CardSet {
      *
      * @param cards
      */
-    CardSet(ArrayList<Card> cards) {
+    public CardSet(ArrayList<Card> cards) {
 
         this.cards = cards;
     }
