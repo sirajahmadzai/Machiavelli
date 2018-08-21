@@ -62,6 +62,10 @@ public class LoginView extends View {
         txtPort = new TextField();
         btnConnect = new Button("Connect");
         lblMessage = new Label();
+        lblMessage.setTextFill(Color.RED);
+        lblMessage.setFont(Font.font("Times New Roman", FontWeight.BOLD, 20));
+
+
 
         //Adding Nodes to GridPane layout
         gridPane.add(lblIp, 0, 0);
@@ -93,9 +97,7 @@ public class LoginView extends View {
         lblPort.setId("port");
         bp.setTop(hb);
         bp.setCenter(gridPane);
-
         layout.getStylesheets().add("/css/login.css");
-
         list.add(bp);
     }
 
