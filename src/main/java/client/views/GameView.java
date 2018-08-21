@@ -12,6 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import server.models.Player;
+import server.models.cards.Card;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,6 +55,7 @@ public class GameView extends View {
     @FXML // fx:id="deck"
     private HBox deck; // Value injected by FXMLLoader
 
+    @FXML
     private HBox messageBox;
 
     /*************************************************************
@@ -69,39 +72,24 @@ public class GameView extends View {
      *****************************PRIVATE MAPS****************************
      *************************************************************/
 
-    private Map<Integer, ObservableList<Node>> playerHands;
+    private Map<Player, ObservableList<Node>> playerHands;
 
 
-    private Map<Integer, ObservableList<Node>> sets;
+    private Map<Card, ObservableList<Node>> sets;
 
-    private Map<Integer, PlayerPosition> playerPositions;
+    /**
+     * PlayerPosition is an enum, Integer is the playerID
+     */
+    private Map<Player, PlayerPosition> playerPositions;
 
     /*************************************************************
      *****************************END OF MAPS*********************
      *************************************************************/
 
-    /*************************************************************
-     *****************************OBSERVABLE LISTS*****************
-     *************************************************************/
-
-    private ObservableList<Node> deckOfCards;
-
-
-    /*************************************************************
-     *********************END OF OBSERVABLE LISTS*****************
-     *************************************************************/
-
-
     @FXML
     // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        assert board != null : "fx:id=\"board\" was not injected: check your FXML file 'GameView.fxml'.";
-        assert bottomPlayer != null : "fx:id=\"bottomPlayer\" was not injected: check your FXML file 'GameView.fxml'.";
-        assert leftPlayer != null : "fx:id=\"leftPlayer\" was not injected: check your FXML file 'GameView.fxml'.";
-        assert rightPlayer != null : "fx:id=\"rightPlayer\" was not injected: check your FXML file 'GameView.fxml'.";
-        assert topPlayer != null : "fx:id=\"topPlayer\" was not injected: check your FXML file 'GameView.fxml'.";
-        assert deck != null : "fx:id=\"deck\" was not injected: check your FXML file 'GameView.fxml'.";
-
+        messageBox = new HBox();
     }
 
     /******************************************************
@@ -111,105 +99,105 @@ public class GameView extends View {
     /**
      * receives player ids and maps out game areas to each player
      *
-     * @param playerIDs
+     * @param players
      */
-    private void initPlayerMaps(ArrayList<Integer> playerIDs) {
+    private void initPlayerMaps(ArrayList<Player> players) {
 
         //bottom for player1 and top for player2 in a 2 player game
-        if (playerIDs.size() == 2) {
-            playerHands.put(playerIDs.get(0), bottomPlayer.getChildren());
+        if (players.size() == 2) {
+            playerHands.put(players.get(0), bottomPlayer.getChildren());
 
-            playerHands.put(playerIDs.get(1), topPlayer.getChildren());
+            playerHands.put(players.get(1), topPlayer.getChildren());
         }
 
         //CLOCKWISE
-        if (playerIDs.size() >= 3) {
-            playerHands.put(playerIDs.get(0), bottomPlayer.getChildren());
-            playerHands.put(playerIDs.get(1), leftPlayer.getChildren());
-            playerHands.put(playerIDs.get(2), topPlayer.getChildren());
+        if (players.size() >= 3) {
+            playerHands.put(players.get(0), bottomPlayer.getChildren());
+            playerHands.put(players.get(1), leftPlayer.getChildren());
+            playerHands.put(players.get(2), topPlayer.getChildren());
 
         }
-        if (playerIDs.size() == 4) {
-            playerHands.put(playerIDs.get(3), rightPlayer.getChildren());
+        if (players.size() == 4) {
+            playerHands.put(players.get(3), rightPlayer.getChildren());
         }
     }
 
     /**
-     * @param playerIDs
+     * @param players
      */
-    private void init(ArrayList<Integer> playerIDs) {
+    private void init(ArrayList<Player> players) {
         playerHands = new HashMap<>();
 
-        initPlayerMaps(playerIDs);
-//        initCentre();
-//        initMessage();
+        initPlayerMaps(players);
+        initMessageBox();
     }
 
     /**
      * set up 2 player game
      *
-     * @param bottomPlayerID
-     * @param topPlayerID
+     * @param bottomPlayer
+     * @param topPlayer
      */
-    public void setup(int bottomPlayerID, int topPlayerID) {
-        ArrayList<Integer> playerIDs = new ArrayList<>();
+    public void setup(Player bottomPlayer, Player topPlayer) {
+        ArrayList<Player> players = new ArrayList<>();
 
-        playerIDs.add(bottomPlayerID);
-        playerIDs.add(topPlayerID);
+        players.add(bottomPlayer);
+        players.add(topPlayer);
 
-        init(playerIDs);
+        init(players);
 
         playerPositions = new HashMap<>();
-        playerPositions.put(bottomPlayerID, PlayerPosition.BOTTOM);
-        playerPositions.put(topPlayerID, PlayerPosition.TOP);
+        playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
+        playerPositions.put(topPlayer, PlayerPosition.TOP);
 
     }
 
     /**
      * setup 3 player game
      *
-     * @param bottomPlayerID
-     * @param leftPlayerID
-     * @param topPlayerID
+     * @param bottomPlayer
+     * @param leftPlayer
+     * @param topPlayer
      */
-    public void setup(int bottomPlayerID, int leftPlayerID, int topPlayerID) {
-        ArrayList<Integer> playerIDs = new ArrayList<>();
+    public void setup(Player bottomPlayer, Player leftPlayer, Player topPlayer) {
+        ArrayList<Player> players = new ArrayList<>();
 
-        playerIDs.add(bottomPlayerID);
-        playerIDs.add(leftPlayerID);
-        playerIDs.add(topPlayerID);
+        players.add(bottomPlayer);
+        players.add(leftPlayer);
+        players.add(topPlayer);
 
-        init(playerIDs);
+        init(players);
 
         playerPositions = new HashMap<>();
-        playerPositions.put(bottomPlayerID, PlayerPosition.BOTTOM);
-        playerPositions.put(leftPlayerID, PlayerPosition.LEFT);
-        playerPositions.put(topPlayerID, PlayerPosition.TOP);
+        playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
+        playerPositions.put(leftPlayer, PlayerPosition.LEFT);
+        playerPositions.put(topPlayer, PlayerPosition.TOP);
 
     }
 
     /**
      * set up 4 player game
      *
-     * @param bottomPlayerID
-     * @param leftPlayerID
-     * @param topPlayerID
-     * @param rightPlayerID
+     * @param bottomPlayer
+     * @param leftPlayer
+     * @param topPlayer
+     * @param rightPlayer
      */
-    public void setup(int bottomPlayerID, int leftPlayerID, int topPlayerID, int rightPlayerID) {
-        ArrayList<Integer> playerIDs = new ArrayList<>();
-        playerIDs.add(bottomPlayerID);
-        playerIDs.add(leftPlayerID);
-        playerIDs.add(topPlayerID);
-        playerIDs.add(rightPlayerID);
+    public void setup(Player bottomPlayer, Player leftPlayer, Player topPlayer, Player rightPlayer) {
+        ArrayList<Player> players = new ArrayList<>();
 
-        init(playerIDs);
+        players.add(bottomPlayer);
+        players.add(leftPlayer);
+        players.add(topPlayer);
+        players.add(rightPlayer);
+
+        init(players);
 
         playerPositions = new HashMap<>();
-        playerPositions.put(bottomPlayerID, PlayerPosition.BOTTOM);
-        playerPositions.put(leftPlayerID, PlayerPosition.LEFT);
-        playerPositions.put(topPlayerID, PlayerPosition.TOP);
-        playerPositions.put(rightPlayerID, PlayerPosition.RIGHT);
+        playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
+        playerPositions.put(leftPlayer, PlayerPosition.LEFT);
+        playerPositions.put(topPlayer, PlayerPosition.TOP);
+        playerPositions.put(rightPlayer, PlayerPosition.RIGHT);
 
     }
 
@@ -234,18 +222,18 @@ public class GameView extends View {
     /***********************************************
      *************************HANDS******************
      ************************************************/
+
+    //todo: remove currentPlayerId and instead check for ownership of the client and unuse mouseEvent
+
     /**
-     * to add a card to a specific hand
-     *
-     * @param playerId
-     * @param cardId
-     * @param imgUrl
+     * @param player
+     * @param mouseEvent
      */
-    public void addCardToHand(int playerId, int currentPlayerId, int cardId, String imgUrl, EventHandler<MouseEvent> mouseEvent) {
-        if (playerId == currentPlayerId) { //if current player show
-            addCardToMap(playerHands, playerId, cardId, imgUrl, mouseEvent);
+    public void addCardToHand(Player player, Card card, EventHandler<MouseEvent> mouseEvent) {
+        if (true) { //if current player show
+            addCardToMap(playerHands, player, card, mouseEvent);
         } else { //if not current player hide
-            addCardToMap(playerHands, playerId, cardId, "back/adventure_back.jpg", mouseEvent);
+            addCardToMap(playerHands, player, card, mouseEvent);
         }
     }
 
@@ -264,22 +252,6 @@ public class GameView extends View {
      **************END OF HAND METHODS**************
      ************************************************/
 
-
-    /**
-     * @param playerId
-     * @param cardId
-     * @param imgUrl
-     */
-    public void changeCardImage(int playerId, int cardId, String imgUrl) {
-        ImageView card = createCard(cardId, imgUrl);
-
-        for (Node node : playerHands.get(playerId)) {
-            if (Integer.parseInt(node.getId()) == cardId) {
-                node = card;
-            }
-        }
-    }
-
     /***********************************************
      ******************DECKS*************************
      ************************************************/
@@ -287,29 +259,20 @@ public class GameView extends View {
      * empties deckOfCards
      */
     public void emptyDeckOfCards() {
-        deckOfCards.removeAll();
+        deck.getChildren().removeAll();
     }
 
     /*********************************************************************************
      ************* HELPERS********************
      *********************************************************************************/
 
-    private void initMessage() {
+    private void initMessageBox() {
         Label text = new Label("Click on the story deck to get started!");
         text.setWrapText(true);
 
         messageBox.getChildren().add(text);
         messageBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
         messageBox.setPadding(new Insets(20));
-
-    }
-
-    /**
-     * init centre of the game view
-     * specifically placement of story deck and adventure deck
-     */
-    private void initCentre() {
-        deckOfCards = deck.getChildren();
 
     }
 
@@ -335,22 +298,18 @@ public class GameView extends View {
         return thisImage;
     }
 
-
     /**
-     * to create a card
-     *
-     * @param path
-     * @return ImageView
+     * @param card
+     * @return
      */
-    private ImageView createCard(int cardId, String path) {
-        path = path.replace(" ", "");
-        ImageView imv = new ImageView(path);
-        Image type = getImage(path);
+    private ImageView createCard(Card card) {
+        ImageView imv = new ImageView(card.getImgUrl());
+        Image type = getImage(card.getImgUrl());
         imv.setImage(type);
         imv.setFitWidth(CARD_PREF_WIDTH);
         imv.setFitHeight(CARD_MIN_HEIGHT);
-        imv.setUserData(cardId);
-        imv.setId(String.valueOf(cardId));
+        imv.setUserData(card);
+        imv.setId(String.valueOf(card.getId()));
         return imv;
     }
 
@@ -358,12 +317,11 @@ public class GameView extends View {
      * to add a card to an ObservableList
      *
      * @param list
-     * @param cardId
      * @param imgUrl
      */
-    private void addCardToObservableList(ObservableList<Node> list, int cardId, String imgUrl) {
+    private void addCardToObservableList(ObservableList<Node> list, Card card, String imgUrl) {
 
-        list.add(createCard(cardId, imgUrl));
+        list.add(createCard(card));
 
     }
 
@@ -387,6 +345,7 @@ public class GameView extends View {
         list.remove(nodeToRemove);
     }
 
+    //todo: what is this?
     private void removeSelectedNodeFromObservableList(ObservableList<Node> list, int cardId) {
         Node nodeToRemove = null;
 
@@ -410,17 +369,14 @@ public class GameView extends View {
 
     /**
      * @param map
-     * @param playerId
-     * @param cardId
-     * @param imgUrl
+     * @param player
+     * @param mouseEvent
      */
-    private void addCardToMap(Map<Integer, ObservableList<Node>> map, int playerId, int cardId, String imgUrl, EventHandler<MouseEvent> mouseEvent) {
+    private void addCardToMap(Map<Player, ObservableList<Node>> map, Player player, Card card, EventHandler<MouseEvent> mouseEvent) {
         //rotation is hard coded for now
-        PlayerPosition pos = playerPositions.get(playerId);
+        PlayerPosition pos = playerPositions.get(player);
 
-        imgUrl = imgUrl.replace(" ", "");
-
-        ImageView imv = createCard(cardId, imgUrl);
+        ImageView imv = createCard(card);
         if (pos == PlayerPosition.BOTTOM) {
             //DO NOTHING
         } else if (pos == PlayerPosition.LEFT) {
@@ -432,7 +388,7 @@ public class GameView extends View {
         }
         imv.setOnMouseClicked(mouseEvent);
 
-        map.get(playerId).add(imv);
+        map.get(player).add(imv);
     }
 
 
