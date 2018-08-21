@@ -2,10 +2,15 @@ package tests.consoleGame;
 
 import server.models.Machiavelli;
 import server.models.Player;
+import server.models.cards.Card;
 
 import java.util.Scanner;
 
 public class ConsoleGame {
+    private Player[] players;
+    public static final int HAND_SIZE = 15;
+    public static boolean won;
+
     public static void main(String[] args) {
 
         int numOfPlayers = 0;
@@ -24,7 +29,15 @@ public class ConsoleGame {
                     Machiavelli machiavelli = new Machiavelli(numOfPlayers);
                     System.out.println("time to select a random player to start the game!");
                     Player randomPlayer = machiavelli.getRandomPlayer();
-                    System.out.println("random player is Player" + randomPlayer.getPlayerID());
+//                    System.out.println("random player is Player" + randomPlayer.getPlayerID());
+                    for (Card card : randomPlayer.getHand()){
+                        System.out.println(card.getSuit());
+                        System.out.println(card.getRank());
+                    }
+
+
+
+
 
 
                     /**********************
