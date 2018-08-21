@@ -9,12 +9,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tests.testController.GameViewControllerTest;
+import tests.testController.LoginViewControllerTest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
 public class App extends Application {
+
+    public static void main(String[] args) throws IOException {
+        Application.launch(App.class);
+    }
 
     /* CONSTANTS */
     private static final String TITLE = "Machiavelli";
@@ -46,9 +52,9 @@ public class App extends Application {
         this.primaryStage = primaryStage;
 
         initRootLayout();
-        loginView = new LoginView();
-        showLoginView();
-
+//        loginView = new LoginView();
+//        showLoginView();
+showGameView(2);
         //this is for networked version
 //        loginView.addBtnLoginAction(event -> {
 //            try {
@@ -59,8 +65,8 @@ public class App extends Application {
 //            clientThread.start();
 //        });
 
-        showMainMenuView();
-        showPlayerSelectionView();
+//        showMainMenuView();
+//        showPlayerSelectionView();
 
     }
 
@@ -94,60 +100,60 @@ public class App extends Application {
         return activeView;
     }
 
-    /**
-     *
-     */
-    public synchronized void showMainMenuView() {
-        showMainMenuView("Awaiting response from the server...");
-    }
+//    /**
+//     *
+//     */
+//    public synchronized void showMainMenuView() {
+//        showMainMenuView("Awaiting response from the server...");
+//    }
 
-    /**
-     * @param message
-     */
-    public synchronized void showMainMenuView(String message) {
-        MainMenuView mainView = new MainMenuView(message);
-        activeView = mainView;
-        VBox mainViewLayout = mainView.getLayout();
-
-        rootLayout.getChildren().add(mainViewLayout);
-
-        mainViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-        mainViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-
-        mainView.setMainApp(this);
-    }
-
-    /**
-     *
-     */
-    public synchronized void showPlayerSelectionView() {
-        PlayerSelectionView playerSelectionView = new PlayerSelectionView();
-        activeView = playerSelectionView;
-
-        VBox playerViewLayout = playerSelectionView.getLayout();
-
-        rootLayout.getChildren().add(playerViewLayout);
-
-        playerViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-        playerViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-
-        playerSelectionView.add2PLayerButtonAction(e -> {
-//            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "2");
-            showWaitingView();
-        });
-
-        playerSelectionView.add3PLayerButtonAction(e -> {
-//            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "3");
-            showWaitingView();
-        });
-
-        playerSelectionView.add4PLayerButtonAction(e -> {
-//            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "4");
-            showWaitingView();
-        });
-
-        playerSelectionView.setMainApp(this);
-    }
+//    /**
+//     * @param message
+//     */
+//    public synchronized void showMainMenuView(String message) {
+//        MainMenuView mainView = new MainMenuView(message);
+//        activeView = mainView;
+//        VBox mainViewLayout = mainView.getLayout();
+//
+//        rootLayout.getChildren().add(mainViewLayout);
+//
+//        mainViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
+//        mainViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
+//
+//        mainView.setMainApp(this);
+//    }
+//
+//    /**
+//     *
+//     */
+//    public synchronized void showPlayerSelectionView() {
+//        PlayerSelectionView playerSelectionView = new PlayerSelectionView();
+//        activeView = playerSelectionView;
+//
+//        VBox playerViewLayout = playerSelectionView.getLayout();
+//
+//        rootLayout.getChildren().add(playerViewLayout);
+//
+//        playerViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
+//        playerViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
+//
+//        playerSelectionView.add2PLayerButtonAction(e -> {
+////            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "2");
+//            showWaitingView();
+//        });
+//
+//        playerSelectionView.add3PLayerButtonAction(e -> {
+////            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "3");
+//            showWaitingView();
+//        });
+//
+//        playerSelectionView.add4PLayerButtonAction(e -> {
+////            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "4");
+//            showWaitingView();
+//        });
+//
+//        playerSelectionView.setMainApp(this);
+//    }
 
     /**
      * @param numOfPlayers
@@ -169,6 +175,8 @@ public class App extends Application {
                 // Give the controller access to the main app.
                 GameView gameView = loader.getController();
                 activeView = gameView;
+
+                new GameViewControllerTest(this, gameView);
 
                 gameView.setMainApp(this);
 
@@ -200,6 +208,7 @@ public class App extends Application {
         activeView = loginView;
 
 
+
         VBox loginViewLayout = loginView.getLayout();
 
         rootLayout.getChildren().add(loginViewLayout);
@@ -207,7 +216,9 @@ public class App extends Application {
         loginViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
         loginViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
 
-        loginView.setMainApp(this);
+       new LoginViewControllerTest(this, loginView);
+
+//        loginView.setMainApp(this);
     }
 
     /**
