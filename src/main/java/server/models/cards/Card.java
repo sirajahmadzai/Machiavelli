@@ -109,8 +109,6 @@ public abstract class Card {
     }
 
     private String getImageUrl() {
-        if (suit == Suit.JOKER) return "joker.gif";
-
         String imgUrl = "";
 
         imgUrl += rank;
