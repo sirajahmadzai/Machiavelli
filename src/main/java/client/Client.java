@@ -49,7 +49,7 @@ public class Client extends Task<Void>/* implements Runnable*/ {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                app.showPlayerSelectionView();
+//                app.showPlayerSelectionView();
             }
         });
 
