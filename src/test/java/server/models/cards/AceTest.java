@@ -13,20 +13,20 @@ public class AceTest {
      */
     @Test
     public void testConstructor() {
-        final Suit INITIAL_SUIT_VALID = Suit.SPADES;
-        final int INITIAL_RANK_VALID = 14;
-        final int INITIAL_ID_VALID = 1;
+        final Suit VALID_SUIT = Suit.SPADES;
+        final int VALID_RANK = 14;
+        final int VALID_CARD_ID = 1;
 
         //testing Valid
         try {
-            final Ace ACE_CARD = new Ace(INITIAL_SUIT_VALID, INITIAL_RANK_VALID, INITIAL_ID_VALID);
+            final Ace ACE_CARD = new Ace(VALID_SUIT, VALID_RANK, VALID_CARD_ID);
             final int EXPECTED_POINT_VALUE = 15;
             final String EXPECTED_NAME = "Ace";
-            assertEquals("getSuit() != INITIAL", INITIAL_SUIT_VALID, ACE_CARD.getSuit());
+            assertEquals("getSuit() != INITIAL", VALID_SUIT, ACE_CARD.getSuit());
             assertEquals("getPointValue != EXPECTED", EXPECTED_POINT_VALUE, ACE_CARD.getPointValue());
             assertEquals("getPointValue != EXPECTED", EXPECTED_NAME, ACE_CARD.getName());
-            assertEquals("getRank() != INITIAL", INITIAL_RANK_VALID, ACE_CARD.getRank());
-            assertEquals("getId() != INITIAL", INITIAL_ID_VALID, ACE_CARD.getId());
+            assertEquals("getRank() != INITIAL", VALID_RANK, ACE_CARD.getRank());
+            assertEquals("getId() != INITIAL", VALID_CARD_ID, ACE_CARD.getId());
 
         } catch (InvalidArgumentException e) {
             fail("Invalid Argument");
@@ -34,7 +34,7 @@ public class AceTest {
 
         //testing INVALID Suit
         try {
-            final Ace ACE_CARD = new Ace(null, INITIAL_RANK_VALID, INITIAL_ID_VALID);
+            final Ace ACE_CARD = new Ace(null, VALID_RANK, VALID_CARD_ID);
             fail("null suit did not throw an exception");
 
         } catch (InvalidArgumentException e) {
@@ -44,7 +44,7 @@ public class AceTest {
         //testing INVALID rank
         try {
             final int INVALID_RANK = 2;
-            final Ace ACE_CARD = new Ace(INITIAL_SUIT_VALID, INVALID_RANK, INITIAL_ID_VALID);
+            final Ace ACE_CARD = new Ace(VALID_SUIT, INVALID_RANK, VALID_CARD_ID);
             fail("Invalid rank did not throw an exception");
 
         } catch (InvalidArgumentException e) {
@@ -54,7 +54,7 @@ public class AceTest {
         //testing INVALID Id
         try {
             final int INVALID_ID = 2;
-            final Ace ACE_CARD = new Ace(INITIAL_SUIT_VALID, INITIAL_RANK_VALID, INVALID_ID);
+            final Ace ACE_CARD = new Ace(VALID_SUIT, VALID_RANK, INVALID_ID);
             fail("Invalid Id did not throw an exception");
         } catch (InvalidArgumentException e) {
             //passed
@@ -64,7 +64,7 @@ public class AceTest {
     @Test
     public void changeRank() {
         final Suit INITIAL_SUIT = Suit.DIAMONDS;
-        final int INITIAL_RANK = 1;
+        final int INITIAL_RANK = 2;
         final int INITIAL_ID = 1;
 
         final Ace ACE_CARD;
