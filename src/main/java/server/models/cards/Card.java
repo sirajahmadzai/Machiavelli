@@ -13,6 +13,7 @@ public abstract class Card {
     private int pointValue;
     private String name;
     private int id;
+    private String imgUrl;
 
     /******************************
      ********** PROTECTEDS ********
@@ -33,6 +34,7 @@ public abstract class Card {
         this.name = getCardNameByInitialRank(rank);
         this.rank = rank;
         this.id = id;
+        this.imgUrl = getImageUrl();
     }
 
     /***************************************
@@ -70,6 +72,10 @@ public abstract class Card {
         return rank;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
     /**
      * gets cardName by rank
      *
@@ -77,7 +83,7 @@ public abstract class Card {
      * @return
      * @throws InvalidArgumentException
      */
-    String getCardNameByInitialRank(int rank) throws InvalidArgumentException {
+    private String getCardNameByInitialRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return String.valueOf(rank);
         if (rank == 11) return "Jack";
         else if (rank == 12) return "Queen";
@@ -94,7 +100,7 @@ public abstract class Card {
      * @return
      * @throws InvalidArgumentException
      */
-    int getCardValueByInitialRank(int rank) throws InvalidArgumentException {
+    private int getCardValueByInitialRank(int rank) throws InvalidArgumentException {
         if (rank >= 2 && rank <= 10) return rank;
         else if (rank > 10 && rank < 14) return 10;
         else if (rank == 1 || rank == 14) return 15;
@@ -102,6 +108,16 @@ public abstract class Card {
         else throw new InvalidArgumentException(new String[]{"invalid rank"});
     }
 
+    private String getImageUrl() {
+        if (suit == Suit.JOKER) return "joker.gif";
+
+        String imgUrl = "";
+
+        imgUrl += rank;
+        imgUrl += suit.name().substring(0, 1).toLowerCase();
+        imgUrl += ".gif";
+        return imgUrl;
+    }
 
     /**
      * Custom exception handling class
