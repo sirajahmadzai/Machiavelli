@@ -3,15 +3,16 @@ package client.views;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import server.models.CardSet;
 import server.models.Player;
 import server.models.cards.Card;
 
@@ -52,11 +53,12 @@ public class GameView extends View {
     @FXML // fx:id="topPlayer"
     private HBox topPlayer; // Value injected by FXMLLoader
 
-    @FXML // fx:id="deck"
-    private HBox deck; // Value injected by FXMLLoader
+    @FXML
+    private HBox playAreaTop;
 
     @FXML
-    private HBox messageBox;
+    private FlowPane setsArea;
+
 
     /*************************************************************
      ************************END OF FXML INJECTIONS***************
@@ -68,6 +70,7 @@ public class GameView extends View {
     private static final int CARD_PREF_WIDTH = 100;
     private static final int CARD_MIN_HEIGHT = 120;
 
+
     /*************************************************************
      *****************************PRIVATE MAPS****************************
      *************************************************************/
@@ -76,6 +79,8 @@ public class GameView extends View {
 
 
     private Map<Card, ObservableList<Node>> sets;
+
+    private Map<CardSet, VBox> setViews;
 
     /**
      * PlayerPosition is an enum, Integer is the playerID
@@ -86,10 +91,17 @@ public class GameView extends View {
      *****************************END OF MAPS*********************
      *************************************************************/
 
+    //private
+    private String backOfCardPath;
+
+    private ImageView deckImageView;
+
+    private Label messageBox;
+
     @FXML
-    // This method is called by the FXMLLoader when initialization is complete
+        // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        messageBox = new HBox();
+
     }
 
     /******************************************************
@@ -129,7 +141,18 @@ public class GameView extends View {
         playerHands = new HashMap<>();
 
         initPlayerMaps(players);
-        initMessageBox();
+    }
+
+    private void initPlayAreaTop() {
+        deckImageView = new ImageView(backOfCardPath);
+        playAreaTop.getChildren().add(deckImageView);
+        deckImageView.setVisible(false);
+
+        messageBox = new Label("Click on the story deck to get started!");
+        messageBox.setWrapText(true);
+        messageBox.setId("messageBox");
+
+        playAreaTop.getChildren().add(messageBox);
     }
 
     /**
@@ -138,7 +161,8 @@ public class GameView extends View {
      * @param bottomPlayer
      * @param topPlayer
      */
-    public void setup(Player bottomPlayer, Player topPlayer) {
+    public void setup(String backOfCardImagePath, Player bottomPlayer, Player topPlayer) {
+        backOfCardPath = backOfCardImagePath;
         ArrayList<Player> players = new ArrayList<>();
 
         players.add(bottomPlayer);
@@ -149,6 +173,7 @@ public class GameView extends View {
         playerPositions = new HashMap<>();
         playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
         playerPositions.put(topPlayer, PlayerPosition.TOP);
+        initPlayAreaTop();
 
     }
 
@@ -159,7 +184,9 @@ public class GameView extends View {
      * @param leftPlayer
      * @param topPlayer
      */
-    public void setup(Player bottomPlayer, Player leftPlayer, Player topPlayer) {
+    public void setup(String backOfCardImagePath, Player bottomPlayer, Player leftPlayer, Player topPlayer) {
+        backOfCardPath = backOfCardImagePath;
+
         ArrayList<Player> players = new ArrayList<>();
 
         players.add(bottomPlayer);
@@ -172,7 +199,7 @@ public class GameView extends View {
         playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
         playerPositions.put(leftPlayer, PlayerPosition.LEFT);
         playerPositions.put(topPlayer, PlayerPosition.TOP);
-
+        initPlayAreaTop();
     }
 
     /**
@@ -183,7 +210,9 @@ public class GameView extends View {
      * @param topPlayer
      * @param rightPlayer
      */
-    public void setup(Player bottomPlayer, Player leftPlayer, Player topPlayer, Player rightPlayer) {
+    public void setup(String backOfCardImagePath, Player bottomPlayer, Player leftPlayer, Player topPlayer, Player rightPlayer) {
+        backOfCardPath = backOfCardImagePath;
+
         ArrayList<Player> players = new ArrayList<>();
 
         players.add(bottomPlayer);
@@ -198,7 +227,7 @@ public class GameView extends View {
         playerPositions.put(leftPlayer, PlayerPosition.LEFT);
         playerPositions.put(topPlayer, PlayerPosition.TOP);
         playerPositions.put(rightPlayer, PlayerPosition.RIGHT);
-
+        initPlayAreaTop();
     }
 
     /*******************************
@@ -214,8 +243,8 @@ public class GameView extends View {
      *
      * @param message
      */
-    public void setMessageBox(String message) {
-        ((Label) messageBox.getChildren().get(0)).setText(message);
+    public void setMessage(String message) {
+        messageBox.setText(message);
     }
 
 
@@ -259,22 +288,32 @@ public class GameView extends View {
      * empties deckOfCards
      */
     public void emptyDeckOfCards() {
-        deck.getChildren().removeAll();
+        deckImageView.setVisible(false);
     }
 
-    /*********************************************************************************
+    public void fillDeck() {
+        deckImageView.setVisible(true);
+    }
+
+    //sets
+    public void addSet(CardSet set) {
+        VBox setView = new VBox();
+        for (Card card : set.getCards()) {
+            ImageView imageView = new ImageView(card.getImgUrl());
+            setView.getChildren().add(imageView);
+        }
+        setsArea.getChildren().add(setView);
+        setViews.put(set, setView);
+    }
+
+    public void removeSet(CardSet set) {
+        setsArea.getChildren().remove(setViews.remove(set));
+    }
+
+
+    /********************************************************
      ************* HELPERS********************
      *********************************************************************************/
-
-    private void initMessageBox() {
-        Label text = new Label("Click on the story deck to get started!");
-        text.setWrapText(true);
-
-        messageBox.getChildren().add(text);
-        messageBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
-        messageBox.setPadding(new Insets(20));
-
-    }
 
     /**
      * @param resource
