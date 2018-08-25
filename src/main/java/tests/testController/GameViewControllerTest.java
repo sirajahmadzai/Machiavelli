@@ -4,9 +4,7 @@ import client.App;
 import client.views.GameView;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import server.models.Player;
-import server.models.cards.Basic;
-import server.models.cards.Card;
-import server.models.cards.Suit;
+import server.models.cards.*;
 
 public class GameViewControllerTest {
     private App app;
@@ -18,18 +16,30 @@ public class GameViewControllerTest {
 
         Player bottomPlayer = new Player(1, "siraj");
         Player topPlayer = new Player(2, "steph");
+        Player rightPlayer = new Player(3, "right");
+        Player leftPlayer = new Player(4, "left");
 
-        gameView.setup(bottomPlayer, topPlayer);
+        gameView.setup("b.gif", bottomPlayer, leftPlayer, topPlayer, rightPlayer);
 
         try {
             Card card = new Basic(Suit.CLUBS, 4, 1);
 
+            Card card2 = new Basic(Suit.HEARTS, 5, 2);
+
+            Card card3 = new Joker(Suit.JOKER, 15, 3);
+
+            Card card4 = new Ace(Suit.HEARTS, 14, 4);
+
             gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.fillDeck();
+
 
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
-
 
 
     }
