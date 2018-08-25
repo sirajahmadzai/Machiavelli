@@ -23,7 +23,7 @@ public abstract class View {
     private App mainApp;
 
 
-    private Background getBackground(String fileName) {
+    public Background getBackground(String fileName) {
         try {
 
             ClassLoader classLoader = getClass().getClassLoader();
@@ -50,7 +50,7 @@ public abstract class View {
      *
      * @return
      */
-    protected App getMainApp() {
+    public App getMainApp() {
         return mainApp;
     }
 
@@ -72,7 +72,7 @@ public abstract class View {
         return btn;
     }
 
-    protected VBox createLayout(int spacing, int padding) {
+    public VBox createLayout(int spacing, int padding) {
         VBox layout = new VBox(spacing);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(padding));
