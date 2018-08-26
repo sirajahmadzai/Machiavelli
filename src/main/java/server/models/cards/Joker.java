@@ -3,8 +3,6 @@ package server.models.cards;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 public class Joker extends Changeable {
-
-
     /**
      * CONSTRUCTOR
      *

@@ -14,15 +14,27 @@ import java.net.URL;
 
 public abstract class View {
 
-    private static final String HOME_BACKGROUND_FILENAME = "home.jpg";
+    /*******************************************************************
+     * *************************PRIVATE STATIC FINALS*******************
+     ******************************************************************/
+    private static final String HOME_BACKGROUND_FILENAME = "game.jpg";
     private static final String GREY_BTN_STYLE = "-fx-base: orange; -fx-text-fill: black;";
 
     private static final int BTN_MAX_WIDTH = 120;
     private static final int BTN_MAX_HEIGHT = 60;
 
+    /*******************************************************************
+     * *************************PRIVATES*******************
+     ******************************************************************/
     private App mainApp;
 
 
+    /**
+     * get the background
+     *
+     * @param fileName
+     * @return
+     */
     public Background getBackground(String fileName) {
         try {
 
@@ -64,6 +76,10 @@ public abstract class View {
         this.mainApp = mainApp;
     }
 
+    /**
+     * @param text
+     * @return
+     */
     public Button createBtn(String text) {
         Button btn = new Button(text);
         btn.setStyle(GREY_BTN_STYLE);
@@ -72,6 +88,11 @@ public abstract class View {
         return btn;
     }
 
+    /**
+     * @param spacing
+     * @param padding
+     * @return
+     */
     public VBox createLayout(int spacing, int padding) {
         VBox layout = new VBox(spacing);
         layout.setAlignment(Pos.CENTER);

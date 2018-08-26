@@ -23,17 +23,27 @@ import javafx.scene.text.Text;
 
 public class LoginView extends View {
 
+    /*******************************************************************
+     * *************************PRIVATE STATIC FINALS*******************
+     ******************************************************************/
     private static final int LAYOUT_SPACING = 20;
     private static final int LAYOUT_PADDING = 20;
 
+    /*******************************************************************
+     * *************************FINALS*******************
+     ******************************************************************/
+    final TextField txtIp;
+    final TextField txtPort;
 
+
+    /*******************************************************************
+     * *************************PRIVATES*******************
+     ******************************************************************/
     private VBox layout;
     private Label lblIp;
     private Label lblPort;
-    final TextField txtIp;
-    final TextField txtPort;
     private Button btnConnect;
-    Label lblMessage;
+    private Label lblMessage;
 
     public LoginView() {
         super();
@@ -64,7 +74,6 @@ public class LoginView extends View {
         lblMessage = new Label();
         lblMessage.setTextFill(Color.RED);
         lblMessage.setFont(Font.font("Times New Roman", FontWeight.BOLD, 20));
-
 
 
         //Adding Nodes to GridPane layout
@@ -101,14 +110,23 @@ public class LoginView extends View {
         list.add(bp);
     }
 
+    /**
+     * @return
+     */
     public VBox getLayout() {
         return layout;
     }
 
+    /**
+     * @return
+     */
     public String getIp() {
         return txtIp.getText();
     }
 
+    /**
+     * @return
+     */
     public int getPort() {
         int port = 0;
         try {
@@ -124,10 +142,18 @@ public class LoginView extends View {
         return port;
     }
 
+    /**
+     * @return
+     */
     public Label getLblMessage() {
         return lblMessage;
     }
 
+    /**
+     * sets reflection of the GridPane
+     *
+     * @param gridPane
+     */
     private void setReflection(GridPane gridPane) {
         Reflection r = new Reflection();
         r.setFraction(0.7f);
@@ -135,6 +161,11 @@ public class LoginView extends View {
     }
 
 
+    /**
+     * creates a dropShadowEffect
+     *
+     * @return
+     */
     private Effect dropShadowEffect() {
         //DropShadow effect
         DropShadow dropShadow = new DropShadow();
@@ -143,6 +174,11 @@ public class LoginView extends View {
         return dropShadow;
     }
 
+    /**
+     * adds ActionEvent to btnConnect
+     *
+     * @param event
+     */
     public void addBtnLoginAction(EventHandler<ActionEvent> event) {
         btnConnect.setOnAction(event);
     }

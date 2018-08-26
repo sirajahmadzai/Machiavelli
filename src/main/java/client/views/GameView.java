@@ -3,6 +3,7 @@ package client.views;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -68,11 +69,11 @@ public class GameView extends View {
      * *************************PRIVATE STATIC FINALS*******************
      ******************************************************************/
     private static final int CARD_PREF_WIDTH = 100;
-    private static final int CARD_MIN_HEIGHT = 120;
+    private static final int CARD_PREF_HEIGHT = 120;
 
 
     /*************************************************************
-     *****************************PRIVATE MAPS****************************
+     *********************PRIVATE MAPS****************************
      *************************************************************/
 
     private Map<Player, ObservableList<Node>> playerHands;
@@ -91,7 +92,9 @@ public class GameView extends View {
      *****************************END OF MAPS*********************
      *************************************************************/
 
-    //private
+    /*************************************************************
+     *****************************PRIVATES************************
+     *************************************************************/
     private String backOfCardPath;
 
     private ImageView deckImageView;
@@ -138,13 +141,14 @@ public class GameView extends View {
      * @param players
      */
     private void init(ArrayList<Player> players) {
+        setViews = new HashMap<>();
         playerHands = new HashMap<>();
 
         initPlayerMaps(players);
     }
 
     private void initPlayAreaTop() {
-        deckImageView = new ImageView(backOfCardPath);
+        deckImageView = createImageView(backOfCardPath);
         playAreaTop.getChildren().add(deckImageView);
         deckImageView.setVisible(false);
 
@@ -259,21 +263,11 @@ public class GameView extends View {
      * @param mouseEvent
      */
     public void addCardToHand(Player player, Card card, EventHandler<MouseEvent> mouseEvent) {
-        if (true) { //if current player show
+        if (true) {
             addCardToMap(playerHands, player, card, mouseEvent);
-        } else { //if not current player hide
+        } else {
             addCardToMap(playerHands, player, card, mouseEvent);
         }
-    }
-
-    /**
-     * to remove a card from a specific hand
-     *
-     * @param playerId
-     * @param cardId
-     */
-    public void removeCardFromHand(int playerId, int cardId) {
-        removeNodeFromObservableList(playerHands.get(playerId), cardId);
     }
 
 
@@ -287,7 +281,7 @@ public class GameView extends View {
     /**
      * empties deckOfCards
      */
-    public void emptyDeckOfCards() {
+    public void emptyDeck() {
         deckImageView.setVisible(false);
     }
 
@@ -295,17 +289,27 @@ public class GameView extends View {
         deckImageView.setVisible(true);
     }
 
-    //sets
+    /**
+     * adds a set to the setsArea FlowPane and setViews map
+     *
+     * @param set
+     */
     public void addSet(CardSet set) {
-        VBox setView = new VBox();
+        VBox setView = new VBox(-20);
+        setView.setPadding(new Insets(5, 5, 5, 5));
         for (Card card : set.getCards()) {
-            ImageView imageView = new ImageView(card.getImgUrl());
+            ImageView imageView = createImageView(card.getImgUrl());
             setView.getChildren().add(imageView);
         }
         setsArea.getChildren().add(setView);
         setViews.put(set, setView);
     }
 
+    /**
+     * removes set from setsArea
+     *
+     * @param set
+     */
     public void removeSet(CardSet set) {
         setsArea.getChildren().remove(setViews.remove(set));
     }
@@ -342,14 +346,26 @@ public class GameView extends View {
      * @return
      */
     private ImageView createCard(Card card) {
-        ImageView imv = new ImageView(card.getImgUrl());
-        Image type = getImage(card.getImgUrl());
-        imv.setImage(type);
-        imv.setFitWidth(CARD_PREF_WIDTH);
-        imv.setFitHeight(CARD_MIN_HEIGHT);
+        ImageView imv = createImageView(card.getImgUrl());
         imv.setUserData(card);
         imv.setId(String.valueOf(card.getId()));
         return imv;
+    }
+
+    /**
+     * creates an ImageView
+     *
+     * @param imgUrl
+     * @return
+     */
+    private ImageView createImageView(String imgUrl) {
+        ImageView imageView = new ImageView(imgUrl);
+        Image type = getImage(imgUrl);
+        imageView.setImage(type);
+        imageView.setFitWidth(CARD_PREF_WIDTH);
+        imageView.setFitHeight(CARD_PREF_HEIGHT);
+
+        return imageView;
     }
 
     /**
@@ -383,28 +399,6 @@ public class GameView extends View {
         }
         list.remove(nodeToRemove);
     }
-
-    //todo: what is this?
-    private void removeSelectedNodeFromObservableList(ObservableList<Node> list, int cardId) {
-        Node nodeToRemove = null;
-
-        for (Node node : list) {
-            if (node.getId().equals(String.valueOf(cardId))) {
-                if (node.getEffect() == null) {
-                    continue;
-                }
-                nodeToRemove = node;
-                break; //doesn't cause problem
-            }
-        }
-
-        if (nodeToRemove == null) {
-            removeNodeFromObservableList(list, cardId);
-        } else {
-            list.remove(nodeToRemove);
-        }
-    }
-
 
     /**
      * @param map

@@ -40,35 +40,33 @@ public class Server {
                 System.out.println("Wait for socket...");
                 playerClientHandlers.add(clientHandler);
 
-//                int tempNum = clientHandler.checkForMessageInt();
+                int tempNum = clientHandler.checkForMessageInt();
+                while (playerClientHandlers.size() == 1 && tempNum == -1) {
+                    tempNum = clientHandler.checkForMessageInt();
+                }
 
-//                while (playerClientHandlers.size() == 1 && tempNum == -1) {
-//                    tempNum = clientHandler.checkForMessageInt();
+                if (tempNum != -1) {
+                    numPlayers = tempNum;
+                }
+
+                if (playerClientHandlers.size() == numPlayers) {
+                    for (ClientHandler cH : playerClientHandlers) {
+                        cH.showGameView(numPlayers);
+                    }
+                    break;
+                }
             }
 
-
-//                if (tempNum != -1) {
-//                    numPlayers = tempNum;
-//                }
-
-//                if (playerClientHandlers.size() == numPlayers) {
-//                    for (ClientHandler cH : playerClientHandlers) {
-//                        cH.showGameView(numPlayers);
-//                    }
-//                    break;
-//                }
-//            }
-
 //            GameController gameController = new GameController(playerClientHandlers);
-//
+
 //            gameController.initGame(numPlayers, 3); //CHANGE THIS NUMBER HERE TO RIG (-1 for regular, 1 for scenario 1, 2 for scenario 2)
-//
+
 //            gameController.startGame();
-//        } catch (Exception e) {
-//            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             for (ClientHandler cH : playerClientHandlers) {
-//                cH.closeSocket();
+                cH.closeSocket();
             }
             listener.close();
         }

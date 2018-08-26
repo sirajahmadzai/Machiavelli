@@ -8,11 +8,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+
 public class WaitingForOtherPlayersView extends View {
+
+    /*******************************************************************
+     * *************************PRIVATE STATIC FINALS*******************
+     ******************************************************************/
     private static final int LAYOUT_SPACING = 20;
     private static final int LAYOUT_PADDING = 20;
 
 
+    /*******************************************************************
+     * *************************PRIVATES*******************
+     ******************************************************************/
     private VBox layout;
 
     public WaitingForOtherPlayersView() {
@@ -28,6 +36,9 @@ public class WaitingForOtherPlayersView extends View {
         list.add(lblMsg);
     }
 
+    /**
+     * @return
+     */
     public VBox getLayout() {
         return layout;
     }

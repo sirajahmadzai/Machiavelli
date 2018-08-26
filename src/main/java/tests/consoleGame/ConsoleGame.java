@@ -30,14 +30,10 @@ public class ConsoleGame {
                     System.out.println("time to select a random player to start the game!");
                     Player randomPlayer = machiavelli.getRandomPlayer();
 //                    System.out.println("random player is Player" + randomPlayer.getPlayerID());
-                    for (Card card : randomPlayer.getHand()){
+                    for (Card card : randomPlayer.getHand()) {
                         System.out.println(card.getSuit());
                         System.out.println(card.getRank());
                     }
-
-
-
-
 
 
                     /**********************

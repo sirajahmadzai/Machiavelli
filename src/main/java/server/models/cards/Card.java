@@ -8,7 +8,6 @@ public abstract class Card {
     /***************************************
      ************ PRIVATES *****************
      ***************************************/
-
     private Suit suit;
     private int pointValue;
     private String name;
@@ -54,6 +53,9 @@ public abstract class Card {
         return pointValue;
     }
 
+    /**
+     * @return
+     */
     public int getId() {
         return id;
     }
@@ -72,6 +74,9 @@ public abstract class Card {
         return rank;
     }
 
+    /**
+     * @return
+     */
     public String getImgUrl() {
         return imgUrl;
     }
@@ -108,12 +113,17 @@ public abstract class Card {
         else throw new InvalidArgumentException(new String[]{"invalid rank"});
     }
 
+    /**
+     * gets the imgUrl
+     *
+     * @return
+     */
     private String getImageUrl() {
         String imgUrl = "";
 
         imgUrl += rank;
         imgUrl += suit.name().substring(0, 1).toLowerCase();
-        imgUrl += ".gif";
+        imgUrl += ".png";
         return imgUrl;
     }
 

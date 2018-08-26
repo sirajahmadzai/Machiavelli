@@ -17,6 +17,9 @@ public abstract class Changeable extends Card {
         initialRank = rank;
     }
 
+    /**
+     * @return
+     */
     public int getInitialRank() {
         return initialRank;
     }
