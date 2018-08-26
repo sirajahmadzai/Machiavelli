@@ -1,6 +1,9 @@
 package client;
 
-import client.views.*;
+import client.views.GameView;
+import client.views.LoginView;
+import client.views.View;
+import client.views.WaitingForOtherPlayersView;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,20 +21,27 @@ import java.io.PrintWriter;
 
 public class App extends Application {
 
+    /*******************************************************************
+     * *************************PRIVATE STATIC FINALS*******************
+     ******************************************************************/
+    private static final String TITLE = "Machiavelli";
+    private static final int MIN_WIDTH = 800;
+    public static final int MIN_HEIGHT = (int) (MIN_WIDTH * 0.66);
+
+
+    /**
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         Application.launch(App.class);
     }
 
-    /* CONSTANTS */
-    private static final String TITLE = "Machiavelli";
-    public static final int MIN_WIDTH = 800;
-    public static final int MIN_HEIGHT = (int) (MIN_WIDTH * 0.66);
 
-
+    /*******************************************************************
+     * *************************PRIVATES********************************
+     ******************************************************************/
     private Thread clientThread;
-
-    protected BufferedReader in;
-    protected PrintWriter out;
 
     private Stage primaryStage;
 
@@ -42,19 +52,26 @@ public class App extends Application {
     @FXML
     private AnchorPane rootLayout;
 
-//    GameController gameCon;
+    /*******************************************************************
+     **************************PROTECTEDS********************************
+     ******************************************************************/
+    protected BufferedReader in;
+    protected PrintWriter out;
 
     public App() throws IOException {
     }
 
+    /**
+     * @param primaryStage
+     * @throws IOException
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-
         initRootLayout();
 //        loginView = new LoginView();
 //        showLoginView();
-showGameView(2);
+        showGameView(2);
         //this is for networked version
 //        loginView.addBtnLoginAction(event -> {
 //            try {
@@ -64,10 +81,6 @@ showGameView(2);
 //            }
 //            clientThread.start();
 //        });
-
-//        showMainMenuView();
-//        showPlayerSelectionView();
-
     }
 
     /**
@@ -93,6 +106,9 @@ showGameView(2);
         }
     }
 
+    /*******************************************************************
+     **************************GETTERS********************************
+     ******************************************************************/
     /**
      * @return
      */
@@ -100,61 +116,18 @@ showGameView(2);
         return activeView;
     }
 
-//    /**
-//     *
-//     */
-//    public synchronized void showMainMenuView() {
-//        showMainMenuView("Awaiting response from the server...");
-//    }
+    /**
+     * Returns the main stage.
+     *
+     * @return
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
-//    /**
-//     * @param message
-//     */
-//    public synchronized void showMainMenuView(String message) {
-//        MainMenuView mainView = new MainMenuView(message);
-//        activeView = mainView;
-//        VBox mainViewLayout = mainView.getLayout();
-//
-//        rootLayout.getChildren().add(mainViewLayout);
-//
-//        mainViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-//        mainViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-//
-//        mainView.setMainApp(this);
-//    }
-//
-//    /**
-//     *
-//     */
-//    public synchronized void showPlayerSelectionView() {
-//        PlayerSelectionView playerSelectionView = new PlayerSelectionView();
-//        activeView = playerSelectionView;
-//
-//        VBox playerViewLayout = playerSelectionView.getLayout();
-//
-//        rootLayout.getChildren().add(playerViewLayout);
-//
-//        playerViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-//        playerViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-//
-//        playerSelectionView.add2PLayerButtonAction(e -> {
-////            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "2");
-//            showWaitingView();
-//        });
-//
-//        playerSelectionView.add3PLayerButtonAction(e -> {
-////            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "3");
-//            showWaitingView();
-//        });
-//
-//        playerSelectionView.add4PLayerButtonAction(e -> {
-////            sendCommandToServer(ClientCommand.NUMBER_OF_PLAYERS, "4");
-//            showWaitingView();
-//        });
-//
-//        playerSelectionView.setMainApp(this);
-//    }
-
+    /*******************************************************************
+     **************************DISPLAY METHODS**************************
+     ******************************************************************/
     /**
      * @param numOfPlayers
      */
@@ -203,10 +176,12 @@ showGameView(2);
         waitingForOthersView.setMainApp(this);
     }
 
+    /**
+     *
+     */
     public synchronized void showLoginView() {
 
         activeView = loginView;
-
 
 
         VBox loginViewLayout = loginView.getLayout();
@@ -216,40 +191,12 @@ showGameView(2);
         loginViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
         loginViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
 
-       new LoginViewControllerTest(this, loginView);
+        new LoginViewControllerTest(this, loginView);
 
 //        loginView.setMainApp(this);
     }
 
-    /**
-     *
-     * @param numOfPlayers
-     */
-//    public void initGame(int numOfPlayers) {
-//        gameCon = new GameController(UICon);
-//        gameCon.initGame(numOfPlayers, 5); //CHANGE THIS TO CHANGE THE SCENARIO INITIALIZED
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                startGame();
-//            }
-//        }).start();
-//    }
-//
-//    public void startGame() {
-//        gameCon.startGame();
-//    }
-
-    /**
-     * Returns the main stage.
-     *
-     * @return
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
+//TODO: uncomment for networked version
 //    /**
 //     * @param cmd
 //     * @param args
@@ -257,6 +204,4 @@ showGameView(2);
 //    public void sendCommandToServer(ClientCommand cmd, String args) {
 //        this.out.println(cmd + " " + args);
 //    }
-
-
 }

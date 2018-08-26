@@ -1,7 +1,6 @@
 package commands;
 
 public enum ServerCommands {
-    SHOW_PLAYER_SELECTION_VIEW,
     SHOW_WAIT_FOR_OTHER_PLAYERS_VIEW,
     SHOW_MAIN_MENU_VIEW,
     SHOW_LOGIN_VIEW,
@@ -15,4 +14,6 @@ public enum ServerCommands {
     ADD_CARD_TO_HAND,
     SET_MESSAGE_BOX,
     REMOVE_CARD_FROM_HAND,
+    FILL_DECK,
+    EMPTY_DECK,
 }

@@ -3,8 +3,11 @@ package tests.testController;
 import client.App;
 import client.views.GameView;
 import com.sun.javaws.exceptions.InvalidArgumentException;
+import server.models.CardSet;
 import server.models.Player;
 import server.models.cards.*;
+
+import java.util.ArrayList;
 
 public class GameViewControllerTest {
     private App app;
@@ -29,6 +32,17 @@ public class GameViewControllerTest {
             Card card3 = new Joker(Suit.JOKER, 15, 3);
 
             Card card4 = new Ace(Suit.HEARTS, 14, 4);
+
+            ArrayList<Card> cards = new ArrayList<>();
+            cards.add(card);
+            cards.add(card2);
+            cards.add(card3);
+            cards.add(card4);
+
+            CardSet cardSet = new CardSet(cards);
+
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
 
             gameView.addCardToHand(bottomPlayer, card, null);
             gameView.addCardToHand(topPlayer, card2, null);
