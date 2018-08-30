@@ -9,10 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import server.models.CardSet;
 import server.models.Player;
 import server.models.cards.Card;
@@ -68,8 +65,8 @@ public class GameView extends View {
     /*******************************************************************
      * *************************PRIVATE STATIC FINALS*******************
      ******************************************************************/
-    private static final int CARD_PREF_WIDTH = 100;
-    private static final int CARD_PREF_HEIGHT = 120;
+    private static final int CARD_PREF_WIDTH = 120;
+    private static final int CARD_PREF_HEIGHT = 140;
 
 
     /*************************************************************
@@ -104,6 +101,11 @@ public class GameView extends View {
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+        bottomPlayer.setSpacing(-20);
+        leftPlayer.setSpacing(-50);
+        topPlayer.setSpacing(-20);
+        rightPlayer.setSpacing(-50);
+
 
     }
 
@@ -152,7 +154,7 @@ public class GameView extends View {
         playAreaTop.getChildren().add(deckImageView);
         deckImageView.setVisible(false);
 
-        messageBox = new Label("Click on the story deck to get started!");
+        messageBox = new Label("Click on the deck to get started!");
         messageBox.setWrapText(true);
         messageBox.setId("messageBox");
 
@@ -276,7 +278,7 @@ public class GameView extends View {
      ************************************************/
 
     /***********************************************
-     ******************DECKS*************************
+     ******************PLAY AREA*************************
      ************************************************/
     /**
      * empties deckOfCards
@@ -296,7 +298,7 @@ public class GameView extends View {
      */
     public void addSet(CardSet set) {
         VBox setView = new VBox(-20);
-        setView.setPadding(new Insets(5, 5, 5, 5));
+        setView.setPadding(new Insets(10, 10, 10, 10));
         for (Card card : set.getCards()) {
             ImageView imageView = createImageView(card.getImgUrl());
             setView.getChildren().add(imageView);
