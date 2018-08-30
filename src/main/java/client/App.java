@@ -4,6 +4,7 @@ import client.views.GameView;
 import client.views.LoginView;
 import client.views.View;
 import client.views.WaitingForOtherPlayersView;
+import commands.ClientCommands;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,18 +70,19 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         initRootLayout();
-//        loginView = new LoginView();
-//        showLoginView();
+        loginView = new LoginView();
+        showLoginView();
         showGameView(2);
+
         //this is for networked version
-//        loginView.addBtnLoginAction(event -> {
-//            try {
-//                clientThread = new Thread(new Client(this, loginView.getIp(), loginView.getPort()));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            clientThread.start();
-//        });
+        loginView.addBtnLoginAction(event -> {
+            try {
+                clientThread = new Thread(new Client(this, loginView.getIp(), loginView.getPort()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            clientThread.start();
+        });
     }
 
     /**
@@ -180,12 +182,8 @@ public class App extends Application {
      *
      */
     public synchronized void showLoginView() {
-
         activeView = loginView;
-
-
         VBox loginViewLayout = loginView.getLayout();
-
         rootLayout.getChildren().add(loginViewLayout);
 
         loginViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
@@ -193,15 +191,15 @@ public class App extends Application {
 
         new LoginViewControllerTest(this, loginView);
 
-//        loginView.setMainApp(this);
+        loginView.setMainApp(this);
     }
 
 //TODO: uncomment for networked version
-//    /**
-//     * @param cmd
-//     * @param args
-//     */
-//    public void sendCommandToServer(ClientCommand cmd, String args) {
-//        this.out.println(cmd + " " + args);
-//    }
+    /**
+     * @param cmd
+     * @param args
+     */
+    public void sendCommandToServer(ClientCommands cmd, String args) {
+        this.out.println(cmd + " " + args);
+    }
 }
