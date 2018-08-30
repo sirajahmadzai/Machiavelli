@@ -2,5 +2,9 @@
     -fx-background-color: white;
     -fx-fill-height: 100%;
     -fx-fill-width: 100%;
-    -fx-font-size: 20;
+    -fx-font-size: 30;
+}
+
+#setView{
+    -fx-background-color: white;
 }
