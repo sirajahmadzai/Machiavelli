@@ -22,7 +22,7 @@ public class GameViewControllerTest {
         Player rightPlayer = new Player(3, "right");
         Player leftPlayer = new Player(4, "left");
 
-        gameView.setup("b.gif", bottomPlayer, leftPlayer, topPlayer, rightPlayer);
+        gameView.setup("images/b.png", bottomPlayer, leftPlayer, topPlayer, rightPlayer);
 
         try {
             Card card = new Basic(Suit.CLUBS, 4, 1);
@@ -35,19 +35,81 @@ public class GameViewControllerTest {
 
             ArrayList<Card> cards = new ArrayList<>();
             cards.add(card);
-            cards.add(card2);
-            cards.add(card3);
-            cards.add(card4);
 
             CardSet cardSet = new CardSet(cards);
 
             gameView.addSet(cardSet);
             gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+            gameView.addSet(cardSet);
+
 
             gameView.addCardToHand(bottomPlayer, card, null);
             gameView.addCardToHand(topPlayer, card2, null);
             gameView.addCardToHand(leftPlayer, card3, null);
             gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+            gameView.addCardToHand(bottomPlayer, card, null);
+            gameView.addCardToHand(topPlayer, card2, null);
+            gameView.addCardToHand(leftPlayer, card3, null);
+            gameView.addCardToHand(rightPlayer, card4, null);
+
+
             gameView.fillDeck();
 
 
