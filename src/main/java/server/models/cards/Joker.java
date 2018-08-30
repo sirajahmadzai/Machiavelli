@@ -1,5 +1,10 @@
 package server.models.cards;
 
+import com.sun.javafx.geom.BaseBounds;
+import com.sun.javafx.geom.transform.BaseTransform;
+import com.sun.javafx.jmx.MXNodeAlgorithm;
+import com.sun.javafx.jmx.MXNodeAlgorithmContext;
+import com.sun.javafx.sg.prism.NGNode;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 public class Joker extends Changeable {
@@ -27,5 +32,10 @@ public class Joker extends Changeable {
         } else {
             this.rank = rank;
         }
+    }
+
+    @Override
+    public String toString(){
+        return "joker";
     }
 }

@@ -13,8 +13,6 @@ public class Ace extends Changeable {
     public Ace(Suit suit, int rank, int id) throws InvalidArgumentException {
         super(suit, rank, id);
         if (rank != 1 && rank != 14) throw new InvalidArgumentException(new String[]{"Invalid rank for Ace Card"});
-        if (id <= 0) throw new InvalidArgumentException(new String[]{"Invalid id"});
-
     }
 
 
@@ -36,4 +34,8 @@ public class Ace extends Changeable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "a" + this.getSuit().name().substring(0, 1).toLowerCase();
+    }
 }
