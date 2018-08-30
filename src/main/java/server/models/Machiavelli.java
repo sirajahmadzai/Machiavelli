@@ -25,12 +25,10 @@ public class Machiavelli {
         players = new ArrayList<>();
         table = new Table();
 
+        //creates players based on the numOfPlayers
         for (int playerCounter = 0; playerCounter < numOfPlayers; playerCounter++) {
             players.add(new Player(numOfPlayers, "Player" + numOfPlayers + 1));
         }
-
-        dealHands();
-
     }
 
     /***************************************
@@ -89,8 +87,12 @@ public class Machiavelli {
     /**
      * @param player
      */
-    public void drawCardFromDeck(Player player) {
-        player.getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
+    public void drawCardFromDeck(Player player) throws EmptyDeckException {
+        try {
+            player.getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new EmptyDeckException();
+        }
     }
 
     /**
@@ -190,21 +192,11 @@ public class Machiavelli {
 
     }
 
-    /***************************************
-     *************** PRIVATE HELPERS **************
-     **************************************/
-    /**
-     *
-     */
-    private void verifyTable() {
-
-    }
-
     /**
      * deals fifteen random cards per player
      */
-    private void dealHands() {
-        int currPlayerID = (new Random()).nextInt(players.size());
+    public void dealHands(Player dealer) {
+        int currPlayerID = dealer.getPlayerID();
 
         for (int cardCounter = 0; cardCounter < 15; cardCounter++) {
 
@@ -221,6 +213,22 @@ public class Machiavelli {
                 currPlayerID++;
                 playerCounter++;
             }
+        }
+    }
+
+    /***************************************
+     *************** PRIVATE HELPERS **************
+     **************************************/
+    /**
+     *
+     */
+    private void verifyTable() {
+
+    }
+
+    public class EmptyDeckException extends Exception {
+        public EmptyDeckException() {
+            super("Deck is empty!");
         }
     }
 }
