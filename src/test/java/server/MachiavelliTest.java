@@ -100,7 +100,11 @@ public class MachiavelliTest {
 
             assertEquals("", CARD2, TABLE.getDeck().get(TABLE.getDeck().size() - 1));
 
-            GAME.drawCardFromDeck(PLAYER1);
+            try {
+                GAME.drawCardFromDeck(PLAYER1);
+            } catch (Machiavelli.EmptyDeckException e) {
+                fail("Deck is empty!");
+            }
 
             assertEquals("drawCardFromDeck() != CARD1", -1, TABLE.getDeck().indexOf(CARD2));
             assertEquals("", CARD2, GAME.getPlayers().get(PLAYER1_ID).getHand().get(GAME.getPlayers().get(PLAYER1_ID).getHand().size() - 1));
