@@ -1,59 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.*?>
-<BorderPane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0" prefHeight="1080.0"
-            prefWidth="1920.0" style="-fx-background-image: url('game.jpg');" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.views.GameView">
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-image: url('images/game.jpg');" stylesheets="@../css/gameview.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.views.GameView">
     <bottom>
-        <HBox fx:id="bottomPlayer" alignment="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="120.0"
-              BorderPane.alignment="BOTTOM_CENTER">
+        <HBox fx:id="bottomPlayer" alignment="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="120.0" BorderPane.alignment="BOTTOM_CENTER">
             <BorderPane.margin>
-                <Insets top="30.0"/>
+                <Insets top="30.0" />
             </BorderPane.margin>
         </HBox>
     </bottom>
     <left>
-        <VBox fx:id="leftPlayer" alignment="CENTER" maxWidth="1400.0" minHeight="0.0" minWidth="0.0" prefWidth="120.0"
-              spacing="5.0" BorderPane.alignment="CENTER_LEFT">
+        <VBox fx:id="leftPlayer" alignment="CENTER" maxWidth="1400.0" minHeight="0.0" minWidth="0.0" prefWidth="120.0" spacing="5.0" BorderPane.alignment="CENTER_LEFT">
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
             <BorderPane.margin>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </BorderPane.margin>
         </VBox>
     </left>
     <right>
-        <VBox fx:id="rightPlayer" alignment="CENTER" minHeight="0.0" minWidth="0.0" prefWidth="120.0"
-              BorderPane.alignment="CENTER_RIGHT">
+        <VBox fx:id="rightPlayer" alignment="CENTER" minHeight="0.0" minWidth="0.0" prefWidth="120.0" BorderPane.alignment="CENTER_RIGHT">
             <BorderPane.margin>
-                <Insets/>
+                <Insets />
             </BorderPane.margin>
         </VBox>
     </right>
     <top>
-        <HBox fx:id="topPlayer" alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0" prefHeight="120.0" spacing="5.0"
-              BorderPane.alignment="TOP_CENTER">
+        <HBox fx:id="topPlayer" alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0" prefHeight="120.0" spacing="5.0" BorderPane.alignment="TOP_CENTER">
             <BorderPane.margin>
-                <Insets/>
+                <Insets />
             </BorderPane.margin>
         </HBox>
     </top>
     <center>
-        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0"
-                   style="-fx-background-image: url('game.jpg');" BorderPane.alignment="CENTER">
+        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" style="-fx-background-image: url('images/game.jpg');" BorderPane.alignment="CENTER">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                     <children>
-                        <HBox fx:id="playAreaTop"/>
+                        <HBox fx:id="playAreaTop" />
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                    <children>
-                        <FlowPane fx:id="setsArea"/>
-                    </children>
+               <children>
+                  <FlowPane fx:id="setsArea" orientation="VERTICAL" />
+               </children>
                 </AnchorPane>
             </items>
         </SplitPane>
