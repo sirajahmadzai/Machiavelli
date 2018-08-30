@@ -27,6 +27,7 @@ public abstract class Card {
      * @param id
      */
     public Card(Suit suit, int rank, int id) throws InvalidArgumentException {
+        if (id < 0) throw new InvalidArgumentException(new String[]{"Invalid id"});
         if (suit == null) throw new InvalidArgumentException(new String[]{"Suit was null"});
         this.suit = suit;
         this.pointValue = getCardValueByInitialRank(rank);
@@ -121,11 +122,13 @@ public abstract class Card {
     private String getImageUrl() {
         String imgUrl = "";
 
+        imgUrl += "images/";
         imgUrl += rank;
-        imgUrl += suit.name().substring(0, 1).toLowerCase();
+        imgUrl += suit.name().substring(0, 1).toUpperCase();
         imgUrl += ".png";
         return imgUrl;
     }
+
 
     /**
      * Custom exception handling class
