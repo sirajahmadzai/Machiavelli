@@ -22,7 +22,7 @@ public class Server {
         log.info("starting server on: " + ip + " at port " + port);
         System.out.println("starting server on: " + ip + " at port " + port);
         listener = new ServerSocket(port, 100, InetAddress.getByName(ip));
-        //listener = new ServerSocket(port);
+        listener = new ServerSocket(port);
     }
 
     public void removeClientHandler(ClientHandler clientHandler) {
@@ -57,11 +57,6 @@ public class Server {
                 }
             }
 
-//            GameController gameController = new GameController(playerClientHandlers);
-
-//            gameController.initGame(numPlayers, 3); //CHANGE THIS NUMBER HERE TO RIG (-1 for regular, 1 for scenario 1, 2 for scenario 2)
-
-//            gameController.startGame();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
