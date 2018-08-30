@@ -1,10 +1,7 @@
 package server.models;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
-import server.models.cards.Basic;
-import server.models.cards.Card;
-import server.models.cards.Joker;
-import server.models.cards.Suit;
+import server.models.cards.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,7 +121,21 @@ public class Table {
     private ArrayList<Card> generateStandardDeck() {
         ArrayList<Card> standardDeck = new ArrayList<>();
         int cardID = 0;
-        for (int rank = 1; rank <= 14; rank++) {
+
+        try {
+            int rank = 1;
+            standardDeck.add(new Ace(Suit.CLUBS, rank, cardID));
+            cardID++;
+            standardDeck.add(new Ace(Suit.DIAMONDS, rank, cardID));
+            cardID++;
+            standardDeck.add(new Ace(Suit.HEARTS, rank, cardID));
+            cardID++;
+            standardDeck.add(new Ace(Suit.SPADES, rank, cardID));
+            cardID++;
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
+        for (int rank = 2; rank <= 14; rank++) {
             try {
                 standardDeck.add(new Basic(Suit.CLUBS, rank, cardID));
                 cardID++;
@@ -150,4 +161,5 @@ public class Table {
         }
         return standardDeck;
     }
+
 }
