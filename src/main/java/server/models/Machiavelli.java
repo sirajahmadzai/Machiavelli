@@ -1,5 +1,9 @@
 package server.models;
 
+import commands.Command;
+import commands.ServerCommands;
+import commands.StringCommand;
+import server.ClientHandler;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
@@ -14,6 +18,8 @@ public class Machiavelli {
      ********************************/
     private Table table;
     private ArrayList<Player> players;
+    private int numOfPlayers;
+    private boolean gameStarted = false;
 
 
     /**
@@ -24,11 +30,12 @@ public class Machiavelli {
     public Machiavelli(int numOfPlayers) {
         players = new ArrayList<>();
         table = new Table();
+        this.numOfPlayers = numOfPlayers;
 
         //creates players based on the numOfPlayers
-        for (int playerCounter = 0; playerCounter < numOfPlayers; playerCounter++) {
-            players.add(new Player(numOfPlayers, "Player" + numOfPlayers + 1));
-        }
+//        for (int playerCounter = 0; playerCounter < numOfPlayers; playerCounter++) {
+//            players.add(new Player(numOfPlayers, "Player" + playerCounter + 1));
+//        }
     }
 
     /***************************************
@@ -189,7 +196,6 @@ public class Machiavelli {
      */
     public void appendCard(CardSet cardSet, Card card) {
         cardSet.getCards().add(card);
-
     }
 
     /**
@@ -214,6 +220,12 @@ public class Machiavelli {
                 playerCounter++;
             }
         }
+
+        StringCommand dealCommand = new StringCommand(Command.CommandNames.DEAL_HANDS);
+        for (Player player : players) {
+            dealCommand.setParameterValue(player.getHandAsText()+" "+ player.getPlayerID() );
+            sendCommandToPlayer(dealCommand, player);
+        }
     }
 
     /***************************************
@@ -224,6 +236,47 @@ public class Machiavelli {
      */
     private void verifyTable() {
 
+    }
+
+    public boolean isTableFull() {
+        return numOfPlayers <= players.size();
+    }
+
+    public void addPlayer(ClientHandler clientHandler) {
+        String playerName = "Player" + (players.size() + 1);
+        Player player = new Player(players.size(), playerName);
+        player.setClientHandler(clientHandler);
+        players.add(player);
+        sendCommandToAllPlayers(new Command(Command.CommandNames.INTRODUCE_PLAYER).addParameter(playerName));
+    }
+
+    public void startGame() {
+        
+        if (!gameStarted && isTableFull()) {
+            sendCommandToAllPlayers(ServerCommands.SHOW_GAMEVIEW + " " + numOfPlayers);
+            dealHands(players.get(0));
+            this.gameStarted = true;
+        }
+    }
+
+    private void sendCommandToAllPlayers(Command command) {
+        for (Player player : players) {
+            sendCommandToPlayer(command, player);
+        }
+    }
+
+    private void sendCommandToAllPlayers(String command) {
+        for (Player player : players) {
+            sendCommandToPlayer(command, player);
+        }
+    }
+
+    private void sendCommandToPlayer(Command command, Player player) {
+        player.getClientHandler().sendCommand(command.toString());
+    }
+
+    private void sendCommandToPlayer(String command, Player player) {
+        player.getClientHandler().sendCommand(command);
     }
 
     public class EmptyDeckException extends Exception {

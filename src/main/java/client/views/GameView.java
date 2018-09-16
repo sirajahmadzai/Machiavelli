@@ -1,11 +1,15 @@
 package client.views;
 
+import client.PlayerPosition;
+import commands.Command;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,8 +28,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameView extends View {
-
-
     /*************************************************************
      ************************FXML INJECTIONS**********************
      *************************************************************/
@@ -38,18 +40,6 @@ public class GameView extends View {
 
     @FXML // fx:id="board"
     private BorderPane board; // Value injected by FXMLLoader
-
-    @FXML // fx:id="bottomPlayer"
-    private HBox bottomPlayer; // Value injected by FXMLLoader
-
-    @FXML // fx:id="leftPlayer"
-    private VBox leftPlayer; // Value injected by FXMLLoader
-
-    @FXML // fx:id="rightPlayer"
-    private VBox rightPlayer; // Value injected by FXMLLoader
-
-    @FXML // fx:id="topPlayer"
-    private HBox topPlayer; // Value injected by FXMLLoader
 
     @FXML
     private HBox playAreaTop;
@@ -73,17 +63,11 @@ public class GameView extends View {
      *********************PRIVATE MAPS****************************
      *************************************************************/
 
-    private Map<Player, ObservableList<Node>> playerHands;
-
-
     private Map<Card, ObservableList<Node>> sets;
 
     private Map<CardSet, VBox> setViews;
 
-    /**
-     * PlayerPosition is an enum, Integer is the playerID
-     */
-    private Map<Player, PlayerPosition> playerPositions;
+    private ArrayList<client.Player> clientPlayers = new ArrayList<>();
 
     /*************************************************************
      *****************************END OF MAPS*********************
@@ -98,55 +82,96 @@ public class GameView extends View {
 
     private Label messageBox;
 
+    private int playerCount = 0;
+
+    private static GameView ourInstance = new GameView();
+
+    public static GameView getInstance() {
+        return ourInstance;
+    }
+
+    private GameView() {
+        super();
+        fxml = "/fxml/GameView.fxml";
+
+        try {
+            loadFxml();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
+        this.clientPlayers = new ArrayList<>();
+
+        PlayerPosition[] positions = {PlayerPosition.BOTTOM, PlayerPosition.LEFT, PlayerPosition.TOP, PlayerPosition.RIGHT};
+
+        // Put 2nd player at top if there are only 2 players.
+        if(playerCount==2){
+            positions[1] =PlayerPosition.TOP;
+        }
+
+        for (int i = 0; i < playerCount; i++) {
+            client.Player player = new client.Player(i);
+
+            player.setPlayerId(i);  //TODO: Get this id from server!
+            player.setPosition(positions[i]);
+
+            clientPlayers.add(player);
+
+            switch (player.getPosition()){
+                case TOP:
+                    board.setTop(player);
+                    break;
+                case BOTTOM:
+                    board.setBottom(player);
+                    break;
+                case LEFT:
+                    board.setLeft(player);
+                    break;
+                case RIGHT:
+                    board.setRight(player);
+                    break;
+            }
+        }
+    }
+
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        bottomPlayer.setSpacing(-20);
-        leftPlayer.setSpacing(-50);
-        topPlayer.setSpacing(-20);
-        rightPlayer.setSpacing(-50);
+//        bottomPlayer.setSpacing(-20);
+//        leftPlayer.setSpacing(-50);
+//        topPlayer.setSpacing(-20);
+//        rightPlayer.setSpacing(-50);
 
-
+//        leftPlayer.setRotate(90);
+//        topPlayer.setRotate(90);
     }
 
     /******************************************************
      ********************GUI MAPPING***********************
      *****************************************************/
 
-    /**
-     * receives player ids and maps out game areas to each player
-     *
-     * @param players
-     */
-    private void initPlayerMaps(ArrayList<Player> players) {
-
-        //bottom for player1 and top for player2 in a 2 player game
-        if (players.size() == 2) {
-            playerHands.put(players.get(0), bottomPlayer.getChildren());
-
-            playerHands.put(players.get(1), topPlayer.getChildren());
-        }
-
-        //CLOCKWISE
-        if (players.size() >= 3) {
-            playerHands.put(players.get(0), bottomPlayer.getChildren());
-            playerHands.put(players.get(1), leftPlayer.getChildren());
-            playerHands.put(players.get(2), topPlayer.getChildren());
-
-        }
-        if (players.size() == 4) {
-            playerHands.put(players.get(3), rightPlayer.getChildren());
-        }
+    @FXML
+    public void onCommandEntered(ActionEvent ae) {
+        String cmdText = ((TextField) ae.getSource()).getText();
+        Command cmd = new Command(cmdText);
+        getMainApp().sendCommandToServer(cmd);
     }
 
     /**
      * @param players
      */
     private void init(ArrayList<Player> players) {
-        setViews = new HashMap<>();
-        playerHands = new HashMap<>();
+//        setViews = new HashMap<>();
+//        playerHands = new HashMap<>();
 
-        initPlayerMaps(players);
+//        initPlayerMaps(players);
     }
 
     private void initPlayAreaTop() {
@@ -161,80 +186,6 @@ public class GameView extends View {
         playAreaTop.getChildren().add(messageBox);
     }
 
-    /**
-     * set up 2 player game
-     *
-     * @param bottomPlayer
-     * @param topPlayer
-     */
-    public void setup(String backOfCardImagePath, Player bottomPlayer, Player topPlayer) {
-        backOfCardPath = backOfCardImagePath;
-        ArrayList<Player> players = new ArrayList<>();
-
-        players.add(bottomPlayer);
-        players.add(topPlayer);
-
-        init(players);
-
-        playerPositions = new HashMap<>();
-        playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
-        playerPositions.put(topPlayer, PlayerPosition.TOP);
-        initPlayAreaTop();
-
-    }
-
-    /**
-     * setup 3 player game
-     *
-     * @param bottomPlayer
-     * @param leftPlayer
-     * @param topPlayer
-     */
-    public void setup(String backOfCardImagePath, Player bottomPlayer, Player leftPlayer, Player topPlayer) {
-        backOfCardPath = backOfCardImagePath;
-
-        ArrayList<Player> players = new ArrayList<>();
-
-        players.add(bottomPlayer);
-        players.add(leftPlayer);
-        players.add(topPlayer);
-
-        init(players);
-
-        playerPositions = new HashMap<>();
-        playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
-        playerPositions.put(leftPlayer, PlayerPosition.LEFT);
-        playerPositions.put(topPlayer, PlayerPosition.TOP);
-        initPlayAreaTop();
-    }
-
-    /**
-     * set up 4 player game
-     *
-     * @param bottomPlayer
-     * @param leftPlayer
-     * @param topPlayer
-     * @param rightPlayer
-     */
-    public void setup(String backOfCardImagePath, Player bottomPlayer, Player leftPlayer, Player topPlayer, Player rightPlayer) {
-        backOfCardPath = backOfCardImagePath;
-
-        ArrayList<Player> players = new ArrayList<>();
-
-        players.add(bottomPlayer);
-        players.add(leftPlayer);
-        players.add(topPlayer);
-        players.add(rightPlayer);
-
-        init(players);
-
-        playerPositions = new HashMap<>();
-        playerPositions.put(bottomPlayer, PlayerPosition.BOTTOM);
-        playerPositions.put(leftPlayer, PlayerPosition.LEFT);
-        playerPositions.put(topPlayer, PlayerPosition.TOP);
-        playerPositions.put(rightPlayer, PlayerPosition.RIGHT);
-        initPlayAreaTop();
-    }
 
     /*******************************
      * GUI MAPPING ENDS************
@@ -258,20 +209,24 @@ public class GameView extends View {
      *************************HANDS******************
      ************************************************/
 
-    //todo: remove currentPlayerId and instead check for ownership of the client and unuse mouseEvent
-
-    /**
-     * @param player
-     * @param mouseEvent
-     */
-    public void addCardToHand(Player player, Card card, EventHandler<MouseEvent> mouseEvent) {
-        if (true) {
-            addCardToMap(playerHands, player, card, mouseEvent);
-        } else {
-            addCardToMap(playerHands, player, card, mouseEvent);
+    private client.Player getPlayerById(int id) {
+        for (client.Player player : clientPlayers) {
+            if (player.getPlayerId()== id)
+                return player;
         }
+
+//        TODO: Write better code.
+        return null;
     }
 
+    public void addCardToHand(String playerId, Card card, EventHandler<MouseEvent> mouseEvent) {
+        client.Player player = getPlayerById(Integer.parseInt(playerId));
+        player.addCardToHand(card);
+    }
+
+    public void dealHands() {
+//        Distribute back of the cards to other players.
+    }
 
     /***********************************************
      **************END OF HAND METHODS**************
@@ -402,35 +357,4 @@ public class GameView extends View {
         list.remove(nodeToRemove);
     }
 
-    /**
-     * @param map
-     * @param player
-     * @param mouseEvent
-     */
-    private void addCardToMap(Map<Player, ObservableList<Node>> map, Player player, Card card, EventHandler<MouseEvent> mouseEvent) {
-        //rotation is hard coded for now
-        PlayerPosition pos = playerPositions.get(player);
-
-        ImageView imv = createCard(card);
-        if (pos == PlayerPosition.BOTTOM) {
-            //DO NOTHING
-        } else if (pos == PlayerPosition.LEFT) {
-            imv.setRotate(90);
-        } else if (pos == PlayerPosition.RIGHT) {
-            imv.setRotate(270);
-        } else {
-            imv.setRotate(180);
-        }
-        imv.setOnMouseClicked(mouseEvent);
-
-        map.get(player).add(imv);
-    }
-
-
-    private enum PlayerPosition {
-        BOTTOM,
-        LEFT,
-        TOP,
-        RIGHT
-    }
 }

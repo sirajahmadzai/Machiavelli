@@ -1,8 +1,10 @@
 package server.models;
 
+import server.ClientHandler;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
+import java.util.StringJoiner;
 
 public class Player {
 
@@ -13,6 +15,7 @@ public class Player {
     private String name;
     private ArrayList<Card> hand;
     private int pointValue;
+    private ClientHandler clientHandler;
 
     /**
      * CONSTRUCTOR
@@ -23,8 +26,17 @@ public class Player {
     public Player(int playerID, String name) {
         this.playerID = playerID;
         this.name = name;
+
         hand = new ArrayList<>();
         pointValue = 0;
+    }
+
+    public ClientHandler getClientHandler() {
+        return clientHandler;
+    }
+
+    public void setClientHandler(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
     }
 
     /**
@@ -52,6 +64,15 @@ public class Player {
      */
     public ArrayList<Card> getHand() {
         return hand;
+    }
+
+    public String getHandAsText() {
+        StringJoiner joiner = new StringJoiner(" ");
+        for(Card card : hand){
+            joiner.add(card.toString());
+        }
+
+        return joiner.toString();
     }
 
     /**

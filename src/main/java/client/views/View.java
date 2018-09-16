@@ -1,18 +1,26 @@
 package client.views;
 
 import client.App;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.net.URL;
 
 
 public abstract class View {
+
+    protected String fxml;
+    protected Parent root;
+
 
     /*******************************************************************
      * *************************PRIVATE STATIC FINALS*******************
@@ -27,6 +35,23 @@ public abstract class View {
      * *************************PRIVATES*******************
      ******************************************************************/
     private App mainApp;
+
+    protected void loadFxml() throws Exception {
+        if(fxml == null || fxml.isEmpty()){
+            throw new InvalidObjectException("The fxml field should be set before calling loadFxml method.");
+        }
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setController(this);
+        loader.setLocation(View.class.getResource(fxml));
+
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.root = loader.getRoot();
+    }
 
 
     /**
@@ -105,5 +130,10 @@ public abstract class View {
         }
 
         return layout;
+    }
+
+    public Parent getRoot() {
+
+        return root;
     }
 }

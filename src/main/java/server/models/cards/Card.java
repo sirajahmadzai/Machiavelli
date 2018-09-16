@@ -2,6 +2,7 @@ package server.models.cards;
 
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
+import commands.StringCommand;
 
 public abstract class Card {
 
@@ -37,6 +38,44 @@ public abstract class Card {
         this.imgUrl = getImageUrl();
     }
 
+
+    public static Card fromString(String cardText) throws InvalidArgumentException {
+        Suit suit = Suit.JOKER;
+        int rank=0;
+
+        if (cardText.equals("joker")) {
+            return new Joker(Suit.JOKER, 15, 15);
+        } else {
+            if (cardText.endsWith("s")) {
+                suit = Suit.SPADES;
+            } else if (cardText.endsWith("h")) {
+                suit = Suit.HEARTS;
+            } else if (cardText.endsWith("d")) {
+                suit = Suit.DIAMONDS;
+            } else if (cardText.endsWith("c")) {
+                suit = Suit.CLUBS;
+            }
+
+            String rankText = cardText.substring(0, cardText.length() - 1);
+            switch (rankText) {
+                case "a":
+                    return new Ace(suit,14,14);
+                case "j":
+                    rank = 11;
+                    break;
+                case "q":
+                    rank = 12;
+                    break;
+                case "k":
+                    rank = 13;
+                    break;
+                default:
+                    rank = Integer.parseInt(rankText);
+            }
+            return new Basic(suit, rank, rank);
+        }
+    }
+
     /***************************************
      *************** GETTERS **************
      **************************************/
@@ -64,7 +103,7 @@ public abstract class Card {
     /**
      * @return
      */
-    String getName() {
+    public String getName() {
         return name;
     }
 

@@ -1,6 +1,7 @@
 package server;
 
 import commands.ClientCommands;
+import commands.Command;
 import commands.ServerCommands;
 
 import java.io.BufferedReader;
@@ -35,13 +36,6 @@ public class ClientHandler implements Runnable {
         out = new PrintWriter(socket.getOutputStream(), true);
 
         id = ++nextId;
-
-        if (id == 1) {
-//            this.out.println(ServerCommands.SHOW_PLAYER_SELECTION_VIEW.toString());
-        } else {
-            this.out.println(ServerCommands.WAIT_FOR_SETUP.toString());
-        }
-
     }
 
     /**
@@ -49,14 +43,13 @@ public class ClientHandler implements Runnable {
      */
     @Override
     public void run() {
-
         try {
-            Scanner scanner = new Scanner(in.readLine());
-            String cmd = scanner.next();
-
-            if (cmd.equals((ClientCommands.NUMBER_OF_PLAYERS.toString()))) {
-                int numOfPlayers = scanner.nextInt();
+            while (true) {
+                String cmdString = in.readLine();
+                Command cmd = new Command(cmdString);
+                processCommand(cmd);
             }
+
         } catch (SocketException e) {
             System.out.println("a Client disconnected!");
         } catch (IOException e) {
@@ -71,6 +64,21 @@ public class ClientHandler implements Runnable {
                 socket.close();
             } catch (IOException e) {
             }
+        }
+    }
+
+    private void processCommand(Command cmd) {
+        switch (cmd.getName()) {
+            case NUMBER_OF_PLAYERS:
+                break;
+//            case DECK_CLICKED:
+//                break;
+//            case PROMPT_PLAYER:
+//                break;
+            default:
+                System.out.println("Command received: " + cmd.serialize());
+                cmd.execute();
+                break;
         }
     }
 
@@ -179,5 +187,9 @@ public class ClientHandler implements Runnable {
      */
     public void closeSocket() throws IOException {
         socket.close();
+    }
+
+    public void sendCommand(String command){
+        out.println(command);
     }
 }

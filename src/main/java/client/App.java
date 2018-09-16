@@ -1,16 +1,15 @@
 package client;
 
-import client.views.GameView;
-import client.views.LoginView;
-import client.views.View;
-import client.views.WaitingForOtherPlayersView;
+import client.views.*;
 import commands.ClientCommands;
+import commands.Command;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tests.testController.GameViewControllerTest;
@@ -38,7 +37,6 @@ public class App extends Application {
         Application.launch(App.class);
     }
 
-
     /*******************************************************************
      * *************************PRIVATES********************************
      ******************************************************************/
@@ -46,12 +44,14 @@ public class App extends Application {
 
     private Stage primaryStage;
 
+    private Scene scene;
+
     private View activeView;
 
     private LoginView loginView;
 
     @FXML
-    private AnchorPane rootLayout;
+    private StackPane rootLayout;
 
     /*******************************************************************
      **************************PROTECTEDS********************************
@@ -70,18 +70,21 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         initRootLayout();
-        loginView = new LoginView();
-        showLoginView();
-        showGameView(2);
+
+        ClientManager.getInstance().setStage(primaryStage);
+        ClientManager.getInstance().setApp(this);
+
+        ClientManager.getInstance().showView(StartOptionsView.getInstance());
+
+//        showView();
+//        showLoginView();
+//        showGameView(4);
+//        showWaitingView();
 
         //this is for networked version
+        loginView = new LoginView();
         loginView.addBtnLoginAction(event -> {
-            try {
-                clientThread = new Thread(new Client(this, loginView.getIp(), loginView.getPort()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            clientThread.start();
+            ClientManager.getInstance().loginServer(loginView.getIp(), loginView.getPort());
         });
     }
 
@@ -93,10 +96,11 @@ public class App extends Application {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/fxml/RootLayout.fxml"));
-            rootLayout = (AnchorPane) loader.load();
+            rootLayout = (StackPane) loader.load();
+
 
             // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
+            scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
 
             primaryStage.setTitle(TITLE);
@@ -127,6 +131,12 @@ public class App extends Application {
         return primaryStage;
     }
 
+    public synchronized void showView(View view) {
+        scene.setRoot(view.getRoot());
+        activeView = view;
+        view.setMainApp(this);
+    }
+
     /*******************************************************************
      **************************DISPLAY METHODS**************************
      ******************************************************************/
@@ -142,7 +152,6 @@ public class App extends Application {
                 BorderPane gameViewLayout = (BorderPane) loader.load();
 
                 rootLayout.getChildren().add(gameViewLayout);
-
 
                 gameViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
                 gameViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
@@ -165,17 +174,17 @@ public class App extends Application {
      *
      */
     public synchronized void showWaitingView() {
-        WaitingForOtherPlayersView waitingForOthersView = new WaitingForOtherPlayersView();
-        activeView = waitingForOthersView;
-
-        VBox waitingViewLayout = waitingForOthersView.getLayout();
-
-        rootLayout.getChildren().add(waitingViewLayout);
-
-        waitingViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-        waitingViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-
-        waitingForOthersView.setMainApp(this);
+//        WaitingForOtherPlayersView waitingForOthersView = new WaitingForOtherPlayersView();
+//        activeView = waitingForOthersView;
+//
+//        VBox waitingViewLayout = waitingForOthersView.getLayout();
+//
+//        rootLayout.getChildren().add(waitingViewLayout);
+//
+//        waitingViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
+//        waitingViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
+//
+//        waitingForOthersView.setMainApp(this);
     }
 
     /**
@@ -195,11 +204,16 @@ public class App extends Application {
     }
 
 //TODO: uncomment for networked version
+
     /**
      * @param cmd
      * @param args
      */
     public void sendCommandToServer(ClientCommands cmd, String args) {
         this.out.println(cmd + " " + args);
+    }
+
+    public void sendCommandToServer(Command cmd) {
+        this.out.println(cmd.serialize());
     }
 }
