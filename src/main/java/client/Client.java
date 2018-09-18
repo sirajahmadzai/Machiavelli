@@ -2,6 +2,7 @@ package client;
 
 import client.views.GameView;
 import commands.Command;
+import commands.CommandFactory;
 import commands.ServerCommands;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -60,23 +61,24 @@ public class Client extends Task<Void>/* implements Runnable*/ {
     @Override
     protected Void call() throws Exception {
         // Process all messages from server, according to the protocol.
-        String response;
-        while ((response = in.readLine()) != null) {
-            Command command = new Command(response);
-            System.out.println("Client received command: " + command);
-            switch (command.getName()) {
-                case SHOW_GAMEVIEW:
-                    Platform.runLater(() -> manager.startGame(Integer.parseInt(command.getParameter())));
-                    break;
-                case INTRODUCE_PLAYER:
-                    Platform.runLater(() -> manager.showView(GameView.getInstance()));
-                    break;
-                case DEAL_HANDS:
-                    Stack<Object> params = command.getParameters();
-                    Platform.runLater(() -> manager.dealHand(params.pop().toString(),params));
-                    break;
-            }
-            System.out.println("Command processed " + command);
+        try {
+            String response;
+            while ((response = in.readLine()) != null) {
+                Command command = CommandFactory.buildCommand(response);
+                System.out.println("Client received command: " + command);
+                switch (command.getName()) {
+                    case SHOW_GAMEVIEW:
+                        Platform.runLater(() -> manager.startGame(Integer.parseInt(command.getParameter())));
+                        break;
+                    case DEAL_HANDS:
+                        Stack<Object> params = command.getParameters();
+                        Platform.runLater(() -> manager.dealHand(Integer.parseInt(params.pop().toString()), params));
+                        break;
+                    default:
+                        command.execute();
+                }
+
+                System.out.println("Command processed " + command);
 
 //            Scanner scanner = new Scanner(response);
 //            String cmd = scanner.next();
@@ -129,8 +131,13 @@ public class Client extends Task<Void>/* implements Runnable*/ {
 //            } else if (cmd.equals(ServerCommands.FILL_DECK.toString())) {
 ////                UICon.fillDecks();
 //            }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return null;
     }
+
 
 }

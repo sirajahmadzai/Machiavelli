@@ -1,6 +1,8 @@
 package client.views;
 
-import client.PlayerPosition;
+import client.GameSeats;
+import client.Player;
+import client.ViewHelper;
 import commands.Command;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,17 +15,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import server.models.CardSet;
-import server.models.Player;
 import server.models.cards.Card;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -31,13 +33,6 @@ public class GameView extends View {
     /*************************************************************
      ************************FXML INJECTIONS**********************
      *************************************************************/
-
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
-
     @FXML // fx:id="board"
     private BorderPane board; // Value injected by FXMLLoader
 
@@ -67,8 +62,6 @@ public class GameView extends View {
 
     private Map<CardSet, VBox> setViews;
 
-    private ArrayList<client.Player> clientPlayers = new ArrayList<>();
-
     /*************************************************************
      *****************************END OF MAPS*********************
      *************************************************************/
@@ -76,11 +69,11 @@ public class GameView extends View {
     /*************************************************************
      *****************************PRIVATES************************
      *************************************************************/
-    private String backOfCardPath;
-
     private ImageView deckImageView;
 
     private Label messageBox;
+
+    private GameSeats seats;
 
     private int playerCount = 0;
 
@@ -101,62 +94,34 @@ public class GameView extends View {
         }
     }
 
+    /**
+     * Number of players the game set up for.
+     * @return
+     */
     public int getPlayerCount() {
         return playerCount;
     }
 
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
-        this.clientPlayers = new ArrayList<>();
-
-        PlayerPosition[] positions = {PlayerPosition.BOTTOM, PlayerPosition.LEFT, PlayerPosition.TOP, PlayerPosition.RIGHT};
-
-        // Put 2nd player at top if there are only 2 players.
-        if(playerCount==2){
-            positions[1] =PlayerPosition.TOP;
-        }
-
-        for (int i = 0; i < playerCount; i++) {
-            client.Player player = new client.Player(i);
-
-            player.setPlayerId(i);  //TODO: Get this id from server!
-            player.setPosition(positions[i]);
-
-            clientPlayers.add(player);
-
-            switch (player.getPosition()){
-                case TOP:
-                    board.setTop(player);
-                    break;
-                case BOTTOM:
-                    board.setBottom(player);
-                    break;
-                case LEFT:
-                    board.setLeft(player);
-                    break;
-                case RIGHT:
-                    board.setRight(player);
-                    break;
-            }
-        }
+        this.seats = new GameSeats(board, playerCount);
+        initPlayAreaTop();
     }
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-//        bottomPlayer.setSpacing(-20);
-//        leftPlayer.setSpacing(-50);
-//        topPlayer.setSpacing(-20);
-//        rightPlayer.setSpacing(-50);
 
-//        leftPlayer.setRotate(90);
-//        topPlayer.setRotate(90);
     }
 
     /******************************************************
      ********************GUI MAPPING***********************
      *****************************************************/
 
+    /**
+     * for testing purposes
+     * @param ae
+     */
     @FXML
     public void onCommandEntered(ActionEvent ae) {
         String cmdText = ((TextField) ae.getSource()).getText();
@@ -164,18 +129,8 @@ public class GameView extends View {
         getMainApp().sendCommandToServer(cmd);
     }
 
-    /**
-     * @param players
-     */
-    private void init(ArrayList<Player> players) {
-//        setViews = new HashMap<>();
-//        playerHands = new HashMap<>();
-
-//        initPlayerMaps(players);
-    }
-
     private void initPlayAreaTop() {
-        deckImageView = createImageView(backOfCardPath);
+        deckImageView = ViewHelper.createImageView(Card.BACK_OF_CARD_IMAGE);
         playAreaTop.getChildren().add(deckImageView);
         deckImageView.setVisible(false);
 
@@ -208,24 +163,19 @@ public class GameView extends View {
     /***********************************************
      *************************HANDS******************
      ************************************************/
-
-    private client.Player getPlayerById(int id) {
-        for (client.Player player : clientPlayers) {
-            if (player.getPlayerId()== id)
-                return player;
-        }
-
-//        TODO: Write better code.
-        return null;
-    }
-
-    public void addCardToHand(String playerId, Card card, EventHandler<MouseEvent> mouseEvent) {
-        client.Player player = getPlayerById(Integer.parseInt(playerId));
+    public void addCardToHand(int seatNumber, Card card, EventHandler<MouseEvent> mouseEvent) {
+        Player player = seats.getPlayer(seatNumber);
         player.addCardToHand(card);
     }
 
+    /**
+     * Deal 1 card to each opponent
+     */
     public void dealHands() {
-//        Distribute back of the cards to other players.
+        // TODO: maybe an animation?
+        for (Player player : seats.getOpponents()) {
+            player.addHiddenCardToHand();
+        }
     }
 
     /***********************************************
@@ -255,7 +205,7 @@ public class GameView extends View {
         VBox setView = new VBox(-20);
         setView.setPadding(new Insets(10, 10, 10, 10));
         for (Card card : set.getCards()) {
-            ImageView imageView = createImageView(card.getImgUrl());
+            ImageView imageView = ViewHelper.createImageView(card.getImgUrl());
             setView.getChildren().add(imageView);
         }
         setsArea.getChildren().add(setView);
@@ -277,64 +227,13 @@ public class GameView extends View {
      *********************************************************************************/
 
     /**
-     * @param resource
-     * @return Image
-     */
-    private Image getImage(String resource) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL url = classLoader.getResource(resource);
-        File file = null;
-        if (url != null) {
-            file = new File(url.getFile());
-        }
-        Image thisImage = null;
-        try {
-            if (file != null) {
-                thisImage = new Image(new FileInputStream(file));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return thisImage;
-    }
-
-    /**
-     * @param card
-     * @return
-     */
-    private ImageView createCard(Card card) {
-        ImageView imv = createImageView(card.getImgUrl());
-        imv.setUserData(card);
-        imv.setId(String.valueOf(card.getId()));
-        return imv;
-    }
-
-    /**
-     * creates an ImageView
-     *
-     * @param imgUrl
-     * @return
-     */
-    private ImageView createImageView(String imgUrl) {
-        ImageView imageView = new ImageView(imgUrl);
-        Image type = getImage(imgUrl);
-        imageView.setImage(type);
-        imageView.setFitWidth(CARD_PREF_WIDTH);
-        imageView.setFitHeight(CARD_PREF_HEIGHT);
-
-        return imageView;
-    }
-
-    /**
      * to add a card to an ObservableList
      *
      * @param list
      * @param imgUrl
      */
     private void addCardToObservableList(ObservableList<Node> list, Card card, String imgUrl) {
-
-        list.add(createCard(card));
-
+        list.add(ViewHelper.createCard(card));
     }
 
     /**
@@ -357,4 +256,22 @@ public class GameView extends View {
         list.remove(nodeToRemove);
     }
 
+    /**
+     * Set the owner player id and seat number for this client.
+     * @param ownerPlayerId
+     * @param seatNumber
+     */
+    public void setOwnerPlayer(int ownerPlayerId, int seatNumber) {
+        seats.setOwnerSeat(seatNumber, ownerPlayerId);
+    }
+
+    /**
+     * Add new player to specified seat.
+     * @param playerName
+     * @param playerId
+     * @param seatNumber
+     */
+    public void fillSeat(String playerName, int playerId, int seatNumber) {
+        seats.setPlayerInfo(seatNumber, playerName, playerId);
+    }
 }

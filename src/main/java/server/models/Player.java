@@ -16,6 +16,7 @@ public class Player {
     private ArrayList<Card> hand;
     private int pointValue;
     private ClientHandler clientHandler;
+    private int seatNumber;
 
     /**
      * CONSTRUCTOR
@@ -26,6 +27,7 @@ public class Player {
     public Player(int playerID, String name) {
         this.playerID = playerID;
         this.name = name;
+//        this.seatNumber = seatNumber;
 
         hand = new ArrayList<>();
         pointValue = 0;
@@ -37,6 +39,19 @@ public class Player {
 
     public void setClientHandler(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
+    }
+
+    /**
+     * gets player id
+     *
+     * @return
+     */
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(int seatNumber) {
+        this.seatNumber = seatNumber;
     }
 
     /**

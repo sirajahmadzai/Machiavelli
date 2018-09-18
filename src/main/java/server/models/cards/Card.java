@@ -14,6 +14,7 @@ public abstract class Card {
     private String name;
     private int id;
     private String imgUrl;
+    public static final String BACK_OF_CARD_IMAGE = "images/b.png";
 
     /******************************
      ********** PROTECTEDS ********

@@ -1,5 +1,7 @@
 package commands;
 
+import javafx.application.Platform;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,13 +17,19 @@ public class Command {
     }
 
     public void execute() {
+        Platform.runLater( () -> doExecute() );
+    }
+
+    protected void doExecute(){
         System.out.println("Command executing itself.");
     }
+
 
     public enum CommandNames {
         NUMBER_OF_PLAYERS,
         SHOW_GAMEVIEW,
         DEAL_HANDS,
+        WELLCOME,
         INTRODUCE_PLAYER,
         TABLE_IS_FULL,
         ADD_CARD_TO_HAND,

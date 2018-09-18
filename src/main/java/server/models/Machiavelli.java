@@ -1,8 +1,7 @@
 package server.models;
 
-import commands.Command;
-import commands.ServerCommands;
-import commands.StringCommand;
+import commands.*;
+import javafx.application.Platform;
 import server.ClientHandler;
 import server.models.cards.Card;
 
@@ -223,7 +222,8 @@ public class Machiavelli {
 
         StringCommand dealCommand = new StringCommand(Command.CommandNames.DEAL_HANDS);
         for (Player player : players) {
-            dealCommand.setParameterValue(player.getHandAsText()+" "+ player.getPlayerID() );
+            // Let clients know their hand.
+            dealCommand.setParameterValue(player.getHandAsText() + " " + player.getSeatNumber());
             sendCommandToPlayer(dealCommand, player);
         }
     }
@@ -243,17 +243,36 @@ public class Machiavelli {
     }
 
     public void addPlayer(ClientHandler clientHandler) {
-        String playerName = "Player" + (players.size() + 1);
-        Player player = new Player(players.size(), playerName);
+        int playerId = players.size();
+        int seatNumber = playerId + 1;
+        String playerName = "Player" + playerId;
+
+        Player player = new Player(playerId, playerName);
+        player.setSeatNumber(seatNumber);
         player.setClientHandler(clientHandler);
+
+
+
+        Command introduce = new IntroducePlayer(playerName, playerId, seatNumber);
+        Command welcome = new Wellcome(playerName, playerId, seatNumber, numOfPlayers);
+
+        // Welcome the new player
+        sendCommandToPlayer(welcome, player);
+
+        // Introduce the new player to others
+        sendCommandToAllPlayersExcept(introduce, player);
+
+        // Introduce others to the new player.
+        for(Player p : players) {
+            // Welcome the new player
+            sendCommandToPlayer(new IntroducePlayer(p.getName(), p.getPlayerID(), p.getSeatNumber()), player);
+        }
+
         players.add(player);
-        sendCommandToAllPlayers(new Command(Command.CommandNames.INTRODUCE_PLAYER).addParameter(playerName));
     }
 
     public void startGame() {
-        
         if (!gameStarted && isTableFull()) {
-            sendCommandToAllPlayers(ServerCommands.SHOW_GAMEVIEW + " " + numOfPlayers);
             dealHands(players.get(0));
             this.gameStarted = true;
         }
@@ -262,6 +281,14 @@ public class Machiavelli {
     private void sendCommandToAllPlayers(Command command) {
         for (Player player : players) {
             sendCommandToPlayer(command, player);
+        }
+    }
+
+    private void sendCommandToAllPlayersExcept(Command command, Player exceptPlayer) {
+        for (Player player : players) {
+            if (player != exceptPlayer) {
+                sendCommandToPlayer(command, player);
+            }
         }
     }
 

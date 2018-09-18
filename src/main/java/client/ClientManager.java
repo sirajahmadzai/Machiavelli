@@ -2,13 +2,11 @@ package client;
 
 import client.views.GameView;
 import client.views.View;
-import client.views.WaitingForOtherPlayersView;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import server.Server;
 import server.models.cards.Card;
-import tests.testController.GameViewControllerTest;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,7 +60,7 @@ public class ClientManager {
     }
 
     public synchronized void showView(View view) {
-//        root.getChildren().clear();
+        root.getChildren().clear();
         root.getChildren().add(view.getRoot());
     }
 
@@ -76,14 +74,13 @@ public class ClientManager {
 
         clientThread.start();
         joinedGame = true;
-
-//        startGame();
     }
 
-    public void startGame(int playerCount) {
+    public void startGame(int numberOfPlayers) {
 //        new GameViewControllerTest(this.app, GameView.getInstance());
-        GameView.getInstance().setPlayerCount(playerCount);
+        GameView.getInstance().setPlayerCount(numberOfPlayers);
         showView(GameView.getInstance());
+        GameView.getInstance().fillDeck();
 
         //TODO: Check if the table is full.
 //        pushView(WaitingForOtherPlayersView.getInstance());
@@ -113,17 +110,23 @@ public class ClientManager {
         return app;
     }
 
-    public void dealHand(String playerId, Stack<Object> cards) {
-
-        for(Object cardText : cards){
+    public void dealHand(int seatNumber, Stack<Object> cards) {
+        for (Object cardText : cards) {
             try {
                 Card card = Card.fromString(cardText.toString());
-                GameView.getInstance().addCardToHand(playerId,card,null);
+                GameView.getInstance().addCardToHand(seatNumber, card, null);
                 GameView.getInstance().dealHands();
 
             } catch (InvalidArgumentException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void introducePlayer(String playerName, int playerId, int seatNumber, boolean owner) {
+        if (owner) {
+            GameView.getInstance().setOwnerPlayer(playerId, seatNumber);
+        }
+        GameView.getInstance().fillSeat(playerName, playerId, seatNumber);
     }
 }
