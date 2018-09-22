@@ -3,6 +3,7 @@ package server.models;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class CardSet {
 
@@ -17,9 +18,17 @@ public class CardSet {
      *
      * @param cards
      */
-    public CardSet(ArrayList<Card> cards) {
+    public CardSet(Collection<Card> cards) {
+        this.cards = new ArrayList<>(cards);
+    }
 
-        this.cards = cards;
+    public CardSet(Card card) {
+        this();
+        cards.add(card);
+    }
+
+    public CardSet() {
+        this.cards = new ArrayList<>();
     }
 
 

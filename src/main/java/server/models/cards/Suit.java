@@ -10,6 +10,7 @@ public enum Suit {
 
     HEARTS,
 
-    JOKER
+    JOKER,
 
+    HIDDEN
 }

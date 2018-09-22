@@ -2,6 +2,8 @@ package client;
 
 import client.views.GameView;
 import client.views.View;
+import client.views.components.CardSetView;
+import client.views.components.CardView;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -26,6 +28,7 @@ public class ClientManager {
     public BufferedReader in;
     public PrintWriter out;
     private App app;
+    private CardView selectedCard;
 
     public static ClientManager getInstance() {
         return ourInstance;
@@ -128,5 +131,26 @@ public class ClientManager {
             GameView.getInstance().setOwnerPlayer(playerId, seatNumber);
         }
         GameView.getInstance().fillSeat(playerName, playerId, seatNumber);
+    }
+
+//    When user clicks a card target, we move the card from old set to the target set.
+    public void droppedToTarget(CardSetView targetSet) {
+        if (selectedCard != null) {
+            Card s = (Card) this.selectedCard.getCard();
+            targetSet.addCard(s);
+
+            this.selectedCard.setSelected(false);
+            this.selectedCard.removeFromParentSet();
+            selectedCard = null;
+
+            GameView.getInstance().setPlayAreaActive(false);
+        }
+    }
+
+//    Keep track of any card selected inside the views.
+//    Activate the play area so that the selected card can be moved to it.
+    public void cardSelected(CardView selectedCard) {
+        this.selectedCard = selectedCard;
+        GameView.getInstance().setPlayAreaActive(this.selectedCard != null);
     }
 }

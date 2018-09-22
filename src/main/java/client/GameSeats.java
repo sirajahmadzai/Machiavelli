@@ -1,5 +1,6 @@
 package client;
 
+import client.views.components.Player;
 import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;

@@ -5,7 +5,6 @@ import server.gameLogic.WaitingForPlayersState;
 import server.models.Machiavelli;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -20,13 +19,6 @@ public class Server implements Runnable {
     private int port;
     private Machiavelli machiavelli;
 
-    public Server() throws IOException {
-        log.info("starting server on: localhost at port 9876");
-        System.out.println("starting server on: localhost at port 9876");
-        listener = new ServerSocket(9876);
-        currentState = WaitingForPlayersState.getInstance();
-    }
-
     public Server(int port, int numPlayers) throws IOException {
         this.numPlayers = numPlayers;
         this.port = port;
@@ -38,33 +30,18 @@ public class Server implements Runnable {
         currentState = WaitingForPlayersState.getInstance();
     }
 
-    public Server(String ip, int port) throws Exception {
-        log.info("starting server on: " + ip + " at port " + port);
-        System.out.println("starting server on: " + ip + " at port " + port);
-        listener = new ServerSocket(port, 100, InetAddress.getByName(ip));
-        listener = new ServerSocket(port);
-    }
-
     public void removeClientHandler(ClientHandler clientHandler) {
         playerClientHandlers.remove(clientHandler);
     }
-
 
     private void startClientThread(ClientHandler clientHandler) {
         Thread handlerThread = new Thread(clientHandler);
         handlerThread.setName("ClientHandlerThread " + clientHandler.getId());
 
         log.info("Client connected!");
-//        clientHandler.showGameView(numPlayers);
         handlerThread.start();
     }
 
-//    private void startGame() {
-//        for (ClientHandler cH : playerClientHandlers) {
-//            cH.showGameView(numPlayers);
-//        }
-//        gameStarted = true;
-//    }
 
     @Override
     public void run() {

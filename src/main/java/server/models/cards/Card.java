@@ -14,7 +14,10 @@ public abstract class Card {
     private String name;
     private int id;
     private String imgUrl;
+    protected boolean hidden = false;
+    protected boolean dropTarget= false;
     public static final String BACK_OF_CARD_IMAGE = "images/b.png";
+    public static final String DROP_TARGET_IMAGE = "images/dropTarget.png";
 
     /******************************
      ********** PROTECTEDS ********
@@ -38,7 +41,6 @@ public abstract class Card {
         this.id = id;
         this.imgUrl = getImageUrl();
     }
-
 
     public static Card fromString(String cardText) throws InvalidArgumentException {
         Suit suit = Suit.JOKER;
@@ -75,6 +77,12 @@ public abstract class Card {
             }
             return new Basic(suit, rank, rank);
         }
+    }
+
+//    Used to create a hidden card.
+    protected Card(){
+        suit = Suit.HIDDEN;
+        rank = 0;
     }
 
     /***************************************
@@ -169,6 +177,13 @@ public abstract class Card {
         return imgUrl;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public boolean isDropTarget() {
+        return dropTarget;
+    }
 
     /**
      * Custom exception handling class

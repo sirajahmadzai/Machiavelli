@@ -1,35 +1,32 @@
 package client.views;
 
+import client.CardEvent;
 import client.GameSeats;
-import client.Player;
 import client.ViewHelper;
+import client.views.components.CardSetView;
+import client.views.components.CardView;
+import client.views.components.PlayArea;
+import client.views.components.Player;
 import commands.Command;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import server.models.CardSet;
 import server.models.cards.Card;
+import server.models.cards.HiddenCard;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.URL;
 import java.util.Map;
-import java.util.ResourceBundle;
 
-public class GameView extends View {
+public class GameView extends View implements EventHandler<CardEvent>{
     /*************************************************************
      ************************FXML INJECTIONS**********************
      *************************************************************/
@@ -37,10 +34,14 @@ public class GameView extends View {
     private BorderPane board; // Value injected by FXMLLoader
 
     @FXML
-    private HBox playAreaTop;
+    private ImageView deckImageView;
+
+    @FXML
+    private Text messageBox;
 
     @FXML
     private FlowPane setsArea;
+    private PlayArea playArea;
 
 
     /*************************************************************
@@ -60,7 +61,7 @@ public class GameView extends View {
 
     private Map<Card, ObservableList<Node>> sets;
 
-    private Map<CardSet, VBox> setViews;
+    private Map<CardSet, HBox> setViews;
 
     /*************************************************************
      *****************************END OF MAPS*********************
@@ -69,9 +70,6 @@ public class GameView extends View {
     /*************************************************************
      *****************************PRIVATES************************
      *************************************************************/
-    private ImageView deckImageView;
-
-    private Label messageBox;
 
     private GameSeats seats;
 
@@ -105,7 +103,11 @@ public class GameView extends View {
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
         this.seats = new GameSeats(board, playerCount);
-        initPlayAreaTop();
+        this.playArea = new PlayArea(setsArea);
+
+        deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
+        deckImageView.setVisible(false);
+        messageBox.setText("Click on the deck to get started!");
     }
 
     @FXML
@@ -127,18 +129,6 @@ public class GameView extends View {
         String cmdText = ((TextField) ae.getSource()).getText();
         Command cmd = new Command(cmdText);
         getMainApp().sendCommandToServer(cmd);
-    }
-
-    private void initPlayAreaTop() {
-        deckImageView = ViewHelper.createImageView(Card.BACK_OF_CARD_IMAGE);
-        playAreaTop.getChildren().add(deckImageView);
-        deckImageView.setVisible(false);
-
-        messageBox = new Label("Click on the deck to get started!");
-        messageBox.setWrapText(true);
-        messageBox.setId("messageBox");
-
-        playAreaTop.getChildren().add(messageBox);
     }
 
 
@@ -174,7 +164,7 @@ public class GameView extends View {
     public void dealHands() {
         // TODO: maybe an animation?
         for (Player player : seats.getOpponents()) {
-            player.addHiddenCardToHand();
+            player.addCardToHand(HiddenCard.getInstance());
         }
     }
 
@@ -202,12 +192,8 @@ public class GameView extends View {
      * @param set
      */
     public void addSet(CardSet set) {
-        VBox setView = new VBox(-20);
-        setView.setPadding(new Insets(10, 10, 10, 10));
-        for (Card card : set.getCards()) {
-            ImageView imageView = ViewHelper.createImageView(card.getImgUrl());
-            setView.getChildren().add(imageView);
-        }
+        CardSetView setView = new CardSetView(set);
+
         setsArea.getChildren().add(setView);
         setViews.put(set, setView);
     }
@@ -233,7 +219,7 @@ public class GameView extends View {
      * @param imgUrl
      */
     private void addCardToObservableList(ObservableList<Node> list, Card card, String imgUrl) {
-        list.add(ViewHelper.createCard(card));
+        list.add(new CardView(card));
     }
 
     /**
@@ -273,5 +259,22 @@ public class GameView extends View {
      */
     public void fillSeat(String playerName, int playerId, int seatNumber) {
         seats.setPlayerInfo(seatNumber, playerName, playerId);
+    }
+
+    public void setPlayAreaActive(boolean active){
+        playArea.setActive(active);
+    }
+
+    @Override
+    public void handle(CardEvent event) {
+        String eventType = event.getEventType().getName();
+
+        switch (eventType){
+            case "CARD_SELECTED_AT_HAND":
+                playArea.setActive(event.getCardView() != null);
+                break;
+            case "CARD_SELECTED_AT_TABLE":
+                break;
+        }
     }
 }
