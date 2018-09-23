@@ -273,7 +273,7 @@ public class Machiavelli {
 
     public void startGame() {
         if (!gameStarted && isTableFull()) {
-            dealHands(players.get(0));
+            dealHands(getRandomPlayer());
             this.gameStarted = true;
         }
     }

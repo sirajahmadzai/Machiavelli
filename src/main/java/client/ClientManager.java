@@ -136,7 +136,7 @@ public class ClientManager {
     //    When user clicks a card target, we move the card from old set to the target set.
     public void droppedToTarget(CardSetView targetSet) {
         if (selectedCard != null) {
-            Card s = (Card) this.selectedCard.getCard();
+            Card s = this.selectedCard.getCard();
             targetSet.addCard(s);
 
             this.selectedCard.setSelected(false);

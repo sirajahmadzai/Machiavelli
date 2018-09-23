@@ -41,35 +41,16 @@ public class GameView extends View implements EventHandler<CardEvent>{
 
     @FXML
     private FlowPane setsArea;
-    private PlayArea playArea;
-
 
     /*************************************************************
      ************************END OF FXML INJECTIONS***************
      *************************************************************/
 
-    /*******************************************************************
-     * *************************PRIVATE STATIC FINALS*******************
-     ******************************************************************/
-    private static final int CARD_PREF_WIDTH = 120;
-    private static final int CARD_PREF_HEIGHT = 140;
-
-
-    /*************************************************************
-     *********************PRIVATE MAPS****************************
-     *************************************************************/
-
-    private Map<Card, ObservableList<Node>> sets;
-
-    private Map<CardSet, HBox> setViews;
-
-    /*************************************************************
-     *****************************END OF MAPS*********************
-     *************************************************************/
-
     /*************************************************************
      *****************************PRIVATES************************
      *************************************************************/
+
+    private PlayArea playArea;
 
     private GameSeats seats;
 
@@ -107,7 +88,7 @@ public class GameView extends View implements EventHandler<CardEvent>{
 
         deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
         deckImageView.setVisible(false);
-        messageBox.setText("Click on the deck to get started!");
+        setMessage("Click on the deck to get started!");
     }
 
     @FXML
@@ -115,26 +96,6 @@ public class GameView extends View implements EventHandler<CardEvent>{
     void initialize() {
 
     }
-
-    /******************************************************
-     ********************GUI MAPPING***********************
-     *****************************************************/
-
-    /**
-     * for testing purposes
-     * @param ae
-     */
-    @FXML
-    public void onCommandEntered(ActionEvent ae) {
-        String cmdText = ((TextField) ae.getSource()).getText();
-        Command cmd = new Command(cmdText);
-        getMainApp().sendCommandToServer(cmd);
-    }
-
-
-    /*******************************
-     * GUI MAPPING ENDS************
-     *******************************/
 
     /************************************************************
      ********** MODIFIERS TO BE USED BY CONTROLLERS **************
@@ -186,61 +147,10 @@ public class GameView extends View implements EventHandler<CardEvent>{
         deckImageView.setVisible(true);
     }
 
-    /**
-     * adds a set to the setsArea FlowPane and setViews map
-     *
-     * @param set
-     */
-    public void addSet(CardSet set) {
-        CardSetView setView = new CardSetView(set);
-
-        setsArea.getChildren().add(setView);
-        setViews.put(set, setView);
-    }
-
-    /**
-     * removes set from setsArea
-     *
-     * @param set
-     */
-    public void removeSet(CardSet set) {
-        setsArea.getChildren().remove(setViews.remove(set));
-    }
-
 
     /********************************************************
      ************* HELPERS********************
      *********************************************************************************/
-
-    /**
-     * to add a card to an ObservableList
-     *
-     * @param list
-     * @param imgUrl
-     */
-    private void addCardToObservableList(ObservableList<Node> list, Card card, String imgUrl) {
-        list.add(new CardView(card));
-    }
-
-    /**
-     * to remove a Node from a specific ObservableList
-     *
-     * @param list
-     * @param cardId
-     */
-    private void removeNodeFromObservableList(ObservableList<Node> list, int cardId) {
-        Node nodeToRemove = null;
-
-        for (Node node : list) {
-            if (node instanceof ImageView) {
-                if (node.getId().equals(String.valueOf(cardId))) {
-                    nodeToRemove = node;
-                    break; //doesn't cause problem
-                }
-            }
-        }
-        list.remove(nodeToRemove);
-    }
 
     /**
      * Set the owner player id and seat number for this client.

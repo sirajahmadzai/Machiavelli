@@ -4,7 +4,7 @@ package server.models.cards;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import commands.StringCommand;
 
-public abstract class Card {
+public abstract class Card implements Comparable<Card> {
 
     /***************************************
      ************ PRIVATES *****************
@@ -183,6 +183,11 @@ public abstract class Card {
 
     public boolean isDropTarget() {
         return dropTarget;
+    }
+
+    @Override
+    public int compareTo(Card otherCard) {
+        return rank - otherCard.rank;
     }
 
     /**

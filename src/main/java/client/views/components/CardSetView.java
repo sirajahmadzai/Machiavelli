@@ -13,12 +13,15 @@ import server.models.CardSet;
 import server.models.cards.Card;
 import server.models.cards.DropTargetCard;
 
+import java.util.ArrayList;
+
 public class CardSetView extends HBox {
     private CardSet cardSet;
     private CardView selectedCard;
     private EventHandler<CardEvent> cardEventHandler;
     private CardView dropTarget;
     private boolean receiverMode = false;
+    private ArrayList<CardView> cardViews;
 
     public CardSetView() {
         this(new CardSet());
@@ -26,7 +29,7 @@ public class CardSetView extends HBox {
 
     public CardSetView(CardSet cardSet) {
         initLayout();
-
+        cardViews = new ArrayList<>();
 
         this.cardSet = cardSet;
         for (Card card : cardSet.getCards()) {
@@ -54,22 +57,35 @@ public class CardSetView extends HBox {
     public void addCard(Card card) {
         CardView cardView = new CardView(card);
         getChildren().add(cardView);
+        cardViews.add(cardView);
+
         cardView.setParentSet(this);
 
-        cardSet.getCards().add(card);
+        cardSet.addCard(card);
 
         fireEvent(cardView, CardEvent.CARD_ADDED);
 
         if (!card.isHidden()) {
             assignEvents(cardView);
+            markValidity();
         }
     }
 
     public void removeCard(CardView cardView) {
-        cardSet.getCards().remove(cardView.getCard());
+        cardSet.removeCard(cardView.getCard());
         getChildren().remove(cardView);
+        cardViews.remove(cardView);
 
         fireEvent(cardView, CardEvent.CARD_REMOVED);
+        markValidity();
+    }
+
+    private void markValidity() {
+        boolean validMeld = cardSet.isAValidMeld();
+
+        for (CardView cardView: cardViews) {
+            cardView.setValid(validMeld);
+        }
     }
 
     private void fireEvent(CardView cardView, EventType<CardEvent> eventType) {

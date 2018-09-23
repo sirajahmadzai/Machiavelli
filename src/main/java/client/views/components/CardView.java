@@ -10,6 +10,7 @@ public class CardView extends ImageView{
     private CardSetView parentSet;
     private Card card;
     private boolean selected;
+    private boolean valid;
 
     public CardView(Card card) {
         super(card.getImgUrl());
@@ -32,11 +33,16 @@ public class CardView extends ImageView{
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-        if(selected){
-            this.setEffect(ViewEffects.selectedCardEffect);
-        }else {
-            this.setEffect(ViewEffects.defaultEffect);
-        }
+        updateEffect();
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+        updateEffect();
     }
 
     public CardSetView getParentSet() {
@@ -49,5 +55,17 @@ public class CardView extends ImageView{
 
     public void removeFromParentSet() {
         getParentSet().removeCard(this);
+    }
+
+    private void updateEffect(){
+        if(selected){
+            this.setEffect(ViewEffects.selectedCardEffect);
+        }else {
+            if(valid){
+                this.setEffect(ViewEffects.defaultEffect);
+            }else{
+                this.setEffect(ViewEffects.invalidEffect);
+            }
+        }
     }
 }
