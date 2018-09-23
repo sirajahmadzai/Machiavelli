@@ -133,7 +133,7 @@ public class ClientManager {
         GameView.getInstance().fillSeat(playerName, playerId, seatNumber);
     }
 
-//    When user clicks a card target, we move the card from old set to the target set.
+    //    When user clicks a card target, we move the card from old set to the target set.
     public void droppedToTarget(CardSetView targetSet) {
         if (selectedCard != null) {
             Card s = (Card) this.selectedCard.getCard();
@@ -147,10 +147,26 @@ public class ClientManager {
         }
     }
 
-//    Keep track of any card selected inside the views.
-//    Activate the play area so that the selected card can be moved to it.
+    //    Keep track of any card selected inside the views.
+    //    Activate the play area so that the selected card can be moved to it.
     public void cardSelected(CardView selectedCard) {
-        this.selectedCard = selectedCard;
+        // Clear previous selection.
+        if (this.selectedCard != null) {
+            this.selectedCard.getParentSet().clearSelectedCards();
+        }
+
+        // Deselect a card
+        if (selectedCard == this.selectedCard) {
+            this.selectedCard = null;
+
+        } else if (selectedCard != null) {
+
+            this.selectedCard = selectedCard;
+            selectedCard.setSelected(true);
+            // TODO: this line smells!
+            selectedCard.getParentSet().setSelectedCard(selectedCard);
+        }
+
         GameView.getInstance().setPlayAreaActive(this.selectedCard != null);
     }
 }

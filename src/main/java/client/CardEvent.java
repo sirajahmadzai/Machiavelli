@@ -1,11 +1,12 @@
 package client;
 
+import client.views.components.CardSetView;
 import client.views.components.CardView;
 import javafx.event.Event;
 import javafx.event.EventType;
 import server.models.cards.Card;
 
-public class CardEvent extends Event{
+public class CardEvent extends Event {
     private CardView cardView;
 
     public static final EventType<CardEvent> CARD_ADDED = new EventType<CardEvent>("CARD_ADDED");
@@ -23,5 +24,13 @@ public class CardEvent extends Event{
 
     public CardView getCardView() {
         return cardView;
+    }
+
+    public CardSetView getParentCardSetView() {
+        if (cardView == null) {
+            return null;
+        } else {
+            return cardView.getParentSet();
+        }
     }
 }

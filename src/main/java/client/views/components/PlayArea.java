@@ -30,6 +30,10 @@ public class PlayArea implements EventHandler<CardEvent> {
         setsArea.getChildren().add(cardSetView);
     }
 
+    public void removeSet(CardSetView cardSetView) {
+        setsArea.getChildren().remove(cardSetView);
+    }
+
     public void addCard(Card card) {
         addSet(new CardSet(card));
     }
@@ -45,9 +49,20 @@ public class PlayArea implements EventHandler<CardEvent> {
 
     @Override
     public void handle(CardEvent event) {
-        // If user places a card on the placeholder set, we create a new placeholder and leave the old on the table.
-        if (event.getCardView().getParentSet() == placeholderSet) {
-            createPlaceholderSet();
+
+        CardSetView changedSetView = event.getParentCardSetView();
+        if (event.getEventType() == CardEvent.CARD_ADDED) {
+            // If user places a card on the placeholder set, we create a new placeholder and leave the old on the table.
+            if (changedSetView == placeholderSet) {
+                createPlaceholderSet();
+            }
+        } else if (event.getEventType() == CardEvent.CARD_REMOVED) {
+            // Remove empty set from play area.
+            if (changedSetView.isEmpty()) {
+                removeSet(changedSetView);
+            }
+        } else if (event.getEventType() == CardEvent.CARD_SELECTED) {
+
         }
     }
 }

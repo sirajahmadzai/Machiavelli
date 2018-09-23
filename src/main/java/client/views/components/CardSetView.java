@@ -4,6 +4,7 @@ import client.CardEvent;
 import client.ClientManager;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -34,6 +35,7 @@ public class CardSetView extends HBox {
 
         this.dropTarget = new CardView(new DropTargetCard(this));
         this.getChildren().add(dropTarget);
+        this.dropTarget.setVisible(false);
         this.dropTarget.setOnMouseClicked(event -> {
             ClientManager.getInstance().droppedToTarget(this);
         });
@@ -56,9 +58,7 @@ public class CardSetView extends HBox {
 
         cardSet.getCards().add(card);
 
-        if (cardEventHandler != null) {
-            cardEventHandler.handle(new CardEvent(cardView, CardEvent.CARD_ADDED));
-        }
+        fireEvent(cardView, CardEvent.CARD_ADDED);
 
         if (!card.isHidden()) {
             assignEvents(cardView);
@@ -68,35 +68,36 @@ public class CardSetView extends HBox {
     public void removeCard(CardView cardView) {
         cardSet.getCards().remove(cardView.getCard());
         getChildren().remove(cardView);
+
+        fireEvent(cardView, CardEvent.CARD_REMOVED);
+    }
+
+    private void fireEvent(CardView cardView, EventType<CardEvent> eventType) {
+        if (cardEventHandler != null) {
+            cardEventHandler.handle(new CardEvent(cardView, eventType));
+        }
     }
 
     private void assignEvents(CardView cardView) {
         cardView.setOnMouseClicked(event -> {
-            setSelectedCard(cardView);
+//            onCardSelected(cardView);
+            ClientManager.getInstance().cardSelected(cardView);
         });
-    }
-
-    private void setSelectedCard(CardView cardView) {
-//        Card card = null;
-        // Deselect previously selected card
-        if (selectedCard != null) {
-            selectedCard.setSelected(false);
-        }
-
-        // Deselect card if it's already selected.
-        if (selectedCard == cardView) {
-            selectedCard = null;
-        } else {
-            // Select card
-            selectedCard = cardView;
-            selectedCard.setSelected(true);
-        }
-
-        ClientManager.getInstance().cardSelected(selectedCard);
     }
 
     public CardView getSelectedCard() {
         return selectedCard;
+    }
+
+    public void setSelectedCard(CardView selectedCard) {
+        this.selectedCard = selectedCard;
+    }
+
+    public void clearSelectedCards() {
+        if (selectedCard != null) {
+            this.selectedCard.setSelected(false);
+        }
+        this.selectedCard = null;
     }
 
     public int getCardCount() {
@@ -117,11 +118,7 @@ public class CardSetView extends HBox {
         getChildren().add(dropTarget);
     }
 
-    public void addChangeListener(ListChangeListener<Node> listener) {
-        this.getChildren().addListener(listener);
-    }
-
-    public void removeChangeListener(ListChangeListener<Node> listener) {
-        this.getChildren().removeListener(listener);
+    public boolean isEmpty() {
+        return getCardCount() <= 0;
     }
 }
