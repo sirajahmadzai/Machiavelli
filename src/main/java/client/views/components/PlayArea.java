@@ -25,6 +25,12 @@ public class PlayArea implements EventHandler<CardEvent> {
         }
     }
 
+    public void setActive(Card card) {
+        for (CardSetView setView : setViews) {
+            setView.setReceiverMode(card);
+        }
+    }
+
     public void addSet(CardSet cardSet) {
         CardSetView cardSetView = new CardSetView(cardSet);
         setsArea.getChildren().add(cardSetView);

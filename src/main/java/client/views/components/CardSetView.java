@@ -2,7 +2,8 @@ package client.views.components;
 
 import client.CardEvent;
 import client.ClientManager;
-import javafx.collections.ListChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
@@ -14,6 +15,8 @@ import server.models.cards.Card;
 import server.models.cards.DropTargetCard;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CardSetView extends HBox {
     private CardSet cardSet;
@@ -68,7 +71,25 @@ public class CardSetView extends HBox {
         if (!card.isHidden()) {
             assignEvents(cardView);
             markValidity();
+            sort();
         }
+    }
+
+    private void sort(){
+        ObservableList<Node> workingCollection = FXCollections.observableArrayList(
+                this.getChildren()
+        );
+
+        Collections.sort(workingCollection, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                CardView c1 = (CardView) o1;
+                CardView c2 = (CardView) o2;
+                return c1.getCard().compareTo(c2.getCard());
+            }
+        });
+
+        this.getChildren().setAll(workingCollection);
     }
 
     public void removeCard(CardView cardView) {
@@ -101,10 +122,6 @@ public class CardSetView extends HBox {
         });
     }
 
-    public CardView getSelectedCard() {
-        return selectedCard;
-    }
-
     public void setSelectedCard(CardView selectedCard) {
         this.selectedCard = selectedCard;
     }
@@ -117,7 +134,7 @@ public class CardSetView extends HBox {
     }
 
     public int getCardCount() {
-        return cardSet.getCards().size();
+        return cardSet.totalCount();
     }
 
     public boolean isReceiverMode() {
@@ -134,7 +151,16 @@ public class CardSetView extends HBox {
         getChildren().add(dropTarget);
     }
 
+    // If the set is still a valid set after adding proposed card, set receiver mode on.
+    public void setReceiverMode(Card card){
+        setReceiverMode(canAcceptCard(card));
+    }
+
     public boolean isEmpty() {
         return getCardCount() <= 0;
+    }
+
+    public boolean canAcceptCard(Card card){
+        return cardSet.canAcceptCard(card);
     }
 }

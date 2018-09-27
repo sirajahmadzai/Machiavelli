@@ -146,8 +146,8 @@ public class MachiavelliTest {
             final int INDEX_OF_EXPECTED_CARD = 0;
 
             GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(EXPECTED_CARD);
-            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(new Joker(Suit.JOKER, 15, 2));
-            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(new Ace(Suit.CLUBS, 14, 3));
+            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(new Joker(Suit.JOKER, 2));
+            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(new Ace(Suit.CLUBS, 3));
 
             assertEquals("", EXPECTED_CARD, GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().get(INDEX_OF_EXPECTED_CARD));
 

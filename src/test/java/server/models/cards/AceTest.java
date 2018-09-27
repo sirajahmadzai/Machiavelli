@@ -19,7 +19,7 @@ public class AceTest {
 
         //testing Valid
         try {
-            final Ace ACE_CARD = new Ace(VALID_SUIT, VALID_RANK, VALID_CARD_ID);
+            final Ace ACE_CARD = new Ace(VALID_SUIT, VALID_CARD_ID);
             final int EXPECTED_POINT_VALUE = 15;
             final String EXPECTED_NAME = "Ace";
             assertEquals("getSuit() != INITIAL", VALID_SUIT, ACE_CARD.getSuit());
@@ -34,7 +34,7 @@ public class AceTest {
 
         //testing INVALID Suit
         try {
-            final Ace ACE_CARD = new Ace(null, VALID_RANK, VALID_CARD_ID);
+            final Ace ACE_CARD = new Ace(null, VALID_CARD_ID);
             fail("null suit did not throw an exception");
 
         } catch (InvalidArgumentException e) {
@@ -44,7 +44,7 @@ public class AceTest {
         //testing INVALID rank
         try {
             final int INVALID_RANK = 2;
-            final Ace ACE_CARD = new Ace(VALID_SUIT, INVALID_RANK, VALID_CARD_ID);
+            final Ace ACE_CARD = new Ace(VALID_SUIT, VALID_CARD_ID);
             fail("Invalid rank did not throw an exception");
 
         } catch (InvalidArgumentException e) {
@@ -54,7 +54,7 @@ public class AceTest {
         //testing INVALID Id
         try {
             final int INVALID_ID = 2;
-            final Ace ACE_CARD = new Ace(VALID_SUIT, VALID_RANK, INVALID_ID);
+            final Ace ACE_CARD = new Ace(VALID_SUIT, INVALID_ID);
             fail("Invalid Id did not throw an exception");
         } catch (InvalidArgumentException e) {
             //passed
@@ -70,7 +70,7 @@ public class AceTest {
         final Ace ACE_CARD;
 
         try {
-            ACE_CARD = new Ace(INITIAL_SUIT, INITIAL_RANK, INITIAL_ID);
+            ACE_CARD = new Ace(INITIAL_SUIT, INITIAL_ID);
 
             final int INVALID_BOUND_0 = 0;
             try {

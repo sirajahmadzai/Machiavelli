@@ -16,7 +16,7 @@ public class JokerTest {
 
 
         try {
-            final Joker JOKER_CARD = new Joker(SUIT, RANK, -1);
+            final Joker JOKER_CARD = new Joker(SUIT, -1);
             final int EXPECTED_POINT_VALUE = 20;
             final String EXPECTED_NAME = "Joker";
 
@@ -39,7 +39,7 @@ public class JokerTest {
         final int CARD_ID = 1;
 
         try {
-            final Joker JOKER_CARD = new Joker(SUIT, RANK, CARD_ID);
+            final Joker JOKER_CARD = new Joker(SUIT, CARD_ID);
 
             //VALID rank
             try {

@@ -52,8 +52,8 @@ public class PlayerTest {
         try {
             //cards for testing hand
             final Card CARD1 = new Basic(SUIT1, RANK1, ID1);
-            final Card CARD2 = new Ace(SUIT2, RANK2, ID2);
-            final Card CARD3 = new Joker(SUIT3, RANK3, ID3);
+            final Card CARD2 = new Ace(SUIT2, ID2);
+            final Card CARD3 = new Joker(SUIT3, ID3);
             final Card CARD4 = new Basic(SUIT4, RANK4, ID4);
             final Card CARD5 = new Basic(SUIT5, RANK5, ID5);
             final Card CARD6 = new Basic(SUIT6, RANK6, ID16);

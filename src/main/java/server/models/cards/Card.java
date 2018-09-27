@@ -2,9 +2,8 @@ package server.models.cards;
 
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
-import commands.StringCommand;
 
-public abstract class Card implements Comparable<Card> {
+public class Card implements Comparable<Card> {
 
     /***************************************
      ************ PRIVATES *****************
@@ -15,7 +14,8 @@ public abstract class Card implements Comparable<Card> {
     private int id;
     private String imgUrl;
     protected boolean hidden = false;
-    protected boolean dropTarget= false;
+    protected boolean dropTarget = false;
+    protected boolean joker = false;
     public static final String BACK_OF_CARD_IMAGE = "images/b.png";
     public static final String DROP_TARGET_IMAGE = "images/dropTarget.png";
 
@@ -44,10 +44,10 @@ public abstract class Card implements Comparable<Card> {
 
     public static Card fromString(String cardText) throws InvalidArgumentException {
         Suit suit = Suit.JOKER;
-        int rank=0;
+        int rank = 0;
 
         if (cardText.equals("joker")) {
-            return new Joker(Suit.JOKER, 15, 15);
+            return new Joker(Suit.JOKER, 15);
         } else {
             if (cardText.endsWith("s")) {
                 suit = Suit.SPADES;
@@ -62,7 +62,7 @@ public abstract class Card implements Comparable<Card> {
             String rankText = cardText.substring(0, cardText.length() - 1);
             switch (rankText) {
                 case "a":
-                    return new Ace(suit,14,14);
+                    return new Ace(suit, 14);
                 case "j":
                     rank = 11;
                     break;
@@ -79,8 +79,8 @@ public abstract class Card implements Comparable<Card> {
         }
     }
 
-//    Used to create a hidden card.
-    protected Card(){
+    //    Used to create a hidden card.
+    protected Card() {
         suit = Suit.HIDDEN;
         rank = 0;
     }
@@ -93,6 +93,10 @@ public abstract class Card implements Comparable<Card> {
      */
     public Suit getSuit() {
         return suit;
+    }
+
+    public void setSuit(Suit suit) {
+        this.suit = suit;
     }
 
     /**
@@ -185,6 +189,10 @@ public abstract class Card implements Comparable<Card> {
         return dropTarget;
     }
 
+    public boolean isJoker() {
+        return joker;
+    }
+
     @Override
     public int compareTo(Card otherCard) {
         return rank - otherCard.rank;
@@ -198,4 +206,5 @@ public abstract class Card implements Comparable<Card> {
             super("Invalid rank");
         }
     }
+
 }

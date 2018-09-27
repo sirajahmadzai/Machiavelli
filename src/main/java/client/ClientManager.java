@@ -167,6 +167,10 @@ public class ClientManager {
             selectedCard.getParentSet().setSelectedCard(selectedCard);
         }
 
-        GameView.getInstance().setPlayAreaActive(this.selectedCard != null);
+        if(this.selectedCard != null){
+            GameView.getInstance().setPlayAreaActive(selectedCard.getCard());
+        }else{
+            GameView.getInstance().setPlayAreaActive(false);
+        }
     }
 }

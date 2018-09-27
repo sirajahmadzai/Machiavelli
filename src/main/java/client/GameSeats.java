@@ -1,5 +1,6 @@
 package client;
 
+import client.views.components.CardSetView;
 import client.views.components.Player;
 import javafx.scene.layout.BorderPane;
 
@@ -97,5 +98,13 @@ public class GameSeats {
 
     public void setOpponents(ArrayList<Player> opponents) {
         this.opponents = opponents;
+    }
+
+    public Player getOwnerPlayer(){
+        return ownerPlayer;
+    }
+
+    public CardSetView getOwnerPlayerHand(){
+        return ownerPlayer.getHand();
     }
 }

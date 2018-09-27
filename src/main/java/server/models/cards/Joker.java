@@ -1,10 +1,5 @@
 package server.models.cards;
 
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.jmx.MXNodeAlgorithm;
-import com.sun.javafx.jmx.MXNodeAlgorithmContext;
-import com.sun.javafx.sg.prism.NGNode;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 public class Joker extends Changeable {
@@ -12,10 +7,10 @@ public class Joker extends Changeable {
      * CONSTRUCTOR
      *
      * @param suit
-     * @param rank
      */
-    public Joker(Suit suit, int rank, int id) throws InvalidArgumentException {
-        super(suit, rank, id);
+    public Joker(Suit suit,int id) throws InvalidArgumentException {
+        super(suit, 15, id);
+        joker = true;
     }
 
 
@@ -35,7 +30,7 @@ public class Joker extends Changeable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "joker";
     }
 }

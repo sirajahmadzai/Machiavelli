@@ -91,7 +91,7 @@ public class TableTest {
         final int CARD_ID = 1;
 
         try {
-            final Card CARD = new Joker(SUIT, RANK, CARD_ID);
+            final Card CARD = new Joker(SUIT, CARD_ID);
 
 
             final ArrayList<Card> LIST_OF_CARDS = new ArrayList<>();

@@ -124,18 +124,18 @@ public class Table {
 
         try {
             int rank = 1;
-            standardDeck.add(new Ace(Suit.CLUBS, rank, cardID));
+            standardDeck.add(new Ace(Suit.CLUBS, cardID));
             cardID++;
-            standardDeck.add(new Ace(Suit.DIAMONDS, rank, cardID));
+            standardDeck.add(new Ace(Suit.DIAMONDS, cardID));
             cardID++;
-            standardDeck.add(new Ace(Suit.HEARTS, rank, cardID));
+            standardDeck.add(new Ace(Suit.HEARTS, cardID));
             cardID++;
-            standardDeck.add(new Ace(Suit.SPADES, rank, cardID));
+            standardDeck.add(new Ace(Suit.SPADES, cardID));
             cardID++;
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }
-        for (int rank = 2; rank <= 14; rank++) {
+        for (int rank = 2; rank < 14; rank++) {
             try {
                 standardDeck.add(new Basic(Suit.CLUBS, rank, cardID));
                 cardID++;
@@ -153,9 +153,9 @@ public class Table {
 
         try {
             int rank = 15;
-            standardDeck.add(new Joker(Suit.JOKER, rank, cardID));
+            standardDeck.add(new Joker(Suit.JOKER, cardID));
             cardID++;
-            standardDeck.add(new Joker(Suit.JOKER, rank, cardID));
+            standardDeck.add(new Joker(Suit.JOKER, cardID));
         } catch (InvalidArgumentException e) {
             e.printStackTrace();
         }

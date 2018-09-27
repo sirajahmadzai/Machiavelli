@@ -3,16 +3,13 @@ package server.models.cards;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 public class Ace extends Changeable {
-
     /**
      * CONSTRUCTOR
      *
      * @param suit
-     * @param rank
      */
-    public Ace(Suit suit, int rank, int id) throws InvalidArgumentException {
-        super(suit, rank, id);
-        if (rank != 1 && rank != 14) throw new InvalidArgumentException(new String[]{"Invalid rank for Ace Card"});
+    public Ace(Suit suit, int id) throws InvalidArgumentException {
+        super(suit, 1, id);
     }
 
 

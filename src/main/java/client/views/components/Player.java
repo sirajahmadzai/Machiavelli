@@ -1,6 +1,8 @@
 package client.views.components;
 
+import client.CardEvent;
 import client.PlayerPosition;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -8,7 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import server.models.cards.Card;
 
-public class Player extends VBox {
+public class Player extends VBox implements EventHandler<CardEvent> {
     private PlayerPosition position;
     private String name;
     private int playerId;
@@ -21,6 +23,7 @@ public class Player extends VBox {
 
         this.playerInfo = new PlayerInfo("Not joined yet!");
         this.hand = new CardSetView();
+        hand.setCardEventHandler(this);
 
         this.setSpacing(5);
         this.getChildren().add(playerInfo);
@@ -89,5 +92,10 @@ public class Player extends VBox {
             infoText += " (" + cardCount + " Cards)";
         }
         this.playerInfo.setInfoText(infoText);
+    }
+
+    @Override
+    public void handle(CardEvent event) {
+        updateInfoText();
     }
 }

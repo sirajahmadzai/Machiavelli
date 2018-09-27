@@ -26,7 +26,7 @@ import server.models.cards.HiddenCard;
 
 import java.util.Map;
 
-public class GameView extends View implements EventHandler<CardEvent>{
+public class GameView extends View{
     /*************************************************************
      ************************FXML INJECTIONS**********************
      *************************************************************/
@@ -173,18 +173,13 @@ public class GameView extends View implements EventHandler<CardEvent>{
 
     public void setPlayAreaActive(boolean active){
         playArea.setActive(active);
+        seats.getOwnerPlayerHand().setReceiverMode(active);
     }
 
-    @Override
-    public void handle(CardEvent event) {
-        String eventType = event.getEventType().getName();
-
-        switch (eventType){
-            case "CARD_SELECTED_AT_HAND":
-                playArea.setActive(event.getCardView() != null);
-                break;
-            case "CARD_SELECTED_AT_TABLE":
-                break;
-        }
+    public void setPlayAreaActive(Card card){
+        playArea.setActive(card);
+        seats.getOwnerPlayerHand().setReceiverMode(card);
     }
+
+
 }
