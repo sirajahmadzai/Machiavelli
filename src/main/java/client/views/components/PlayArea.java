@@ -7,15 +7,18 @@ import server.models.CardSet;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayArea implements EventHandler<CardEvent> {
     private FlowPane setsArea;
     private CardSetView placeholderSet;
     private ArrayList<CardSetView> setViews;
+    private List<CardSet> snapshot;
 
     public PlayArea(FlowPane setsArea) {
         this.setsArea = setsArea;
         setViews = new ArrayList<>();
+        snapshot = new ArrayList<>();
         createPlaceholderSet();
     }
 
@@ -53,6 +56,22 @@ public class PlayArea implements EventHandler<CardEvent> {
         setViews.add(placeholderSet);
     }
 
+    public List<CardSet> takeSnapshot() {
+        List<CardSet> snapshot = new ArrayList<>();
+        for (CardSetView view : setViews) {
+            if (view != placeholderSet) {
+                snapshot.add(view.takeSnapshot());
+            }
+        }
+
+        this.snapshot = snapshot;
+        return this.snapshot;
+    }
+
+    public List<CardSet> getSnapshot() {
+        return snapshot;
+    }
+
     @Override
     public void handle(CardEvent event) {
 
@@ -70,5 +89,15 @@ public class PlayArea implements EventHandler<CardEvent> {
         } else if (event.getEventType() == CardEvent.CARD_SELECTED) {
 
         }
+    }
+
+    public boolean isValid(int setSize) {
+        for (CardSetView setView : setViews) {
+            if (!setView.getCardSet().isAValidMeld(setSize)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

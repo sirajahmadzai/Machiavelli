@@ -1,9 +1,7 @@
 package client;
 
-import client.views.GameView;
 import commands.Command;
 import commands.CommandFactory;
-import commands.ServerCommands;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
@@ -12,8 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.Stack;
 
 public class Client extends Task<Void>/* implements Runnable*/ {
 
@@ -69,10 +65,6 @@ public class Client extends Task<Void>/* implements Runnable*/ {
                 switch (command.getName()) {
                     case SHOW_GAMEVIEW:
                         Platform.runLater(() -> manager.startGame(Integer.parseInt(command.getParameter())));
-                        break;
-                    case DEAL_HANDS:
-                        Stack<Object> params = command.getParameters();
-                        Platform.runLater(() -> manager.dealHand(Integer.parseInt(params.pop().toString()), params));
                         break;
                     default:
                         command.execute();
@@ -139,5 +131,7 @@ public class Client extends Task<Void>/* implements Runnable*/ {
         }
     }
 
-
+    public void sendCommandToServer(Command cmd) {
+        this.out.println(cmd.serialize());
+    }
 }

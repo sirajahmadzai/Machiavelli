@@ -1,23 +1,15 @@
-package commands;
+package commands.client;
 
-import client.ClientManager;
-import client.views.GameView;
-import javafx.application.Platform;
-
-import java.util.Scanner;
-import java.util.Stack;
-import java.util.StringJoiner;
+import commands.Command;
 
 
-public class IntroducePlayer extends Command {
-    protected final ClientManager manager;
+public class IntroducePlayer extends ClientCommand {
     protected String playerName;
     protected int playerId;
     protected int seatNumber;
 
     public IntroducePlayer(String playerName, int playerId, int seatNumber) {
-        this.name = CommandNames.INTRODUCE_PLAYER;
-        this.manager = ClientManager.getInstance();
+        super(Command.CommandNames.INTRODUCE_PLAYER);
 
         this.seatNumber = seatNumber;
         this.playerName = playerName;

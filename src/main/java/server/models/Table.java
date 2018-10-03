@@ -5,13 +5,14 @@ import server.models.cards.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Stack;
 
 public class Table {
 
     /********************************
      ******** PRIVATES **************
      ********************************/
-    private ArrayList<Card> deck;
+    private Stack<Card> deck;
     private ArrayList<CardSet> cardSets;
 
     /**
@@ -23,7 +24,7 @@ public class Table {
      * CONSTRUCTOR
      */
     public Table() {
-        deck = new ArrayList<>();
+        deck = new Stack<>();
         cardSets = new ArrayList<>();
         cardsInPlay = new ArrayList<>();
         initMachiavelliDeck();
@@ -38,7 +39,7 @@ public class Table {
      *
      * @return
      */
-    public ArrayList<Card> getDeck() {
+    public Stack<Card> getDeck() {
         return deck;
     }
 
@@ -49,6 +50,14 @@ public class Table {
      */
     public ArrayList<CardSet> getCardSets() {
         return cardSets;
+    }
+
+    public CardSet getAllCardsInASet(){
+        CardSet fullSet = new CardSet();
+        for (CardSet set : cardSets) {
+            fullSet.join(set);
+        }
+        return fullSet;
     }
 
     /**
@@ -67,7 +76,7 @@ public class Table {
     /**
      * @param deck
      */
-    public void setDeck(ArrayList<Card> deck) {
+    public void setDeck(Stack<Card> deck) {
         this.deck = deck;
     }
 
@@ -107,7 +116,7 @@ public class Table {
         //2 spade of 2s
         //2 diamon of 2s
         //and so on
-        deck = new ArrayList<>();
+        deck = new Stack<>();
         deck.addAll(generateStandardDeck());
         deck.addAll(generateStandardDeck());
         shuffleDeck();

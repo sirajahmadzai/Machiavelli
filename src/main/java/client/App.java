@@ -1,13 +1,14 @@
 package client;
 
-import client.views.*;
-import commands.ClientCommands;
+import client.views.GameView;
+import client.views.LoginView;
+import client.views.StartOptionsView;
+import client.views.View;
 import commands.Command;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -204,14 +205,6 @@ public class App extends Application {
     }
 
 //TODO: uncomment for networked version
-
-    /**
-     * @param cmd
-     * @param args
-     */
-    public void sendCommandToServer(ClientCommands cmd, String args) {
-        this.out.println(cmd + " " + args);
-    }
 
     public void sendCommandToServer(Command cmd) {
         this.out.println(cmd.serialize());

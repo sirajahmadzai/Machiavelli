@@ -4,7 +4,6 @@ import server.ClientHandler;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
-import java.util.StringJoiner;
 
 public class Player {
 
@@ -13,7 +12,7 @@ public class Player {
      ********************************/
     private int playerID;
     private String name;
-    private ArrayList<Card> hand;
+    private CardSet hand;
     private int pointValue;
     private ClientHandler clientHandler;
     private int seatNumber;
@@ -29,7 +28,7 @@ public class Player {
         this.name = name;
 //        this.seatNumber = seatNumber;
 
-        hand = new ArrayList<>();
+        hand = new CardSet();
         pointValue = 0;
     }
 
@@ -77,17 +76,8 @@ public class Player {
      *
      * @return
      */
-    public ArrayList<Card> getHand() {
+    public CardSet getHand() {
         return hand;
-    }
-
-    public String getHandAsText() {
-        StringJoiner joiner = new StringJoiner(" ");
-        for(Card card : hand){
-            joiner.add(card.toString());
-        }
-
-        return joiner.toString();
     }
 
     /**
@@ -105,7 +95,7 @@ public class Player {
      * @param hand
      */
     public void setHand(ArrayList<Card> hand) {
-        this.hand = hand;
+        this.hand = new CardSet(hand);
     }
 
     /**

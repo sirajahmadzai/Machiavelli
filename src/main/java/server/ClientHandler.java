@@ -1,8 +1,9 @@
 package server;
 
-import commands.ClientCommands;
 import commands.Command;
-import commands.ServerCommands;
+import commands.CommandFactory;
+import commands.server.PlayerMove;
+import server.models.Machiavelli;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Scanner;
 
 
 public class ClientHandler implements Runnable {
@@ -27,10 +27,13 @@ public class ClientHandler implements Runnable {
     private BufferedReader in;
     private int id;
     private PrintWriter out;
+    private Machiavelli machiavelli;
     private Server server;
 
-    public ClientHandler(Socket socket) throws Exception {
+    public ClientHandler(Socket socket, Machiavelli machiavelli) throws Exception {
         this.socket = socket;
+        this.machiavelli = machiavelli;
+
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
@@ -46,7 +49,7 @@ public class ClientHandler implements Runnable {
         try {
             while (true) {
                 String cmdString = in.readLine();
-                Command cmd = new Command(cmdString);
+                Command cmd  = CommandFactory.buildCommand(cmdString);
                 processCommand(cmd);
             }
 
@@ -68,111 +71,20 @@ public class ClientHandler implements Runnable {
     }
 
     private void processCommand(Command cmd) {
+        System.out.println("Command received: " + cmd.serialize());
         switch (cmd.getName()) {
             case NUMBER_OF_PLAYERS:
                 break;
-//            case DECK_CLICKED:
-//                break;
-//            case PROMPT_PLAYER:
-//                break;
+            case PASS_TURN:
+                break;
+            case PLAYER_MOVE:
+                machiavelli.processMove((PlayerMove) cmd);
+                break;
+
             default:
-                System.out.println("Command received: " + cmd.serialize());
                 cmd.execute();
                 break;
         }
-    }
-
-    public int checkForMessageInt() {
-        int result = -1;
-        try {
-            if (in.ready()) {
-                Scanner scanner = new Scanner(in.readLine());
-
-                String cmd = scanner.next();
-
-                if (cmd.equals((ClientCommands.NUMBER_OF_PLAYERS.toString()))) {
-                    int numOfPlayers = scanner.nextInt();
-                    result = numOfPlayers;
-//                } else if (cmd.equals(ClientCommands.PROMPT_BIDS_REPLY.toString())) {
-                    int bids = scanner.nextInt();
-                    result = bids;
-                }
-
-                scanner.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    public boolean checkForMessageBool() {
-        try {
-            if (in.ready()) {
-                Scanner scanner = new Scanner(in.readLine());
-
-                String cmd = scanner.next();
-
-                if (cmd.equals((ClientCommands.DECK_CLICKED.toString()))) {
-                    scanner.close();
-                    return true;
-                }
-
-                scanner.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    public String checkForMessageString() {
-        String res = "";
-        try {
-            if (in.ready()) {
-                Scanner scanner = new Scanner(in.readLine());
-                String cmd = scanner.next();
-
-                if (cmd.equals((ClientCommands.PROMPT_PLAYER.toString()))) {
-                    boolean result = scanner.nextBoolean();
-                    if (result) {
-                        res = "true";
-                    } else {
-                        res = "false";
-                    }
-                } else if (cmd.equals((ClientCommands.PROMPT_PLAY_CARD.toString()))) {
-                    String cards = scanner.nextLine();
-                    res = cards;
-                } else if (cmd.equals((ClientCommands.PROMPT_PLAY_CARD.toString()))) {
-                    String cards = scanner.nextLine();
-                    res = cards;
-                } else if (cmd.equals((ClientCommands.PROMPT_PLAY_CARD.toString()))) {
-                    String cards = scanner.nextLine();
-                    res = cards;
-                } else if (cmd.equals((ClientCommands.PROMPT_END_TURN.toString()))) {
-                    boolean result = scanner.nextBoolean();
-                    if (result) {
-                        res = "true";
-                    } else {
-                        res = "false";
-                    }
-                }
-
-                scanner.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    /**
-     * @param numOfPlayers
-     */
-    public void showGameView(int numOfPlayers) {
-        out.println(ServerCommands.SHOW_GAMEVIEW + " " + numOfPlayers);
     }
 
     /**
@@ -190,6 +102,10 @@ public class ClientHandler implements Runnable {
     }
 
     public void sendCommand(String command){
+        out.println(command);
+    }
+
+    public void sendCommand(Command.CommandNames command){
         out.println(command);
     }
 }

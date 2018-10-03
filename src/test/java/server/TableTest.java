@@ -10,6 +10,7 @@ import server.models.cards.Joker;
 import server.models.cards.Suit;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -18,7 +19,7 @@ public class TableTest {
 
     @Test
     public void testConstructor() {
-        final ArrayList<Card> INITIAL_DECK = new ArrayList<>();
+        final Stack<Card> INITIAL_DECK = new Stack<>();
         final ArrayList<CardSet> INITIAL_Card_SETS = new ArrayList<>();
         final ArrayList<Card> INITIAL_CARDS_IN_PLAY = new ArrayList<>();
 
@@ -34,7 +35,7 @@ public class TableTest {
 
     @Test
     public void setDeck() {
-        final ArrayList<Card> DECK = new ArrayList<>();
+        final Stack<Card> DECK = new Stack<>();
 
         final Suit SUIT = Suit.SPADES;
         final int RANK = 4;

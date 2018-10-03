@@ -3,6 +3,8 @@ package server.models.cards;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
+import java.util.Objects;
+
 public class Card implements Comparable<Card> {
 
     /***************************************
@@ -195,7 +197,38 @@ public class Card implements Comparable<Card> {
 
     @Override
     public int compareTo(Card otherCard) {
-        return rank - otherCard.rank;
+        int diff = rank - otherCard.rank;
+
+        if (diff != 0) {
+            return diff;
+        }
+
+        return suit.compareTo(otherCard.suit);
+    }
+
+    // Cards with same rank and suits are considered equal;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Card card = (Card) o;
+        return compareTo(card) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSuit(), getRank());
+    }
+
+    @Override
+    public String toString() {
+        String rank = "";
+        if (this.rank == 11) rank = "j";
+        else if (this.rank == 12) rank = "q";
+        else if (this.rank == 13) rank = "k";
+        else rank = String.valueOf(this.rank);
+        return rank + this.getSuit().name().substring(0, 1).toLowerCase();
     }
 
     /**

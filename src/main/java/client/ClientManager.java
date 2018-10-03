@@ -4,18 +4,24 @@ import client.views.GameView;
 import client.views.View;
 import client.views.components.CardSetView;
 import client.views.components.CardView;
-import com.sun.javaws.exceptions.InvalidArgumentException;
+import commands.Command;
+import commands.server.PlayerMove;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import server.Server;
+import server.models.CardSet;
 import server.models.cards.Card;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Stack;
+import java.util.List;
 
 public class ClientManager {
+    private static final int MINIMUM_SET_SIZE = 3;
+    private final GameView gameView;
+
     Server server;
     Thread serverThread;
     boolean serverStarted = false;
@@ -29,12 +35,14 @@ public class ClientManager {
     public PrintWriter out;
     private App app;
     private CardView selectedCard;
+    private Client client;
 
     public static ClientManager getInstance() {
         return ourInstance;
     }
 
     private ClientManager() {
+        this.gameView = GameView.getInstance();
     }
 
     public void startServer(int port, int numberOfPlayers) throws Exception {
@@ -74,16 +82,16 @@ public class ClientManager {
 
     private void loginServer(Client client) {
         clientThread = new Thread(client);
-
+        this.client = client;
         clientThread.start();
         joinedGame = true;
     }
 
     public void startGame(int numberOfPlayers) {
-//        new GameViewControllerTest(this.app, GameView.getInstance());
-        GameView.getInstance().setPlayerCount(numberOfPlayers);
-        showView(GameView.getInstance());
-        GameView.getInstance().fillDeck();
+//        new GameViewControllerTest(this.app, gameView);
+        gameView.setPlayerCount(numberOfPlayers);
+        showView(gameView);
+        gameView.fillDeck();
 
         //TODO: Check if the table is full.
 //        pushView(WaitingForOtherPlayersView.getInstance());
@@ -113,24 +121,22 @@ public class ClientManager {
         return app;
     }
 
-    public void dealHand(int seatNumber, Stack<Object> cards) {
-        for (Object cardText : cards) {
-            try {
-                Card card = Card.fromString(cardText.toString());
-                GameView.getInstance().addCardToHand(seatNumber, card, null);
-                GameView.getInstance().dealHands();
+    public void dealHand(int seatNumber, CardSet hand) {
+        for (Card card : hand.getCards()) {
+            // 1 open card to the owner
+            gameView.addCardToHand(seatNumber, card, null);
 
-            } catch (InvalidArgumentException e) {
-                e.printStackTrace();
-            }
+            // 1 hidden card to each opponent.
+            gameView.dealHands();
         }
+        startTurn();
     }
 
     public void introducePlayer(String playerName, int playerId, int seatNumber, boolean owner) {
         if (owner) {
-            GameView.getInstance().setOwnerPlayer(playerId, seatNumber);
+            gameView.setOwnerPlayer(playerId, seatNumber);
         }
-        GameView.getInstance().fillSeat(playerName, playerId, seatNumber);
+        gameView.fillSeat(playerName, playerId, seatNumber);
     }
 
     //    When user clicks a card target, we move the card from old set to the target set.
@@ -143,7 +149,7 @@ public class ClientManager {
             this.selectedCard.removeFromParentSet();
             selectedCard = null;
 
-            GameView.getInstance().setPlayAreaActive(false);
+            gameView.setPlayAreaActive(false);
         }
     }
 
@@ -167,10 +173,45 @@ public class ClientManager {
             selectedCard.getParentSet().setSelectedCard(selectedCard);
         }
 
-        if(this.selectedCard != null){
-            GameView.getInstance().setPlayAreaActive(selectedCard.getCard());
-        }else{
-            GameView.getInstance().setPlayAreaActive(false);
+        if (this.selectedCard != null) {
+            gameView.setPlayAreaActive(selectedCard.getCard());
+        } else {
+            gameView.setPlayAreaActive(false);
         }
+    }
+
+    public void startTurn() {
+        gameView.takeSnapshot();
+    }
+
+    public void resetMove() {
+//        gameView.getHand().getSnapshot();
+//        TODO: Replace this snapshot.
+    }
+
+    public boolean endTurn(MouseEvent event) {
+        CardSet prevHand = gameView.getHand().getSnapshot();
+        CardSet lastHand = gameView.getHand().getCardSet();
+
+//      No card played. Just pass the turn.
+        if (prevHand.equals(lastHand)) {
+            app.sendCommandToServer(new Command(Command.CommandNames.PASS_TURN));
+            return true;
+        }
+
+//      Can't make the move, invalid sets on table.
+        if (!gameView.getPlayArea().isValid(MINIMUM_SET_SIZE)) {
+            gameView.setMessage("Not a valid play!");
+            return false;
+        }
+
+        List<CardSet> table = gameView.getPlayArea().takeSnapshot();
+
+        CardSet playedCards = prevHand.diff(lastHand);
+        PlayerMove move = new PlayerMove(gameView.getOwnerSeat(), playedCards, table);
+
+        client.sendCommandToServer(move);
+
+        return true;
     }
 }

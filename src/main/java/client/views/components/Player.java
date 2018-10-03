@@ -24,6 +24,7 @@ public class Player extends VBox implements EventHandler<CardEvent> {
         this.playerInfo = new PlayerInfo("Not joined yet!");
         this.hand = new CardSetView();
         hand.setCardEventHandler(this);
+        hand.setCheckForValidity(false);
 
         this.setSpacing(5);
         this.getChildren().add(playerInfo);
@@ -78,6 +79,10 @@ public class Player extends VBox implements EventHandler<CardEvent> {
 
     public void setSeatNumber(int seatNumber) {
         this.seatNumber = seatNumber;
+    }
+
+    public int getSeatNumber() {
+        return seatNumber;
     }
 
     public CardSetView getHand() {

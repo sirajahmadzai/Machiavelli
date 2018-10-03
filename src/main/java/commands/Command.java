@@ -1,10 +1,14 @@
 package commands;
 
 import javafx.application.Platform;
+import javafx.util.Builder;
 
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringJoiner;
+
+import static commands.Command.CommandTypes.CLIENT_COMMAND;
+import static commands.Command.CommandTypes.SERVER_COMMAND;
 
 
 public class Command {
@@ -20,27 +24,35 @@ public class Command {
         System.out.println("Command executing itself.");
     }
 
-
-    public enum CommandNames {
-        NUMBER_OF_PLAYERS,
-        SHOW_GAMEVIEW,
-        DEAL_HANDS,
-        WELLCOME,
-        INTRODUCE_PLAYER,
-        TABLE_IS_FULL,
-        ADD_CARD_TO_HAND,
-        DRAW_CARD_FROM_DECK,
-        ADD_CARD_TO_SET,
-        REMOVE_CARD_FROM_HAND,
-        REMOVE_CARD_FROM_SET,
-        DECK_CLICKED,
-        PROMPT_PLAYER,
-        PROMPT_PLAY_CARD,
-        PROMPT_END_TURN,
+    public enum CommandTypes{
+        SERVER_COMMAND,
+        CLIENT_COMMAND
     }
+    public enum CommandNames{
+//      SERVER_COMMANDS
+        NUMBER_OF_PLAYERS(SERVER_COMMAND),
+        SHOW_GAMEVIEW(SERVER_COMMAND),
+        DEAL_HANDS(SERVER_COMMAND),
+        PLAYER_MOVE(SERVER_COMMAND),
+        PASS_TURN(SERVER_COMMAND),
 
-//    private BufferedReader in;
-//    private PrintWriter out;
+//      CLIENT_COMMANDS
+        INTRODUCE_PLAYER(CLIENT_COMMAND),
+        WELCOME(CLIENT_COMMAND),
+        TABLE_IS_FULL(CLIENT_COMMAND),
+        SWITCH_TURN(CLIENT_COMMAND)
+        ;
+
+        private final CommandTypes type;
+
+        CommandNames(CommandTypes type){
+            this.type = type;
+        }
+
+        public CommandTypes getType() {
+            return type;
+        }
+    }
 
     protected CommandNames name;
     protected Stack<Object> parameters = new Stack<>();
@@ -56,6 +68,7 @@ public class Command {
     }
 
     public Command(String commandStr) {
+        this();
         parse(commandStr);
     }
 

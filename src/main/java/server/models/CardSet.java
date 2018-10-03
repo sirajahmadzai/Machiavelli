@@ -1,5 +1,6 @@
 package server.models;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import server.models.cards.Ace;
 import server.models.cards.Card;
 import server.models.cards.Suit;
@@ -24,14 +25,25 @@ public class CardSet {
      */
     public CardSet(Collection<Card> cards) {
         this();
-        for (Card card : cards) {
-            this.addCard(card);
-        }
+        addCards(cards);
     }
 
     public CardSet(Card card) {
         this();
         this.addCard(card);
+    }
+
+    public CardSet(String setString) {
+        this();
+        String[] cards = setString.split(",");
+
+        try {
+            for (String c : cards) {
+                this.addCard(Card.fromString(c));
+            }
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     public CardSet() {
@@ -60,10 +72,23 @@ public class CardSet {
         cards.add(card);
     }
 
+    public void join(CardSet cardSet) {
+        addCards(cardSet.getCards());
+    }
 
-    public void removeCard(Card card) {
+    public void addCards(Collection<Card> cards) {
+        for (Card card : cards) {
+            this.addCard(card);
+        }
+    }
+
+    public boolean removeCard(Card card) {
         if (jokers.remove(card)) {
-            return;
+            return true;
+        }
+
+        if (!cards.remove(card)) {
+            return false;
         }
 
         ArrayList<Card> suit = suitCardMap.get(card.getSuit());
@@ -77,10 +102,8 @@ public class CardSet {
         if (rank.isEmpty()) {
             rankCardMap.remove(card.getRank());
         }
-
-        cards.remove(card);
+        return true;
     }
-
 
     /**
      * gets list of cards
@@ -92,7 +115,22 @@ public class CardSet {
     }
 
     public boolean isAValidMeld() {
-        if (totalCount() <= 1) {
+        return isAValidMeld(1);
+    }
+
+    public boolean isAValidMeld(int minSetSize) {
+        // An empty set is always a valid meld regardless of minimum set size.
+        if (totalCount() == 0) {
+            return true;
+        }
+
+        //Don't bother if set is not big enough.
+        if (totalCount() < minSetSize) {
+            return false;
+        }
+
+        //A single card is always a valid meld.
+        if (totalCount() == 1) {
             return true;
         }
 
@@ -200,20 +238,84 @@ public class CardSet {
         return jokers.size();
     }
 
-    private int getMinRankDifference(){
+    private int getMinRankDifference() {
         int minRank = cards.get(0).getRank();
         int maxRank = cards.get(cardCount() - 1).getRank();
         int rankDifference = maxRank - minRank;
 
-        if(cards.get(0) instanceof Ace){
+        if (cards.get(0) instanceof Ace) {
             minRank = cards.get(1).getRank();
             maxRank = 14;
             int rankDifference2 = maxRank - minRank;
-            if(rankDifference > rankDifference2){
+            if (rankDifference > rankDifference2) {
                 rankDifference = rankDifference2;
             }
         }
 
         return rankDifference;
+    }
+
+    public CardSet getSnapshot() {
+        return new CardSet(cards);
+    }
+
+    // 2 Sets consisting of the same cards (rank,suit) considered equal regardless of the order of the cards.
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (!(obj instanceof CardSet))
+            return false;
+
+        CardSet set = (CardSet) obj;
+        if (set.totalCount() != this.totalCount()) {
+            return false;
+        }
+
+        if (set.jokerCount() != this.jokerCount()) {
+            return false;
+        }
+
+        set.sort();
+        sort();
+        return set.cards.equals(cards);
+    }
+
+    @Override
+    public int hashCode() {
+        sort();
+        return cards.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        StringJoiner joiner = new StringJoiner(",");
+        for (Card card : cards) {
+            joiner.add(card.toString());
+        }
+        return joiner.toString();
+    }
+
+
+    public boolean superSetOf(CardSet set) {
+        CardSet subSet = new CardSet(set.getCards());
+        CardSet superSet = new CardSet(cards);
+
+        for (Card card : subSet.cards) {
+            if (!superSet.removeCard(card)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public CardSet diff(CardSet set) {
+        CardSet diff = new CardSet(cards);
+
+        for (Card card : set.getCards()) {
+            diff.removeCard(card);
+        }
+
+        return diff;
     }
 }

@@ -1,30 +1,20 @@
 package client.views;
 
-import client.CardEvent;
+import client.ClientManager;
 import client.GameSeats;
 import client.ViewHelper;
 import client.views.components.CardSetView;
-import client.views.components.CardView;
 import client.views.components.PlayArea;
 import client.views.components.Player;
-import commands.Command;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import server.models.CardSet;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
-
-import java.util.Map;
 
 public class GameView extends View{
     /*************************************************************
@@ -88,6 +78,7 @@ public class GameView extends View{
 
         deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
         deckImageView.setVisible(false);
+        deckImageView.setOnMouseClicked(event -> ClientManager.getInstance().endTurn(event));
         setMessage("Click on the deck to get started!");
     }
 
@@ -161,6 +152,10 @@ public class GameView extends View{
         seats.setOwnerSeat(seatNumber, ownerPlayerId);
     }
 
+    public int getOwnerSeat() {
+        return seats.getOwnerPlayer().getSeatNumber();
+    }
+
     /**
      * Add new player to specified seat.
      * @param playerName
@@ -179,6 +174,19 @@ public class GameView extends View{
     public void setPlayAreaActive(Card card){
         playArea.setActive(card);
         seats.getOwnerPlayerHand().setReceiverMode(card);
+    }
+
+    public void takeSnapshot() {
+        playArea.takeSnapshot();
+        seats.getOwnerPlayerHand().takeSnapshot();
+    }
+
+    public PlayArea getPlayArea() {
+        return playArea;
+    }
+
+    public CardSetView getHand(){
+        return seats.getOwnerPlayerHand();
     }
 
 

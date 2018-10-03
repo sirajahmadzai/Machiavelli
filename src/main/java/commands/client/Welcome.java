@@ -1,13 +1,13 @@
-package commands;
+package commands.client;
 
-public class Wellcome extends IntroducePlayer{
+public class Welcome extends IntroducePlayer{
     private int numOfPlayers;
-    public Wellcome(String playerName, int playerId, int seatNumber, int numOfPlayers) {
+    public Welcome(String playerName, int playerId, int seatNumber, int numOfPlayers) {
         super(playerName, playerId, seatNumber);
 
         this.numOfPlayers = numOfPlayers;
         this.addParameter(numOfPlayers);
-        this.name = CommandNames.WELLCOME;
+        this.name = CommandNames.WELCOME;
     }
 
     public void doExecute() {

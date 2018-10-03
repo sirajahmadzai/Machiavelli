@@ -1,17 +1,21 @@
 package server.models;
 
-import commands.*;
-import javafx.application.Platform;
+import commands.Command;
+import commands.NumericCommand;
+import commands.StringCommand;
+import commands.client.IntroducePlayer;
+import commands.client.Welcome;
+import commands.server.PlayerMove;
 import server.ClientHandler;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Machiavelli {
-
-
     /********************************
      ******** PRIVATES **************
      ********************************/
@@ -19,22 +23,19 @@ public class Machiavelli {
     private ArrayList<Player> players;
     private int numOfPlayers;
     private boolean gameStarted = false;
+    private ArrayList<Seat> seats;
 
+    private static Machiavelli ourInstance = new Machiavelli();
+    private Seat currentSeat;
+
+    public static Machiavelli getInstance() {
+        return ourInstance;
+    }
 
     /**
      * CONSTRUCTOR
-     *
-     * @param numOfPlayers
      */
-    public Machiavelli(int numOfPlayers) {
-        players = new ArrayList<>();
-        table = new Table();
-        this.numOfPlayers = numOfPlayers;
-
-        //creates players based on the numOfPlayers
-//        for (int playerCounter = 0; playerCounter < numOfPlayers; playerCounter++) {
-//            players.add(new Player(numOfPlayers, "Player" + playerCounter + 1));
-//        }
+    private Machiavelli() {
     }
 
     /***************************************
@@ -78,6 +79,28 @@ public class Machiavelli {
         this.table = table;
     }
 
+    public void initialize(int numOfPlayers) {
+        players = new ArrayList<>();
+        table = new Table();
+        this.numOfPlayers = numOfPlayers;
+        seats = new ArrayList<>();
+
+        // Create seats.
+        Seat prevSeat = null;
+        for (int seatNumber = 1; seatNumber <= numOfPlayers; seatNumber++) {
+            Seat seat = new Seat(seatNumber, false);
+
+            if (prevSeat != null) {
+                prevSeat.setNextSeat(seat);
+            }
+
+            seats.add(seat);
+            prevSeat = seat;
+        }
+        // Create the circle here.
+        prevSeat.setNextSeat(seats.get(0));
+    }
+
     /**
      * @param players
      */
@@ -95,8 +118,8 @@ public class Machiavelli {
      */
     public void drawCardFromDeck(Player player) throws EmptyDeckException {
         try {
-            player.getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
-        } catch (ArrayIndexOutOfBoundsException e) {
+            player.getHand().addCard(table.getDeck().pop());
+        } catch (EmptyStackException e) {
             throw new EmptyDeckException();
         }
     }
@@ -108,9 +131,9 @@ public class Machiavelli {
      * @param indexOfCard
      * @return
      */
-    public Card removeCardFromHand(int indexOfPlayer, int indexOfCard) {
-        return players.get(indexOfPlayer).getHand().remove(indexOfCard);
-    }
+//    public Card removeCardFromHand(int indexOfPlayer, int indexOfCard) {
+//        return players.get(indexOfPlayer).getHand().removeCard(indexOfCard);
+//    }
 
     /**
      * merges two sets
@@ -213,7 +236,7 @@ public class Machiavelli {
 
                     currPlayerID = 0;
                 }
-                players.get(currPlayerID).getHand().add(table.getDeck().remove(table.getDeck().size() - 1));
+                players.get(currPlayerID).getHand().addCard(table.getDeck().pop());
 
                 currPlayerID++;
                 playerCounter++;
@@ -223,9 +246,11 @@ public class Machiavelli {
         StringCommand dealCommand = new StringCommand(Command.CommandNames.DEAL_HANDS);
         for (Player player : players) {
             // Let clients know their hand.
-            dealCommand.setParameterValue(player.getHandAsText() + " " + player.getSeatNumber());
+            dealCommand.setParameterValue(player.getHand() + " " + player.getSeatNumber());
             sendCommandToPlayer(dealCommand, player);
         }
+
+        switchTurn(getSeat(dealer.getSeatNumber()));
     }
 
     /***************************************
@@ -238,23 +263,32 @@ public class Machiavelli {
 
     }
 
+    public Seat getNextEmptySeat() {
+        for (Seat seat : seats) {
+            if (!seat.isTaken()) {
+                return seat;
+            }
+        }
+        return null;
+    }
+
     public boolean isTableFull() {
         return numOfPlayers <= players.size();
     }
 
     public void addPlayer(ClientHandler clientHandler) {
         int playerId = players.size();
-        int seatNumber = playerId + 1;
+        Seat seat = getNextEmptySeat();
         String playerName = "Player" + playerId;
 
         Player player = new Player(playerId, playerName);
-        player.setSeatNumber(seatNumber);
+        player.setSeatNumber(seat.getSeatNumber());
         player.setClientHandler(clientHandler);
 
+        seat.setPlayer(player);
 
-
-        Command introduce = new IntroducePlayer(playerName, playerId, seatNumber);
-        Command welcome = new Wellcome(playerName, playerId, seatNumber, numOfPlayers);
+        Command introduce = new IntroducePlayer(playerName, playerId, seat.getSeatNumber());
+        Command welcome = new Welcome(playerName, playerId, seat.getSeatNumber(), numOfPlayers);
 
         // Welcome the new player
         sendCommandToPlayer(welcome, player);
@@ -263,12 +297,26 @@ public class Machiavelli {
         sendCommandToAllPlayersExcept(introduce, player);
 
         // Introduce others to the new player.
-        for(Player p : players) {
+        for (Player p : players) {
             // Welcome the new player
             sendCommandToPlayer(new IntroducePlayer(p.getName(), p.getPlayerID(), p.getSeatNumber()), player);
         }
 
         players.add(player);
+    }
+
+    public void removePlayer(ClientHandler clientHandler) {
+        Player player = null;
+        for (Player p : players) {
+            if (p.getClientHandler() == clientHandler) {
+                player = p;
+                break;
+            }
+        }
+        if (player != null) {
+            players.remove(player);
+            sendCommandToAllPlayers(new Command("PLAYER_DROPPED " + player.getSeatNumber()));
+        }
     }
 
     public void startGame() {
@@ -284,12 +332,16 @@ public class Machiavelli {
         }
     }
 
-    private void sendCommandToAllPlayersExcept(Command command, Player exceptPlayer) {
+    private void sendCommandToAllPlayersExcept(Command command, int playerSeatNumber) {
         for (Player player : players) {
-            if (player != exceptPlayer) {
+            if (player.getSeatNumber() != playerSeatNumber) {
                 sendCommandToPlayer(command, player);
             }
         }
+    }
+
+    private void sendCommandToAllPlayersExcept(Command command, Player exceptPlayer) {
+        sendCommandToAllPlayersExcept(command, exceptPlayer.getSeatNumber());
     }
 
     private void sendCommandToAllPlayers(String command) {
@@ -306,9 +358,127 @@ public class Machiavelli {
         player.getClientHandler().sendCommand(command);
     }
 
+    private boolean validateMove(int seatNumber, List<CardSet> proposedSets, CardSet playedCards) {
+        // TODO: Check if the turn is at the right player (seat number)
+
+        CardSet currentTable = table.getAllCardsInASet();
+        CardSet proposedTable = new CardSet();
+
+        // All proposed sets should be valid.
+        for (CardSet set : proposedSets) {
+            if (!set.isAValidMeld(3)) {
+                return false;
+            }
+            proposedTable.join(set);
+        }
+
+        // Propose sets must contain at least all cards previously on the table.
+        // aka: player can only add card to the table. Can't withdraw cards.
+        if (!proposedTable.superSetOf(currentTable)) {
+            return false;
+        }
+
+        // After appending the played cards to the table, the table should be equal to proposed table.
+        currentTable.join(playedCards);
+        if (!currentTable.equals(proposedTable)) {
+            return false;
+        }
+
+        Seat seat = getSeat(seatNumber);
+        Player player = seat.getPlayer();
+        // Player hand should include all the cards played.
+        if (!player.getHand().superSetOf(playedCards)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean processMove(PlayerMove playerMove) {
+        if (!validateMove(playerMove.getSeatNumber(), playerMove.getTable(), playerMove.getPlayedCards())) {
+            return false;
+        }
+
+        /** TODO
+         * - Remove played cards from player hand.
+         * - Replace the table sets with the proposed sets.
+         * + Send new table to all players.
+         * + Send Switch Turn to all players.
+         */
+
+        sendCommandToAllPlayersExcept(playerMove, playerMove.getSeatNumber());
+        switchTurn();
+
+        return true;
+    }
+
+    private void switchTurn(Seat seat) {
+        currentSeat = seat;
+        sendCommandToAllPlayers(new NumericCommand(Command.CommandNames.SWITCH_TURN, currentSeat.getSeatNumber()));
+    }
+
+    private void switchTurn() {
+        switchTurn(currentSeat.getNextSeat());
+    }
+
+
+    private Seat getSeat(int seatNumber) {
+        for (Seat seat : seats) {
+            if (seat.getSeatNumber() == seatNumber) {
+                return seat;
+            }
+        }
+        return null;
+    }
+
     public class EmptyDeckException extends Exception {
         public EmptyDeckException() {
-            super("Deck is empty!");
+            super("Deck is taken!");
+        }
+    }
+
+    private class Seat {
+        private int seatNumber;
+        private Player player = null;
+        private Boolean taken;
+        private Seat nextSeat;
+
+        public Seat(int seatNumber, Boolean taken) {
+            this.taken = taken;
+            this.seatNumber = seatNumber;
+        }
+
+        public Boolean isTaken() {
+            return taken;
+        }
+
+        public void setTaken(Boolean taken) {
+            this.taken = taken;
+        }
+
+        public int getSeatNumber() {
+            return seatNumber;
+        }
+
+        public void setSeatNumber(int seatNumber) {
+            this.seatNumber = seatNumber;
+        }
+
+        public Player getPlayer() {
+            return player;
+        }
+
+        public void setPlayer(Player player) {
+            this.player = player;
+            this.taken = player != null;
+        }
+
+        public Seat getNextSeat() {
+            return nextSeat;
+        }
+
+        public void setNextSeat(Seat nextSeat) {
+            this.nextSeat = nextSeat;
         }
     }
 }

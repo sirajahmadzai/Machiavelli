@@ -17,6 +17,7 @@ import server.models.cards.DropTargetCard;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class CardSetView extends HBox {
     private CardSet cardSet;
@@ -25,6 +26,8 @@ public class CardSetView extends HBox {
     private CardView dropTarget;
     private boolean receiverMode = false;
     private ArrayList<CardView> cardViews;
+    private boolean checkForValidity = true;
+    private CardSet snapshot;
 
     public CardSetView() {
         this(new CardSet());
@@ -33,6 +36,7 @@ public class CardSetView extends HBox {
     public CardSetView(CardSet cardSet) {
         initLayout();
         cardViews = new ArrayList<>();
+        snapshot = new CardSet();
 
         this.cardSet = cardSet;
         for (Card card : cardSet.getCards()) {
@@ -75,23 +79,6 @@ public class CardSetView extends HBox {
         }
     }
 
-    private void sort(){
-        ObservableList<Node> workingCollection = FXCollections.observableArrayList(
-                this.getChildren()
-        );
-
-        Collections.sort(workingCollection, new Comparator<Node>() {
-            @Override
-            public int compare(Node o1, Node o2) {
-                CardView c1 = (CardView) o1;
-                CardView c2 = (CardView) o2;
-                return c1.getCard().compareTo(c2.getCard());
-            }
-        });
-
-        this.getChildren().setAll(workingCollection);
-    }
-
     public void removeCard(CardView cardView) {
         cardSet.removeCard(cardView.getCard());
         getChildren().remove(cardView);
@@ -102,9 +89,13 @@ public class CardSetView extends HBox {
     }
 
     private void markValidity() {
-        boolean validMeld = cardSet.isAValidMeld();
+        if (!checkForValidity){
+            return;
+        }
 
-        for (CardView cardView: cardViews) {
+        boolean validMeld = cardSet.isAValidMeld(3);
+
+        for (CardView cardView : cardViews) {
             cardView.setValid(validMeld);
         }
     }
@@ -137,6 +128,10 @@ public class CardSetView extends HBox {
         return cardSet.totalCount();
     }
 
+    public CardSet getCardSet() {
+        return cardSet;
+    }
+
     public boolean isReceiverMode() {
         return receiverMode;
     }
@@ -152,7 +147,7 @@ public class CardSetView extends HBox {
     }
 
     // If the set is still a valid set after adding proposed card, set receiver mode on.
-    public void setReceiverMode(Card card){
+    public void setReceiverMode(Card card) {
         setReceiverMode(canAcceptCard(card));
     }
 
@@ -160,7 +155,37 @@ public class CardSetView extends HBox {
         return getCardCount() <= 0;
     }
 
-    public boolean canAcceptCard(Card card){
+    private boolean canAcceptCard(Card card) {
         return cardSet.canAcceptCard(card);
+    }
+
+    private void sort() {
+        ObservableList<Node> workingCollection = FXCollections.observableArrayList(
+                this.getChildren()
+        );
+
+        Collections.sort(workingCollection, new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                CardView c1 = (CardView) o1;
+                CardView c2 = (CardView) o2;
+                return c1.getCard().compareTo(c2.getCard());
+            }
+        });
+
+        this.getChildren().setAll(workingCollection);
+    }
+
+    public void setCheckForValidity(boolean checkForValidity) {
+        this.checkForValidity = checkForValidity;
+    }
+
+    public CardSet takeSnapshot() {
+        this.snapshot = cardSet.getSnapshot();
+        return this.snapshot;
+    }
+
+    public CardSet getSnapshot() {
+        return snapshot;
     }
 }

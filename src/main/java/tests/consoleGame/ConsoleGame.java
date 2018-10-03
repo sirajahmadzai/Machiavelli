@@ -35,7 +35,9 @@ public class ConsoleGame {
         } while (numOfPlayers < 2 || numOfPlayers > 4);
 
 
-        machiavelli = new Machiavelli(numOfPlayers);
+        machiavelli = Machiavelli.getInstance();
+        machiavelli.initialize(numOfPlayers);
+
         System.out.println("time to select a random player to start the game!");
         Player dealer = machiavelli.getRandomPlayer();
         machiavelli.dealHands(dealer);
@@ -114,10 +116,10 @@ public class ConsoleGame {
     }
 
     private static void displayHand(Player player) {
-        for (Card card : player.getHand()) {
+        for (Card card : player.getHand().getCards()) {
             System.out.print(card + " ");
         }
-        System.out.println("(" + player.getHand().size() + " cards)");
+        System.out.println("(" + player.getHand().totalCount() + " cards)");
     }
 
     private static void playTurn() {
@@ -145,7 +147,7 @@ public class ConsoleGame {
     }
 
     private static void playGame() {
-        while (currPlayer.getHand().size() != 0) {
+        while (currPlayer.getHand().totalCount() != 0) {
             currPlayer = getNextPlayer(currPlayer);
             playTurn();
         }

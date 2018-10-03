@@ -1,5 +1,6 @@
 package server;
 
+import commands.Command;
 import server.gameLogic.GameState;
 import server.gameLogic.WaitingForPlayersState;
 import server.models.Machiavelli;
@@ -15,14 +16,14 @@ public class Server implements Runnable {
     private ServerSocket listener;
     private int numPlayers = -1;
     private GameState currentState;
-    private boolean gameStarted = false;
     private int port;
     private Machiavelli machiavelli;
 
     public Server(int port, int numPlayers) throws IOException {
         this.numPlayers = numPlayers;
         this.port = port;
-        this.machiavelli = new Machiavelli(numPlayers);
+        machiavelli = Machiavelli.getInstance();
+        machiavelli.initialize(numPlayers);
 
         log.info("starting server on: localhost at port " + port);
         System.out.println("starting server on: localhost at port " + port);
@@ -31,6 +32,7 @@ public class Server implements Runnable {
     }
 
     public void removeClientHandler(ClientHandler clientHandler) {
+        machiavelli.removePlayer(clientHandler);
         playerClientHandlers.remove(clientHandler);
     }
 
@@ -49,10 +51,10 @@ public class Server implements Runnable {
             System.out.println("server started");
             while (true) {
                 System.out.println("Accepting next Client..");
-                ClientHandler clientHandler = new ClientHandler(listener.accept());
+                ClientHandler clientHandler = new ClientHandler(listener.accept(), machiavelli);
 
                 if (machiavelli.isTableFull()) {
-                    clientHandler.sendCommand("TABLE_IS_FULL");
+                    clientHandler.sendCommand(Command.CommandNames.TABLE_IS_FULL);
                 } else {
                     machiavelli.addPlayer(clientHandler);
 
@@ -61,7 +63,7 @@ public class Server implements Runnable {
 
                     machiavelli.startGame();
                 }
-//                TODO: implement a way to stop server.
+//              TODO: implement a way to stop server.
             }
 
         } catch (Exception e) {
