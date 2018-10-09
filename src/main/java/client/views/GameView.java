@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
 
-public class GameView extends View{
+public class GameView extends View {
     /*************************************************************
      ************************FXML INJECTIONS**********************
      *************************************************************/
@@ -166,12 +166,12 @@ public class GameView extends View{
         seats.setPlayerInfo(seatNumber, playerName, playerId);
     }
 
-    public void setPlayAreaActive(boolean active){
+    public void setPlayAreaActive(boolean active) {
         playArea.setActive(active);
         seats.getOwnerPlayerHand().setReceiverMode(active);
     }
 
-    public void setPlayAreaActive(Card card){
+    public void setPlayAreaActive(Card card) {
         playArea.setActive(card);
         seats.getOwnerPlayerHand().setReceiverMode(card);
     }
@@ -185,9 +185,13 @@ public class GameView extends View{
         return playArea;
     }
 
-    public CardSetView getHand(){
+    public CardSetView getHand() {
         return seats.getOwnerPlayerHand();
     }
 
-
+    public void switchTurn(int seatNumber) {
+        for (int i = 1; i <= playerCount; i++) {
+            seats.getPlayer(i).setActive(i == seatNumber);
+        }
+    }
 }

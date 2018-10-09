@@ -1,13 +1,12 @@
 package server.models;
 
+import commands.BasicCommand;
 import commands.Command;
-import commands.NumericCommand;
-import commands.StringCommand;
-import commands.client.IntroducePlayer;
-import commands.client.Welcome;
+import commands.client.*;
 import commands.server.PlayerMove;
 import server.ClientHandler;
 import server.models.cards.Card;
+import server.models.cards.HiddenCard;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -116,9 +115,11 @@ public class Machiavelli {
     /**
      * @param player
      */
-    public void drawCardFromDeck(Player player) throws EmptyDeckException {
+    public Card drawCardFromDeck(Player player) throws EmptyDeckException {
         try {
-            player.getHand().addCard(table.getDeck().pop());
+            Card card = table.getDeck().pop();
+            player.getHand().addCard(card);
+            return card;
         } catch (EmptyStackException e) {
             throw new EmptyDeckException();
         }
@@ -243,11 +244,10 @@ public class Machiavelli {
             }
         }
 
-        StringCommand dealCommand = new StringCommand(Command.CommandNames.DEAL_HANDS);
         for (Player player : players) {
+            DealHands dealHandsCommand = new DealHands(player.getSeatNumber(), player.getHand());
             // Let clients know their hand.
-            dealCommand.setParameterValue(player.getHand() + " " + player.getSeatNumber());
-            sendCommandToPlayer(dealCommand, player);
+            sendCommandToPlayer(dealHandsCommand, player);
         }
 
         switchTurn(getSeat(dealer.getSeatNumber()));
@@ -315,7 +315,7 @@ public class Machiavelli {
         }
         if (player != null) {
             players.remove(player);
-            sendCommandToAllPlayers(new Command("PLAYER_DROPPED " + player.getSeatNumber()));
+            sendCommandToAllPlayers(new BasicCommand("PLAYER_DROPPED " + player.getSeatNumber()));
         }
     }
 
@@ -400,11 +400,17 @@ public class Machiavelli {
         }
 
         /** TODO
-         * - Remove played cards from player hand.
-         * - Replace the table sets with the proposed sets.
+         * + Validate move.
+         * + Remove played cards from player hand.
+         * + Replace the table sets with the proposed sets.
          * + Send new table to all players.
          * + Send Switch Turn to all players.
          */
+
+        Player player = currentSeat.getPlayer();
+        player.getHand().removeCards(playerMove.getPlayedCards());
+
+        table.setCardSets(playerMove.getTable());
 
         sendCommandToAllPlayersExcept(playerMove, playerMove.getSeatNumber());
         switchTurn();
@@ -412,9 +418,26 @@ public class Machiavelli {
         return true;
     }
 
+    public void passTurn() {
+        try {
+            Card card = drawCardFromDeck(currentSeat.getPlayer());
+            Command cmdDrawOpenCard = new DrawCard(currentSeat.getSeatNumber(), card.toString());
+            sendCommandToPlayer(cmdDrawOpenCard, currentSeat.getPlayer());
+
+            Command cmdDrawClosedCard = new DrawCard(currentSeat.getSeatNumber(), HiddenCard.getInstance().toString());
+            sendCommandToAllPlayersExcept(cmdDrawClosedCard, currentSeat.seatNumber);
+
+            switchTurn();
+        } catch (EmptyDeckException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     private void switchTurn(Seat seat) {
         currentSeat = seat;
-        sendCommandToAllPlayers(new NumericCommand(Command.CommandNames.SWITCH_TURN, currentSeat.getSeatNumber()));
+        sendCommandToAllPlayers(new SwitchTurn(currentSeat.getSeatNumber()));
     }
 
     private void switchTurn() {

@@ -3,20 +3,19 @@ package commands.server;
 import commands.Command;
 import server.models.Machiavelli;
 
-public class ServerCommand extends Command {
+public abstract class ServerCommand extends Command {
     protected Machiavelli machiavelli = Machiavelli.getInstance();
 
     public ServerCommand(CommandNames name) {
         super(name);
     }
 
-    @Override
-    public void execute() {
-        doExecute();
+    public ServerCommand(String cmdString) {
+        super(cmdString);
     }
 
     @Override
-    protected void doExecute() {
-        System.out.println("Server Command executing itself.");
+    public void execute() {
+        doExecute();
     }
 }

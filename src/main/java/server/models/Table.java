@@ -5,6 +5,7 @@ import server.models.cards.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
 public class Table {
@@ -52,7 +53,7 @@ public class Table {
         return cardSets;
     }
 
-    public CardSet getAllCardsInASet(){
+    public CardSet getAllCardsInASet() {
         CardSet fullSet = new CardSet();
         for (CardSet set : cardSets) {
             fullSet.join(set);
@@ -83,8 +84,8 @@ public class Table {
     /**
      * @param cardSets
      */
-    public void setCardSets(ArrayList<CardSet> cardSets) {
-        this.cardSets = cardSets;
+    public void setCardSets(List<CardSet> cardSets) {
+        this.cardSets = new ArrayList<>(cardSets);
     }
 
     /**

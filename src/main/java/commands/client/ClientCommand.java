@@ -1,29 +1,23 @@
 package commands.client;
 
-import client.Client;
 import client.ClientManager;
 import commands.Command;
 import javafx.application.Platform;
 
-public class ClientCommand extends Command {
-    protected final ClientManager manager;
-
-    public ClientCommand() {
-        manager = ClientManager.getInstance();
-    }
+public abstract class ClientCommand extends Command {
+    protected final ClientManager manager = ClientManager.getInstance();
 
     public ClientCommand(CommandNames name) {
-        this();
-        this.name = name;
+        super(name);
+    }
+
+    public ClientCommand(String commandStr) {
+        super(commandStr);
     }
 
     @Override
     public void execute() {
-        Platform.runLater(() -> doExecute());
+        Platform.runLater(this::doExecute);
     }
 
-    @Override
-    protected void doExecute() {
-        System.out.println("Command executing itself.");
-    }
 }

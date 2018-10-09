@@ -34,26 +34,26 @@ public class PlayArea implements EventHandler<CardEvent> {
         }
     }
 
-    public void addSet(CardSet cardSet) {
+    private void addSet(CardSet cardSet) {
         CardSetView cardSetView = new CardSetView(cardSet);
+        addSet(cardSetView);
+    }
+
+    private void addSet(CardSetView cardSetView) {
         setsArea.getChildren().add(cardSetView);
+        cardSetView.setCardEventHandler(this);
+        setViews.add(cardSetView);
     }
 
-    public void removeSet(CardSetView cardSetView) {
+    private void removeSet(CardSetView cardSetView) {
         setsArea.getChildren().remove(cardSetView);
-    }
-
-    public void addCard(Card card) {
-        addSet(new CardSet(card));
+        cardSetView.setCardEventHandler(null);
+        setViews.remove(cardSetView);
     }
 
     private void createPlaceholderSet() {
         this.placeholderSet = new CardSetView();
-        this.setsArea.getChildren().add(placeholderSet);
-
-        placeholderSet.setCardEventHandler(this);
-
-        setViews.add(placeholderSet);
+        addSet(placeholderSet);
     }
 
     public List<CardSet> takeSnapshot() {
@@ -99,5 +99,19 @@ public class PlayArea implements EventHandler<CardEvent> {
         }
 
         return true;
+    }
+
+    public void setAllSets(List<CardSet> table) {
+        while (!setViews.isEmpty()){
+            removeSet(setViews.remove(0));
+        }
+
+        setViews.clear();
+        snapshot.clear();
+
+        for (CardSet cardSet : table) {
+            addSet(cardSet);
+        }
+        createPlaceholderSet();
     }
 }

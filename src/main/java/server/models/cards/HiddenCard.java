@@ -12,6 +12,10 @@ public class HiddenCard extends Card {
         return ourInstance;
     }
 
+    public static String getAsString() {
+        return "hidden";
+    }
+
     @Override
     public String toString() {
         return "hidden";

@@ -2,12 +2,17 @@ package commands.client;
 
 public class Welcome extends IntroducePlayer{
     private int numOfPlayers;
+
+    public Welcome() {
+        super(CommandNames.WELCOME);
+    }
+
     public Welcome(String playerName, int playerId, int seatNumber, int numOfPlayers) {
         super(playerName, playerId, seatNumber);
 
+        this.name = CommandNames.WELCOME;
         this.numOfPlayers = numOfPlayers;
         this.addParameter(numOfPlayers);
-        this.name = CommandNames.WELCOME;
     }
 
     public void doExecute() {
@@ -15,5 +20,8 @@ public class Welcome extends IntroducePlayer{
         manager.introducePlayer(playerName, playerId, seatNumber, true);
     }
 
-
+    public void doParse(String commandStr) {
+        super.doParse(commandStr);
+        numOfPlayers = scanner.nextInt();
+    }
 }

@@ -2,6 +2,7 @@ package client;
 
 import commands.Command;
 import commands.CommandFactory;
+import commands.server.PlayerMove;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
@@ -65,6 +66,9 @@ public class Client extends Task<Void>/* implements Runnable*/ {
                 switch (command.getName()) {
                     case SHOW_GAMEVIEW:
                         Platform.runLater(() -> manager.startGame(Integer.parseInt(command.getParameter())));
+                        break;
+                    case PLAYER_MOVE:
+                        Platform.runLater(() -> manager.playMove((PlayerMove) command));
                         break;
                     default:
                         command.execute();

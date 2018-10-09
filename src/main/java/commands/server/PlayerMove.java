@@ -11,7 +11,17 @@ public class PlayerMove extends ServerCommand {
     protected List<CardSet> table;
     protected CardSet playedCards;
 
-    public PlayerMove(int seatNumber,CardSet playedCards, List<CardSet> table) {
+    public PlayerMove() {
+        super(CommandNames.PLAYER_MOVE);
+        table = new ArrayList<>();
+    }
+
+    public PlayerMove(String cmdString) {
+        super(cmdString);
+        table = new ArrayList<>();
+    }
+
+    public PlayerMove(int seatNumber, CardSet playedCards, List<CardSet> table) {
         this();
         this.seatNumber = seatNumber;
         this.table = table;
@@ -24,19 +34,8 @@ public class PlayerMove extends ServerCommand {
         }
     }
 
-    public PlayerMove(String cmdString) {
-        this();
-        table = new ArrayList<>();
-        parse(cmdString);
-    }
-
-    public PlayerMove() {
-        super(CommandNames.PLAYER_MOVE);
-    }
-
     @Override
-    public void parse(String commandStr) {
-        super.parse(commandStr);
+    public void doParse(String commandStr) {
         table.clear();
         int count = 0;
 

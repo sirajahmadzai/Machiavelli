@@ -4,10 +4,7 @@ import client.CardEvent;
 import client.PlayerPosition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import server.models.cards.Card;
 
 public class Player extends VBox implements EventHandler<CardEvent> {
@@ -29,7 +26,7 @@ public class Player extends VBox implements EventHandler<CardEvent> {
         this.setSpacing(5);
         this.getChildren().add(playerInfo);
         this.getChildren().add(hand);
-        setBackground(new Background(new BackgroundFill(Color.color(1,0,0,0.7),null,null)));
+//        setBackground(new Background(new BackgroundFill(Color.color(1,0,0,0.7),null,null)));
     }
 
     public void addCardToHand(Card card) {
@@ -97,6 +94,10 @@ public class Player extends VBox implements EventHandler<CardEvent> {
             infoText += " (" + cardCount + " Cards)";
         }
         this.playerInfo.setInfoText(infoText);
+    }
+
+    public void setActive(boolean active){
+        playerInfo.setActive(active);
     }
 
     @Override

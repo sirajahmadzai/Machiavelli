@@ -49,23 +49,25 @@ public class ClientHandler implements Runnable {
         try {
             while (true) {
                 String cmdString = in.readLine();
-                Command cmd  = CommandFactory.buildCommand(cmdString);
+                Command cmd = CommandFactory.buildCommand(cmdString);
                 processCommand(cmd);
             }
 
         } catch (SocketException e) {
             System.out.println("a Client disconnected!");
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             // This client is going down!  Remove its name and its print
             // writer from the sets, and close its socket.
-            if (out != null) {
-                server.removeClientHandler(this);
-            }
+//            if (out != null) {
+//                server.removeClientHandler(this);
+//            }
             try {
                 socket.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -74,8 +76,6 @@ public class ClientHandler implements Runnable {
         System.out.println("Command received: " + cmd.serialize());
         switch (cmd.getName()) {
             case NUMBER_OF_PLAYERS:
-                break;
-            case PASS_TURN:
                 break;
             case PLAYER_MOVE:
                 machiavelli.processMove((PlayerMove) cmd);
@@ -101,11 +101,11 @@ public class ClientHandler implements Runnable {
         socket.close();
     }
 
-    public void sendCommand(String command){
+    public void sendCommand(String command) {
         out.println(command);
     }
 
-    public void sendCommand(Command.CommandNames command){
+    public void sendCommand(Command.CommandNames command) {
         out.println(command);
     }
 }

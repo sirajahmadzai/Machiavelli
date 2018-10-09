@@ -4,6 +4,7 @@ import client.views.GameView;
 import client.views.View;
 import client.views.components.CardSetView;
 import client.views.components.CardView;
+import commands.BasicCommand;
 import commands.Command;
 import commands.server.PlayerMove;
 import javafx.scene.input.MouseEvent;
@@ -36,6 +37,7 @@ public class ClientManager {
     private App app;
     private CardView selectedCard;
     private Client client;
+    private int currentTurn;
 
     public static ClientManager getInstance() {
         return ourInstance;
@@ -141,6 +143,10 @@ public class ClientManager {
 
     //    When user clicks a card target, we move the card from old set to the target set.
     public void droppedToTarget(CardSetView targetSet) {
+        if (!isOwnerTurn()) {
+            return;
+        }
+
         if (selectedCard != null) {
             Card s = this.selectedCard.getCard();
             targetSet.addCard(s);
@@ -156,6 +162,10 @@ public class ClientManager {
     //    Keep track of any card selected inside the views.
     //    Activate the play area so that the selected card can be moved to it.
     public void cardSelected(CardView selectedCard) {
+        if (!isOwnerTurn()) {
+            return;
+        }
+
         // Clear previous selection.
         if (this.selectedCard != null) {
             this.selectedCard.getParentSet().clearSelectedCards();
@@ -180,6 +190,10 @@ public class ClientManager {
         }
     }
 
+    private boolean isOwnerTurn() {
+        return currentTurn == GameView.getInstance().getOwnerSeat();
+    }
+
     public void startTurn() {
         gameView.takeSnapshot();
     }
@@ -190,12 +204,16 @@ public class ClientManager {
     }
 
     public boolean endTurn(MouseEvent event) {
+        if (!isOwnerTurn()) {
+            return false;
+        }
+
         CardSet prevHand = gameView.getHand().getSnapshot();
         CardSet lastHand = gameView.getHand().getCardSet();
 
 //      No card played. Just pass the turn.
         if (prevHand.equals(lastHand)) {
-            app.sendCommandToServer(new Command(Command.CommandNames.PASS_TURN));
+            client.sendCommandToServer(new BasicCommand(Command.CommandNames.PASS_TURN));
             return true;
         }
 
@@ -213,5 +231,22 @@ public class ClientManager {
         client.sendCommandToServer(move);
 
         return true;
+    }
+
+    public void switchTurn(int seatNumber) {
+        startTurn();
+        currentTurn = seatNumber;
+        gameView.switchTurn(seatNumber);
+    }
+
+    public void drawCard(int seatNumber, Card card) {
+        gameView.addCardToHand(seatNumber, card, null);
+        startTurn();
+    }
+
+    public void playMove(PlayerMove move) {
+        List<CardSet> cardsOnTheTable = gameView.getPlayArea().getSnapshot();
+        gameView.getPlayArea().setAllSets(move.getTable());
+//        Remove cards from hand!
     }
 }

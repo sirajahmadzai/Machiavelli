@@ -4,11 +4,15 @@ import server.models.CardSet;
 
 public class DealHands extends ClientCommand {
 
-    private final int seatNumber;
-    private final CardSet hand;
+    private int seatNumber;
+    private CardSet hand;
+
+    public DealHands() {
+        super(CommandNames.DEAL_HANDS);
+    }
 
     public DealHands(int seatNumber, CardSet hand) {
-        super(CommandNames.DEAL_HANDS);
+        this();
         this.seatNumber = seatNumber;
         this.hand = hand;
 
@@ -17,10 +21,13 @@ public class DealHands extends ClientCommand {
     }
 
     public DealHands(String cmdString) {
-        parseName(cmdString);
+        super(cmdString);
+    }
 
-        hand = new CardSet(scanner.next());
+    @Override
+    public void doParse(String commandStr) {
         seatNumber = scanner.nextInt();
+        hand = new CardSet(scanner.next());
     }
 
     public void doExecute() {

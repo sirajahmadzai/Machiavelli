@@ -17,7 +17,6 @@ import server.models.cards.DropTargetCard;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class CardSetView extends HBox {
     private CardSet cardSet;
@@ -37,8 +36,8 @@ public class CardSetView extends HBox {
         initLayout();
         cardViews = new ArrayList<>();
         snapshot = new CardSet();
+        this.cardSet = new CardSet();
 
-        this.cardSet = cardSet;
         for (Card card : cardSet.getCards()) {
             addCard(card);
         }

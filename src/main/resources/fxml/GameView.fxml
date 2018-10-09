@@ -12,7 +12,7 @@
 
 <BorderPane fx:id="board" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-image: url('images/game.jpg');" stylesheets="@../css/gameview.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <GridPane style="-fx-background-color: #00FF0088;" BorderPane.alignment="CENTER">
+      <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="1722.3247680664062" minWidth="10.0" prefWidth="1406.9852294921875" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="936.0086059570312" minWidth="10.0" prefWidth="193.0147705078125" />
@@ -22,7 +22,7 @@
             <RowConstraints maxHeight="528.806884765625" minHeight="10.0" prefHeight="151.28485107421875" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <FlowPane fx:id="setsArea" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #0000FF88;" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <FlowPane fx:id="setsArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>

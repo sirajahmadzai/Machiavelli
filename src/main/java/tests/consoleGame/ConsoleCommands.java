@@ -1,5 +1,6 @@
 package tests.consoleGame;
 
+import commands.BasicCommand;
 import commands.Command;
 
 import java.io.BufferedReader;
@@ -15,7 +16,7 @@ public class ConsoleCommands {
         while (true) {
             System.out.println("Enter a command as string: ");
             String cmdString = br.readLine();
-            Command cmd = new Command(cmdString);
+            Command cmd = new BasicCommand(cmdString);
 
             System.out.println("Serialized command: " + cmd.serialize());
         }

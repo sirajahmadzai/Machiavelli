@@ -9,6 +9,7 @@ import java.util.*;
 
 public class CardSet {
 
+    private ArrayList<Card> allCards;
     /********************************
      ******** PRIVATES **************
      ********************************/
@@ -48,12 +49,13 @@ public class CardSet {
 
     public CardSet() {
         this.cards = new ArrayList<>();
+        this.allCards = new ArrayList<>();
         this.jokers = new ArrayList<>();
     }
 
     public void addCard(Card card) {
         isSorted = false;
-
+        allCards.add(card);
         if (card.isJoker()) {
             jokers.add(card);
             return;
@@ -73,7 +75,7 @@ public class CardSet {
     }
 
     public void join(CardSet cardSet) {
-        addCards(cardSet.getCards());
+        addCards(cardSet.allCards);
     }
 
     public void addCards(Collection<Card> cards) {
@@ -83,6 +85,8 @@ public class CardSet {
     }
 
     public boolean removeCard(Card card) {
+        allCards.remove(card);
+
         if (jokers.remove(card)) {
             return true;
         }
@@ -111,7 +115,7 @@ public class CardSet {
      * @return
      */
     public ArrayList<Card> getCards() {
-        return cards;
+        return allCards;
     }
 
     public boolean isAValidMeld() {
@@ -194,7 +198,7 @@ public class CardSet {
         if (isSorted) {
             return;
         }
-        Collections.sort(cards);
+        Collections.sort(allCards);
         isSorted = true;
     }
 
@@ -216,10 +220,6 @@ public class CardSet {
             return true;
         }
 
-        ArrayList<Card> allCards = new ArrayList<>();
-        allCards.addAll(cards);
-        allCards.addAll(jokers);
-
         CardSet proposedCardSet = new CardSet(allCards);
 
         proposedCardSet.addCard(card);
@@ -227,14 +227,14 @@ public class CardSet {
     }
 
     public int totalCount() {
-        return cardCount() + jokerCount();
+        return allCards.size();
     }
 
-    public int cardCount() {
+    private int cardCount() {
         return cards.size();
     }
 
-    public int jokerCount() {
+    private int jokerCount() {
         return jokers.size();
     }
 
@@ -256,7 +256,7 @@ public class CardSet {
     }
 
     public CardSet getSnapshot() {
-        return new CardSet(cards);
+        return new CardSet(allCards);
     }
 
     // 2 Sets consisting of the same cards (rank,suit) considered equal regardless of the order of the cards.
@@ -278,19 +278,19 @@ public class CardSet {
 
         set.sort();
         sort();
-        return set.cards.equals(cards);
+        return set.allCards.equals(allCards);
     }
 
     @Override
     public int hashCode() {
         sort();
-        return cards.hashCode();
+        return allCards.hashCode();
     }
 
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(",");
-        for (Card card : cards) {
+        for (Card card : allCards) {
             joiner.add(card.toString());
         }
         return joiner.toString();
@@ -298,10 +298,10 @@ public class CardSet {
 
 
     public boolean superSetOf(CardSet set) {
-        CardSet subSet = new CardSet(set.getCards());
-        CardSet superSet = new CardSet(cards);
+        CardSet subSet = new CardSet(set.allCards);
+        CardSet superSet = new CardSet(allCards);
 
-        for (Card card : subSet.cards) {
+        for (Card card : subSet.allCards) {
             if (!superSet.removeCard(card)) {
                 return false;
             }
@@ -310,12 +310,23 @@ public class CardSet {
     }
 
     public CardSet diff(CardSet set) {
-        CardSet diff = new CardSet(cards);
+        CardSet diff = new CardSet(allCards);
 
-        for (Card card : set.getCards()) {
+        for (Card card : set.allCards) {
             diff.removeCard(card);
         }
 
         return diff;
     }
+
+    public void removeCards(ArrayList<Card> cards) {
+        for (Card card : cards) {
+            this.removeCard(card);
+        }
+    }
+
+    public void removeCards(CardSet cardSet) {
+        removeCards(cardSet.allCards);
+    }
+
 }
