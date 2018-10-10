@@ -2,8 +2,10 @@ package server;
 
 import commands.Command;
 import commands.CommandFactory;
+import commands.server.PlayerLogin;
 import commands.server.PlayerMove;
 import server.models.Machiavelli;
+import server.models.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,26 +21,24 @@ public class ClientHandler implements Runnable {
      **************************PRIVATE STATICS********************************
      ******************************************************************/
     private static int nextId = 0;
+    private final Machiavelli machiavelli = Machiavelli.getInstance();
 
     /*******************************************************************
      **************************PRIVATES********************************
      ******************************************************************/
     private Socket socket;
     private BufferedReader in;
-    private int id;
     private PrintWriter out;
-    private Machiavelli machiavelli;
     private Server server;
+    private Player player;
 
-    public ClientHandler(Socket socket, Machiavelli machiavelli) throws Exception {
+    public ClientHandler(Socket socket, Server server) throws Exception {
         this.socket = socket;
-        this.machiavelli = machiavelli;
+        this.server = server;
 
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-
-        id = ++nextId;
     }
 
     /**
@@ -46,6 +46,8 @@ public class ClientHandler implements Runnable {
      */
     @Override
     public void run() {
+        sendCommand(Command.CommandNames.WHO_ARE_YOU);
+
         try {
             while (true) {
                 String cmdString = in.readLine();
@@ -61,9 +63,9 @@ public class ClientHandler implements Runnable {
         } finally {
             // This client is going down!  Remove its name and its print
             // writer from the sets, and close its socket.
-//            if (out != null) {
-//                server.removeClientHandler(this);
-//            }
+            if (out != null) {
+                server.removeClientHandler(this);
+            }
             try {
                 socket.close();
             } catch (IOException e) {
@@ -75,23 +77,17 @@ public class ClientHandler implements Runnable {
     private void processCommand(Command cmd) {
         System.out.println("Command received: " + cmd.serialize());
         switch (cmd.getName()) {
-            case NUMBER_OF_PLAYERS:
-                break;
             case PLAYER_MOVE:
                 machiavelli.processMove((PlayerMove) cmd);
+                break;
+            case PLAYER_LOGIN:
+                machiavelli.playerLogin(((PlayerLogin) cmd).getPlayerName(), player);
                 break;
 
             default:
                 cmd.execute();
                 break;
         }
-    }
-
-    /**
-     * @return
-     */
-    public int getId() {
-        return id;
     }
 
     /**
@@ -107,5 +103,13 @@ public class ClientHandler implements Runnable {
 
     public void sendCommand(Command.CommandNames command) {
         out.println(command);
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

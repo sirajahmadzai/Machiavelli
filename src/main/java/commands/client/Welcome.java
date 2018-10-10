@@ -15,11 +15,13 @@ public class Welcome extends IntroducePlayer{
         this.addParameter(numOfPlayers);
     }
 
+    @Override
     public void doExecute() {
         manager.startGame(numOfPlayers);
         manager.introducePlayer(playerName, playerId, seatNumber, true);
     }
 
+    @Override
     public void doParse(String commandStr) {
         super.doParse(commandStr);
         numOfPlayers = scanner.nextInt();

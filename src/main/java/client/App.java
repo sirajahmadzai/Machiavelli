@@ -83,10 +83,10 @@ public class App extends Application {
 //        showWaitingView();
 
         //this is for networked version
-        loginView = new LoginView();
-        loginView.addBtnLoginAction(event -> {
-            ClientManager.getInstance().loginServer(loginView.getIp(), loginView.getPort());
-        });
+//        loginView = new LoginView();
+//        loginView.addBtnLoginAction(event -> {
+//            ClientManager.getInstance().loginServer(loginView.getIp(), loginView.getPort());
+//        });
     }
 
     /**

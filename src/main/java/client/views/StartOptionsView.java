@@ -1,13 +1,10 @@
 package client.views;
 
-import client.App;
-import client.Client;
 import client.ClientManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import java.io.IOException;
 
 
 public class StartOptionsView extends View {
@@ -39,6 +36,8 @@ public class StartOptionsView extends View {
     @FXML
     private TextField userName;
     @FXML
+    private TextField adminUserName;
+    @FXML
     private Text messageText;
 
     @FXML
@@ -47,7 +46,7 @@ public class StartOptionsView extends View {
         int port = Integer.parseInt(newGamePort.getText());
 
         try {
-            ClientManager.getInstance().startServer(port,numberOfPlayers);
+            ClientManager.getInstance().startServer(port,numberOfPlayers,adminUserName.getText());
             messageText.setText("Started server at port "+ port);
         } catch (Exception e) {
             messageText.setText("Couldn't start server:"+ e.getMessage());
@@ -61,6 +60,6 @@ public class StartOptionsView extends View {
 //        TODO: use the username
         String userNameText = userName.getText();
 
-        ClientManager.getInstance().loginServer(ip,port);
+        ClientManager.getInstance().loginServer(ip,port,userNameText);
     }
 }

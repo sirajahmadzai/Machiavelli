@@ -2,6 +2,7 @@ package commands;
 
 import commands.client.*;
 import commands.server.PassTurn;
+import commands.server.PlayerLogin;
 import commands.server.PlayerMove;
 import javafx.application.Platform;
 
@@ -34,12 +35,14 @@ public abstract class Command {
         DEAL_HANDS(SERVER_COMMAND, DealHands.class),
         PLAYER_MOVE(SERVER_COMMAND, PlayerMove.class),
         PASS_TURN(SERVER_COMMAND, PassTurn.class),
+        PLAYER_LOGIN(SERVER_COMMAND, PlayerLogin.class),
 
         //      CLIENT_COMMANDS
         INTRODUCE_PLAYER(CLIENT_COMMAND, IntroducePlayer.class),
         WELCOME(CLIENT_COMMAND, Welcome.class),
         TABLE_IS_FULL(CLIENT_COMMAND),
         SWITCH_TURN(CLIENT_COMMAND, SwitchTurn.class),
+        WHO_ARE_YOU(CLIENT_COMMAND),
         DRAW_CARD(CLIENT_COMMAND, DrawCard.class);
 
         private final CommandTypes type;

@@ -2,6 +2,9 @@ package commands.client;
 
 import commands.Command;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 public class IntroducePlayer extends ClientCommand {
     protected String playerName;
     protected int playerId;
@@ -19,7 +22,7 @@ public class IntroducePlayer extends ClientCommand {
         this();
 
         this.seatNumber = seatNumber;
-        this.playerName = playerName;
+        this.playerName = URLEncoder.encode(playerName);
         this.playerId = playerId;
 
         this.addParameter(playerName);
@@ -29,7 +32,7 @@ public class IntroducePlayer extends ClientCommand {
 
     @Override
     public void doParse(String commandStr) {
-        playerName = scanner.next();
+        playerName = URLDecoder.decode(scanner.next());
         playerId = scanner.nextInt();
         seatNumber = scanner.nextInt();
     }

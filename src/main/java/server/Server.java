@@ -38,7 +38,7 @@ public class Server implements Runnable {
 
     private void startClientThread(ClientHandler clientHandler) {
         Thread handlerThread = new Thread(clientHandler);
-        handlerThread.setName("ClientHandlerThread " + clientHandler.getId());
+        handlerThread.setName("ClientHandlerThread " + clientHandler.getPlayer().getName());
 
         log.info("Client connected!");
         handlerThread.start();
@@ -51,7 +51,7 @@ public class Server implements Runnable {
             System.out.println("server started");
             while (true) {
                 System.out.println("Accepting next Client..");
-                ClientHandler clientHandler = new ClientHandler(listener.accept(), machiavelli);
+                ClientHandler clientHandler = new ClientHandler(listener.accept(), this);
 
                 if (machiavelli.isTableFull()) {
                     clientHandler.sendCommand(Command.CommandNames.TABLE_IS_FULL);

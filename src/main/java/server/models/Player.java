@@ -106,4 +106,8 @@ public class Player {
     public void setPointValue(int pointValue) {
         this.pointValue = pointValue;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

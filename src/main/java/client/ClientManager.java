@@ -47,7 +47,7 @@ public class ClientManager {
         this.gameView = GameView.getInstance();
     }
 
-    public void startServer(int port, int numberOfPlayers) throws Exception {
+    public void startServer(int port, int numberOfPlayers, String adminName) throws Exception {
         if (serverStarted) {
             throw new UnsupportedOperationException("A game server is already started at port " + server.getPort());
         }
@@ -60,7 +60,7 @@ public class ClientManager {
             serverStarted = true;
 
 //            Admin joins the game first.
-            loginServer(port);
+            loginServer(port, adminName);
 
         } catch (Exception e) {
             throw e;
@@ -99,17 +99,17 @@ public class ClientManager {
 //        pushView(WaitingForOtherPlayersView.getInstance());
     }
 
-    public void loginServer(int port) {
+    private void loginServer(int port, String name) {
         try {
-            loginServer(new Client(this, port));
+            loginServer(new Client(this, port, name));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void loginServer(String ip, int port) {
+    public void loginServer(String ip, int port, String name) {
         try {
-            loginServer(new Client(this, ip, port));
+            loginServer(new Client(this, ip, port, name));
         } catch (IOException e) {
             e.printStackTrace();
         }

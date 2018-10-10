@@ -2,6 +2,7 @@ package client;
 
 import commands.Command;
 import commands.CommandFactory;
+import commands.server.PlayerLogin;
 import commands.server.PlayerMove;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -21,6 +22,8 @@ public class Client extends Task<Void>/* implements Runnable*/ {
     private BufferedReader in;
     private PrintWriter out;
     private ClientManager manager;
+    private String playerName;
+    private int seatNumber;
 
     /**
      * CONSTRUCTOR
@@ -30,26 +33,26 @@ public class Client extends Task<Void>/* implements Runnable*/ {
      * @param port
      * @throws IOException
      */
-    public Client(ClientManager manager, String ip, int port) throws IOException {
+    public Client(ClientManager manager, String ip, int port, String playerName) throws IOException {
         this.manager = manager;
+        this.playerName = playerName;
 
         if (ip.equals("") && port == 0) {
             socket = new Socket("localhost", 9876);
         } else {
             socket = new Socket(ip, port);
         }
-        in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
-        manager.in = in;
+
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+
+        manager.in = in;
         manager.out = out;
-
     }
 
-    public Client(ClientManager manager, int port) throws IOException {
-        this(manager, "127.0.0.1", port);
+    public Client(ClientManager manager, int port, String playerName) throws IOException {
+        this(manager, "127.0.0.1", port, playerName);
     }
-
 
     /**
      * @return
@@ -59,6 +62,7 @@ public class Client extends Task<Void>/* implements Runnable*/ {
     protected Void call() throws Exception {
         // Process all messages from server, according to the protocol.
         try {
+
             String response;
             while ((response = in.readLine()) != null) {
                 Command command = CommandFactory.buildCommand(response);
@@ -70,63 +74,14 @@ public class Client extends Task<Void>/* implements Runnable*/ {
                     case PLAYER_MOVE:
                         Platform.runLater(() -> manager.playMove((PlayerMove) command));
                         break;
+                    case WHO_ARE_YOU:
+                        sendCommandToServer(new PlayerLogin(this.playerName));
+                        break;
                     default:
                         command.execute();
                 }
 
-                System.out.println("Command processed " + command);
-
-//            Scanner scanner = new Scanner(response);
-//            String cmd = scanner.next();
-//            System.out.println("Client received command: " + cmd);
-//            if (cmd.equals(ServerCommands.SHOW_LOGIN_VIEW.toString())) {
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        manager.showLoginView();
-//                    }
-//                });
-//
-//            } else if (cmd.equals(ServerCommands.WAIT_FOR_SETUP.toString())) {
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        manager.showWaitingView();
-//                    }
-//                });
-//
-//
-//            } else if (cmd.equals(ServerCommands.SHOW_GAMEVIEW.toString())) {
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //javaFX doesn't let you rerun a view that is already running
-////                        if (manager.getActiveView() instanceof GameView) {
-////                            //do nothing
-////                        } else {
-////                            int numOfPlayers = scanner.nextInt();
-//////                            manager.showGameView(numOfPlayers);
-////
-////                        }
-//
-//                    }
-//                });
-//            } else if (cmd.equals(ServerCommands.SET_MESSAGE_BOX.toString())) {
-//                String message = scanner.nextLine();
-////                UICon.setMessageBoxText(message);
-//            } else if (cmd.equals(ServerCommands.REMOVE_CARD_FROM_HAND.toString())) {
-//                int playerId = scanner.nextInt();
-//                int cardId = scanner.nextInt();
-////                UICon.removeSelectedCardFromPlayer(playerId, cardId);
-//            } else if (cmd.equals(ServerCommands.ADD_CARD_TO_HAND.toString())) {
-//                int playerId = scanner.nextInt();
-//                int currId = scanner.nextInt();
-//                int cardId = scanner.nextInt();
-//                String url = scanner.nextLine();
-////                UICon.addCardToPlayer(playerId, currId, cardId, url);
-//            } else if (cmd.equals(ServerCommands.FILL_DECK.toString())) {
-////                UICon.fillDecks();
-//            }
+//                System.out.println("Command processed " + command);
             }
             return null;
         } catch (Exception e) {

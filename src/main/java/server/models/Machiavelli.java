@@ -276,6 +276,15 @@ public class Machiavelli {
         return numOfPlayers <= players.size();
     }
 
+
+    public void playerLogin(String playerName, Player player) {
+        player.setName(playerName);
+
+        Command introduce = new IntroducePlayer(player.getName(), player.getPlayerID(), player.getSeatNumber());
+        // Let all players know this player's name.
+        sendCommandToAllPlayers(introduce);
+    }
+
     public void addPlayer(ClientHandler clientHandler) {
         int playerId = players.size();
         Seat seat = getNextEmptySeat();
@@ -284,6 +293,7 @@ public class Machiavelli {
         Player player = new Player(playerId, playerName);
         player.setSeatNumber(seat.getSeatNumber());
         player.setClientHandler(clientHandler);
+        clientHandler.setPlayer(player);
 
         seat.setPlayer(player);
 
@@ -453,6 +463,7 @@ public class Machiavelli {
         }
         return null;
     }
+
 
     public class EmptyDeckException extends Exception {
         public EmptyDeckException() {
