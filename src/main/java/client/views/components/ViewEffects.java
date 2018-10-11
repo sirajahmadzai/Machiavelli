@@ -7,6 +7,7 @@ public class ViewEffects {
     public static final Effect selectedCardEffect;
     public static final Effect defaultEffect;
     public static final Effect invalidEffect;
+    public static final Effect newCardInSetEffect;
 
     static {
 
@@ -17,8 +18,12 @@ public class ViewEffects {
         ColorAdjust colorAdjust2 = new ColorAdjust();
         colorAdjust2.setHue(-0.1);
         colorAdjust2.setSaturation(0.2);
-
         invalidEffect = colorAdjust2;
+
+        ColorAdjust colorAdjust3 = new ColorAdjust();
+        colorAdjust3.setHue(0.1);
+        colorAdjust3.setSaturation(0.2);
+        newCardInSetEffect = colorAdjust2;
 
         defaultEffect = null;
     }

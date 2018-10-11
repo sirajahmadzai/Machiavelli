@@ -1,11 +1,6 @@
 package server.models;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-import server.models.cards.Card;
-
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class CardSetTest {
@@ -37,7 +32,7 @@ class CardSetTest {
 
     private void checkIsAStraight(String setText, boolean expected) {
         CardSet set = new CardSet(setText);
-        assertEquals(set.isAStraight(), expected);
+        assertEquals(expected, set.isAStraight());
     }
 
     @org.junit.jupiter.api.Test
@@ -47,14 +42,16 @@ class CardSetTest {
         checkIsAStraight("2s,3s", true);
         checkIsAStraight("2s,3s,4s", true);
         checkIsAStraight("2s,3s,4s,5s", true);
+        checkIsAStraight("3s,2s,5s,4s", true);
         checkIsAStraight("as,2s,3s,4s,5s", true);
         checkIsAStraight("as,2s,3s,4s,joker", true);
         checkIsAStraight("as,2s,3s,joker,5s", true);
         checkIsAStraight("10s,js,qs,ks,as", true);
 
 //      False
-        checkIsAStraight("js,qs,ks,as,2s", false);
+        checkIsAStraight("7s,5s", false);
         checkIsAStraight("2s,3s,5s", false);
+        checkIsAStraight("js,qs,ks,as,2s", false);
         checkIsAStraight("2s,3s,4d", false);
         checkIsAStraight("2s,3s,3s", false);
         checkIsAStraight("2s,3s,3d", false);

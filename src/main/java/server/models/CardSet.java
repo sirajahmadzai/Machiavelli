@@ -199,7 +199,15 @@ public class CardSet {
             return;
         }
         Collections.sort(allCards);
+        Collections.sort(cards);
         isSorted = true;
+    }
+
+    public boolean canAcceptCards(CardSet cardSet) {
+        CardSet proposedCardSet = new CardSet(allCards);
+
+        proposedCardSet.join(cardSet);
+        return proposedCardSet.isAValidMeld();
     }
 
     public boolean canAcceptCard(Card card) {
@@ -329,4 +337,9 @@ public class CardSet {
         removeCards(cardSet.allCards);
     }
 
+    public void removeAllCards() {
+        while (!allCards.isEmpty()) {
+            removeCard(allCards.get(0));
+        }
+    }
 }

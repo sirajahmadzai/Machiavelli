@@ -20,7 +20,6 @@ import java.util.Comparator;
 
 public class CardSetView extends HBox {
     private CardSet cardSet;
-    private CardView selectedCard;
     private EventHandler<CardEvent> cardEventHandler;
     private CardView dropTarget;
     private boolean receiverMode = false;
@@ -61,38 +60,56 @@ public class CardSetView extends HBox {
     }
 
     public void addCard(Card card) {
+        addCard(card, false);
+    }
+
+    private void addCard(Card card, boolean silent) {
         CardView cardView = new CardView(card);
         getChildren().add(cardView);
+
         cardViews.add(cardView);
 
         cardView.setParentSet(this);
 
         cardSet.addCard(card);
 
-        fireEvent(cardView, CardEvent.CARD_ADDED);
+        if (!silent) {
+            fireEvent(cardView, CardEvent.CARD_ADDED);
+        }
 
         if (!card.isHidden()) {
             assignEvents(cardView);
             markValidity();
-            sort();
+            if (!snapshot.getCards().contains(card)) {
+                cardView.setNewcomer(true);
+            }
+            if (!silent) {
+                sort();
+            }
         }
     }
 
     public void removeCard(CardView cardView) {
+        removeCard(cardView, false);
+    }
+
+    private void removeCard(CardView cardView, boolean silent) {
         cardSet.removeCard(cardView.getCard());
         getChildren().remove(cardView);
         cardViews.remove(cardView);
 
-        fireEvent(cardView, CardEvent.CARD_REMOVED);
+        if (!silent) {
+            fireEvent(cardView, CardEvent.CARD_REMOVED);
+        }
+
         markValidity();
     }
 
     private void markValidity() {
-        if (!checkForValidity){
-            return;
+        boolean validMeld = true;
+        if (checkForValidity) {
+            validMeld = cardSet.isAValidMeld(3);
         }
-
-        boolean validMeld = cardSet.isAValidMeld(3);
 
         for (CardView cardView : cardViews) {
             cardView.setValid(validMeld);
@@ -107,20 +124,8 @@ public class CardSetView extends HBox {
 
     private void assignEvents(CardView cardView) {
         cardView.setOnMouseClicked(event -> {
-//            onCardSelected(cardView);
             ClientManager.getInstance().cardSelected(cardView);
         });
-    }
-
-    public void setSelectedCard(CardView selectedCard) {
-        this.selectedCard = selectedCard;
-    }
-
-    public void clearSelectedCards() {
-        if (selectedCard != null) {
-            this.selectedCard.setSelected(false);
-        }
-        this.selectedCard = null;
     }
 
     public int getCardCount() {
@@ -129,10 +134,6 @@ public class CardSetView extends HBox {
 
     public CardSet getCardSet() {
         return cardSet;
-    }
-
-    public boolean isReceiverMode() {
-        return receiverMode;
     }
 
     public void setReceiverMode(boolean receiverMode) {
@@ -145,9 +146,9 @@ public class CardSetView extends HBox {
         getChildren().add(dropTarget);
     }
 
-    // If the set is still a valid set after adding proposed card, set receiver mode on.
-    public void setReceiverMode(Card card) {
-        setReceiverMode(canAcceptCard(card));
+    // If the set is still a valid set after adding proposed cards, set receiver mode on.
+    public void setReceiverMode(CardSet cardSetToAppend) {
+        setReceiverMode(this.cardSet.canAcceptCards(cardSetToAppend));
     }
 
     public boolean isEmpty() {
@@ -186,5 +187,26 @@ public class CardSetView extends HBox {
 
     public CardSet getSnapshot() {
         return snapshot;
+    }
+
+    public void rollbackMoves() {
+        while (!cardViews.isEmpty()) {
+            removeCard(cardViews.get(0), true);
+        }
+
+        for (Card card : snapshot.getCards()) {
+            addCard(card, true);
+        }
+
+        sort();
+    }
+
+    // This method is used only for hidden hands. (ie the opponents).
+    // After the opponent plays her turn, we remove as many cards as she played to the table.
+    public void removeCards(int i) {
+        while (i > 0) {
+            removeCard(cardViews.get(0));
+            i--;
+        }
     }
 }

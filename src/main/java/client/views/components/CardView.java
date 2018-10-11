@@ -11,6 +11,7 @@ public class CardView extends ImageView implements Comparable<CardView>{
     private Card card;
     private boolean selected;
     private boolean valid;
+    private boolean newcomer;
 
     public CardView(Card card) {
         super(card.getImgUrl());
@@ -72,5 +73,10 @@ public class CardView extends ImageView implements Comparable<CardView>{
     @Override
     public int compareTo(CardView otherView) {
         return card.compareTo(otherView.card);
+    }
+
+    public void setNewcomer(boolean newcomer) {
+        this.newcomer = newcomer;
+        this.setEffect(ViewEffects.newCardInSetEffect);
     }
 }

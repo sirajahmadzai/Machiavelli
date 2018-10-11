@@ -35,7 +35,8 @@ public class ClientManager {
     public BufferedReader in;
     public PrintWriter out;
     private App app;
-    private CardView selectedCard;
+//    private CardSet selectedCards;
+    private SelectionManager selectionManager = new SelectionManager();
     private Client client;
     private int currentTurn;
 
@@ -44,6 +45,7 @@ public class ClientManager {
     }
 
     private ClientManager() {
+
         this.gameView = GameView.getInstance();
     }
 
@@ -126,7 +128,7 @@ public class ClientManager {
     public void dealHand(int seatNumber, CardSet hand) {
         for (Card card : hand.getCards()) {
             // 1 open card to the owner
-            gameView.addCardToHand(seatNumber, card, null);
+            gameView.addCardToHand(seatNumber, card);
 
             // 1 hidden card to each opponent.
             gameView.dealHands();
@@ -147,16 +149,16 @@ public class ClientManager {
             return;
         }
 
-        if (selectedCard != null) {
-            Card s = this.selectedCard.getCard();
-            targetSet.addCard(s);
-
-            this.selectedCard.setSelected(false);
-            this.selectedCard.removeFromParentSet();
-            selectedCard = null;
-
-            gameView.setPlayAreaActive(false);
+        if(!selectionManager.isEmpty())
+        {
+            for (CardView cardView : selectionManager.getSelectedCards()) {
+                targetSet.addCard(cardView.getCard());
+                cardView.removeFromParentSet();
+                gameView.setPlayAreaActive(false);
+            }
+            selectionManager.deselectAll();
         }
+        gameView.clearMessage();
     }
 
     //    Keep track of any card selected inside the views.
@@ -165,26 +167,11 @@ public class ClientManager {
         if (!isOwnerTurn()) {
             return;
         }
+        selectionManager.addCard(selectedCard);
 
-        // Clear previous selection.
-        if (this.selectedCard != null) {
-            this.selectedCard.getParentSet().clearSelectedCards();
-        }
 
-        // Deselect a card
-        if (selectedCard == this.selectedCard) {
-            this.selectedCard = null;
-
-        } else if (selectedCard != null) {
-
-            this.selectedCard = selectedCard;
-            selectedCard.setSelected(true);
-            // TODO: this line smells!
-            selectedCard.getParentSet().setSelectedCard(selectedCard);
-        }
-
-        if (this.selectedCard != null) {
-            gameView.setPlayAreaActive(selectedCard.getCard());
+        if (!selectionManager.isEmpty()) {
+            gameView.setPlayAreaActive(selectionManager.getSelectedCardsSet());
         } else {
             gameView.setPlayAreaActive(false);
         }
@@ -194,12 +181,11 @@ public class ClientManager {
         return currentTurn == GameView.getInstance().getOwnerSeat();
     }
 
-    public void startTurn() {
+    private void startTurn() {
         gameView.takeSnapshot();
     }
 
     public void resetMove() {
-//        gameView.getHand().getSnapshot();
 //        TODO: Replace this snapshot.
     }
 
@@ -207,6 +193,7 @@ public class ClientManager {
         if (!isOwnerTurn()) {
             return false;
         }
+        selectionManager.deselectAll();
 
         CardSet prevHand = gameView.getHand().getSnapshot();
         CardSet lastHand = gameView.getHand().getCardSet();
@@ -240,13 +227,16 @@ public class ClientManager {
     }
 
     public void drawCard(int seatNumber, Card card) {
-        gameView.addCardToHand(seatNumber, card, null);
+        gameView.addCardToHand(seatNumber, card);
         startTurn();
     }
 
     public void playMove(PlayerMove move) {
-        List<CardSet> cardsOnTheTable = gameView.getPlayArea().getSnapshot();
+//        List<CardSet> cardsOnTheTable = gameView.getPlayArea().getSnapshot();
         gameView.getPlayArea().setAllSets(move.getTable());
+        gameView.removeCardsFrom(move.getSeatNumber(),move.getPlayedCards());
+        startTurn();
+
 //        Remove cards from hand!
     }
 }

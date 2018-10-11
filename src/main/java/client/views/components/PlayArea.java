@@ -4,7 +4,6 @@ import client.CardEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.FlowPane;
 import server.models.CardSet;
-import server.models.cards.Card;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +27,11 @@ public class PlayArea implements EventHandler<CardEvent> {
         }
     }
 
-    public void setActive(Card card) {
+    public void setActive(CardSet cardSet) {
         for (CardSetView setView : setViews) {
-            setView.setReceiverMode(card);
+            setView.setReceiverMode(cardSet);
         }
+
     }
 
     private void addSet(CardSet cardSet) {
@@ -67,6 +67,11 @@ public class PlayArea implements EventHandler<CardEvent> {
         this.snapshot = snapshot;
         return this.snapshot;
     }
+
+    public void rollbackMoves() {
+        setAllSets(snapshot);
+    }
+
 
     public List<CardSet> getSnapshot() {
         return snapshot;
@@ -107,11 +112,12 @@ public class PlayArea implements EventHandler<CardEvent> {
         }
 
         setViews.clear();
-        snapshot.clear();
+//        snapshot.clear();
 
         for (CardSet cardSet : table) {
             addSet(cardSet);
         }
         createPlaceholderSet();
     }
+
 }

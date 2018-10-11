@@ -6,13 +6,14 @@ import client.ViewHelper;
 import client.views.components.CardSetView;
 import client.views.components.PlayArea;
 import client.views.components.Player;
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
+import server.models.CardSet;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
 
@@ -31,6 +32,14 @@ public class GameView extends View {
 
     @FXML
     private FlowPane setsArea;
+
+    @FXML
+    private Button revertButton;
+
+    @FXML
+    public void onRevertClicked(ActionEvent ae){
+        resetMove();
+    }
 
     /*************************************************************
      ************************END OF FXML INJECTIONS***************
@@ -79,7 +88,7 @@ public class GameView extends View {
         deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
         deckImageView.setVisible(false);
         deckImageView.setOnMouseClicked(event -> ClientManager.getInstance().endTurn(event));
-        setMessage("Click on the deck to get started!");
+        setMessage("Waiting for other players to join.");
     }
 
     @FXML
@@ -101,11 +110,14 @@ public class GameView extends View {
         messageBox.setText(message);
     }
 
+    public void clearMessage() {
+        setMessage("");
+    }
 
     /***********************************************
      *************************HANDS******************
      ************************************************/
-    public void addCardToHand(int seatNumber, Card card, EventHandler<MouseEvent> mouseEvent) {
+    public void addCardToHand(int seatNumber, Card card) {
         Player player = seats.getPlayer(seatNumber);
         player.addCardToHand(card);
     }
@@ -171,9 +183,9 @@ public class GameView extends View {
         seats.getOwnerPlayerHand().setReceiverMode(active);
     }
 
-    public void setPlayAreaActive(Card card) {
-        playArea.setActive(card);
-        seats.getOwnerPlayerHand().setReceiverMode(card);
+    public void setPlayAreaActive(CardSet cardSet) {
+        playArea.setActive(cardSet);
+        seats.getOwnerPlayerHand().setReceiverMode(cardSet);
     }
 
     public void takeSnapshot() {
@@ -193,5 +205,23 @@ public class GameView extends View {
         for (int i = 1; i <= playerCount; i++) {
             seats.getPlayer(i).setActive(i == seatNumber);
         }
+        if (seatNumber == getOwnerSeat()) {
+            setMessage("It's your turn. Click on the deck when you're done.");
+        }else {
+            setMessage("Please wait for your turn.");
+        }
     }
+
+    private void resetMove() {
+        playArea.rollbackMoves();
+        getHand().rollbackMoves();
+    }
+
+    public void removeCardsFrom(int seatNumber, CardSet playedCards) {
+        Player player = seats.getPlayer(seatNumber);
+
+        player.getHand().removeCards(playedCards.totalCount());
+    }
+
+
 }
