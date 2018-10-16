@@ -10,15 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ViewHelper {
+    private static Map<String, Image> imageCache = new HashMap<>();
+
     /**
      * @param resource
      * @return Image
      */
-    private static Map<String, Image> imageCache = new HashMap<>();
-
     public static Image getImage(String resource) {
         if (imageCache.containsKey(resource)) {
-            System.out.println("Image from cache.");
             return imageCache.get(resource);
         }
 
@@ -37,7 +36,6 @@ public class ViewHelper {
             e.printStackTrace();
         }
 
-        System.out.println("Image from file system.");
         imageCache.put(resource, thisImage);
         return thisImage;
     }

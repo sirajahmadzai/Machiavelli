@@ -6,8 +6,8 @@ import javafx.scene.image.ImageView;
 import server.models.cards.Card;
 
 public class CardView extends ImageView implements Comparable<CardView> {
-    private static final int CARD_PREF_WIDTH = 120;
-    private static final int CARD_PREF_HEIGHT = 140;
+    public static final int CARD_PREF_WIDTH = 120;
+    public static final int CARD_PREF_HEIGHT = 140;
 
     private CardSetView parentSet;
     private Card card;

@@ -1,7 +1,9 @@
 package client;
 
 import client.views.components.CardSetView;
+import client.views.components.CardView;
 import client.views.components.Player;
+import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 
 import java.util.ArrayList;
@@ -17,8 +19,7 @@ public class GameSeats {
     private ArrayList<Player> opponents;
 
     /**
-     *
-     * @param board the BorderPane instance to place the players on.
+     * @param board           the BorderPane instance to place the players on.
      * @param numberOfPlayers
      */
     public GameSeats(BorderPane board, int numberOfPlayers) {
@@ -26,7 +27,7 @@ public class GameSeats {
         this.numberOfPlayers = numberOfPlayers;
         this.seats = new HashMap<>(numberOfPlayers);
         this.players = new ArrayList<>(numberOfPlayers);
-        this.opponents = new ArrayList<>(numberOfPlayers-1);
+        this.opponents = new ArrayList<>(numberOfPlayers - 1);
 
         PlayerPosition[] positions = {PlayerPosition.BOTTOM, PlayerPosition.LEFT, PlayerPosition.TOP, PlayerPosition.RIGHT};
 
@@ -44,24 +45,43 @@ public class GameSeats {
             player.setPosition(positions[i]);
 
             players.add(player);
-            if(i>0){
+            if (i > 0) {
                 opponents.add(player);
             }
 
+            double opponentScale = 0.5;
+            double cardHeight = CardView.CARD_PREF_HEIGHT;
+            double translatePlayer = CardView.CARD_PREF_HEIGHT*(1-opponentScale/2);
             switch (player.getPosition()) {
                 case TOP:
                     board.setTop(player);
+                    player.container.prefWidthProperty().bind(board.widthProperty().subtract(cardHeight));
+                    player.setTranslateY(-translatePlayer);
+                    BorderPane.setAlignment(player, Pos.CENTER);
                     break;
                 case BOTTOM:
                     board.setBottom(player);
+                    player.container.prefWidthProperty().bind(board.widthProperty());
+                    BorderPane.setAlignment(player, Pos.CENTER);
                     break;
                 case LEFT:
                     board.setLeft(player);
+                    player.container.prefWidthProperty().bind(board.heightProperty().subtract(cardHeight));
+                    player.setTranslateX(-translatePlayer);
+                    BorderPane.setAlignment(player, Pos.CENTER_LEFT);
                     break;
                 case RIGHT:
                     board.setRight(player);
+                    player.container.prefWidthProperty().bind(board.heightProperty().subtract(cardHeight));
+                    player.setTranslateX(translatePlayer);
+                    BorderPane.setAlignment(player, Pos.CENTER_RIGHT);
                     break;
             }
+
+            if (player.getPosition() != PlayerPosition.BOTTOM) {
+                player.setScale(opponentScale);
+            }
+
         }
         ownerPlayer = players.get(0);
     }
@@ -89,7 +109,7 @@ public class GameSeats {
     }
 
     public void setPlayerInfo(int seatNumber, String playerName, int playerId) {
-        Player player= seats.get(seatNumber);
+        Player player = seats.get(seatNumber);
         player.setPlayerId(playerId);
         player.setName(playerName);
     }
@@ -102,11 +122,11 @@ public class GameSeats {
         this.opponents = opponents;
     }
 
-    public Player getOwnerPlayer(){
+    public Player getOwnerPlayer() {
         return ownerPlayer;
     }
 
-    public CardSetView getOwnerPlayerHand(){
+    public CardSetView getOwnerPlayerHand() {
         return ownerPlayer.getHand();
     }
 }

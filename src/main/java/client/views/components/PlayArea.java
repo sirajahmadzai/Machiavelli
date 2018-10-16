@@ -16,6 +16,7 @@ public class PlayArea implements EventHandler<CardEvent> {
 
     public PlayArea(FlowPane setsArea) {
         this.setsArea = setsArea;
+        
         setViews = new ArrayList<>();
         snapshot = new ArrayList<>();
         createPlaceholderSet();

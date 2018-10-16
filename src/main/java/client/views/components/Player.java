@@ -4,29 +4,43 @@ import client.CardEvent;
 import client.PlayerPosition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import server.models.cards.Card;
 
-public class Player extends VBox implements EventHandler<CardEvent> {
+import java.util.Random;
+
+public class Player extends Group implements EventHandler<CardEvent> {
     private PlayerPosition position;
     private String name;
     private int playerId;
     private int seatNumber;
     private PlayerInfo playerInfo;
     private CardSetView hand;
+    public VBox container = new VBox();
 
     public Player() {
-        this.setAlignment(Pos.CENTER);
-
         this.playerInfo = new PlayerInfo("Not joined yet!");
         this.hand = new CardSetView();
         hand.setCardEventHandler(this);
         hand.setCheckForValidity(false);
+        initContainer();
+    }
 
-        this.setSpacing(5);
-        this.getChildren().add(playerInfo);
-        this.getChildren().add(hand);
-//        setBackground(new Background(new BackgroundFill(Color.color(1,0,0,0.7),null,null)));
+    private void initContainer() {
+        this.getChildren().add(container);
+        Random r = new Random();
+        container.setAlignment(Pos.CENTER);
+        container.setPrefHeight(CardView.CARD_PREF_HEIGHT);
+        container.setBackground(new Background(new BackgroundFill(
+                Color.color(r.nextDouble(), r.nextDouble(), r.nextDouble(), 0.7)
+                , null, null)));
+        container.setSpacing(5);
+        container.getChildren().add(playerInfo);
+        container.getChildren().add(hand);
     }
 
     public CardView addCardToHand(Card card) {
@@ -43,17 +57,17 @@ public class Player extends VBox implements EventHandler<CardEvent> {
         this.position = position;
         switch (position) {
             case BOTTOM:
-                this.setRotate(0);
+                container.setRotate(0);
                 break;
             case TOP:
-                this.setRotate(180);
+                container.setRotate(180);
                 this.playerInfo.setRotate(180);
                 break;
             case LEFT:
-                this.setRotate(90);
+                container.setRotate(90);
                 break;
             case RIGHT:
-                this.setRotate(-90);
+                container.setRotate(-90);
                 break;
         }
     }
@@ -97,12 +111,25 @@ public class Player extends VBox implements EventHandler<CardEvent> {
         this.playerInfo.setInfoText(infoText);
     }
 
-    public void setActive(boolean active){
+    public void setActive(boolean active) {
         playerInfo.setActive(active);
     }
 
     @Override
     public void handle(CardEvent event) {
         updateInfoText();
+    }
+
+    /**
+     * When the {@code hand} scaled parent container doesn't update it's height automatically.
+     * So after the hand is scaled we move it close back to the playerInfo.
+     * @param scale
+     */
+    public void setScale(double scale) {
+        hand.setScaleX(scale);
+        hand.setScaleY(scale);
+
+        double translateCards = CardView.CARD_PREF_HEIGHT / 2 * (1 - scale);
+        hand.setTranslateY(-translateCards);
     }
 }
