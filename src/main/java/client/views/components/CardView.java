@@ -1,5 +1,7 @@
 package client.views.components;
 
+import client.ViewHelper;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import server.models.cards.Card;
 
@@ -14,7 +16,10 @@ public class CardView extends ImageView implements Comparable<CardView>{
     private boolean newcomer;
 
     public CardView(Card card) {
-        super(card.getImgUrl());
+        super();
+        Image image = ViewHelper.getImage(card.getImgUrl());
+        setImage(image);
+
         setCard(card);
         setFitWidth(CARD_PREF_WIDTH);
         setFitHeight(CARD_PREF_HEIGHT);
