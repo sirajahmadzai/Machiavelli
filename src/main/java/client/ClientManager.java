@@ -35,10 +35,11 @@ public class ClientManager {
     public BufferedReader in;
     public PrintWriter out;
     private App app;
-//    private CardSet selectedCards;
+    //    private CardSet selectedCards;
     private SelectionManager selectionManager = new SelectionManager();
     private Client client;
     private int currentTurn;
+    private CardView lastCardDrawn;
 
     public static ClientManager getInstance() {
         return ourInstance;
@@ -149,13 +150,14 @@ public class ClientManager {
             return;
         }
 
-        if(!selectionManager.isEmpty())
-        {
+        if (!selectionManager.isEmpty()) {
+            // Move all selected cards to the new set.
             for (CardView cardView : selectionManager.getSelectedCards()) {
                 targetSet.addCard(cardView.getCard());
                 cardView.removeFromParentSet();
                 gameView.setPlayAreaActive(false);
             }
+            // Clear selections.
             selectionManager.deselectAll();
         }
         gameView.clearMessage();
@@ -193,6 +195,7 @@ public class ClientManager {
         if (!isOwnerTurn()) {
             return false;
         }
+        lastCardDrawn = null;
         selectionManager.deselectAll();
 
         CardSet prevHand = gameView.getHand().getSnapshot();
@@ -224,17 +227,24 @@ public class ClientManager {
         startTurn();
         currentTurn = seatNumber;
         gameView.switchTurn(seatNumber);
+
+        if (lastCardDrawn != null) {
+            lastCardDrawn.setNewcomer(true);
+        }
     }
 
     public void drawCard(int seatNumber, Card card) {
-        gameView.addCardToHand(seatNumber, card);
+        CardView drawnCard = gameView.addCardToHand(seatNumber, card);
+        if (!drawnCard.getCard().isHidden()) {
+            lastCardDrawn = drawnCard;
+        }
         startTurn();
     }
 
     public void playMove(PlayerMove move) {
 //        List<CardSet> cardsOnTheTable = gameView.getPlayArea().getSnapshot();
         gameView.getPlayArea().setAllSets(move.getTable());
-        gameView.removeCardsFrom(move.getSeatNumber(),move.getPlayedCards());
+        gameView.removeCardsFrom(move.getSeatNumber(), move.getPlayedCards());
         startTurn();
 
 //        Remove cards from hand!

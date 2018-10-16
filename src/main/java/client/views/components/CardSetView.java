@@ -25,6 +25,7 @@ public class CardSetView extends HBox {
     private boolean receiverMode = false;
     private ArrayList<CardView> cardViews;
     private boolean checkForValidity = true;
+    private boolean interactive = true;
     private CardSet snapshot;
 
     public CardSetView() {
@@ -59,11 +60,12 @@ public class CardSetView extends HBox {
         setPadding(new Insets(10, 10, 10, 10));
     }
 
-    public void addCard(Card card) {
-        addCard(card, false);
+    public CardView addCard(Card card) {
+        return addCard(card, false);
+
     }
 
-    private void addCard(Card card, boolean silent) {
+    private CardView addCard(Card card, boolean silent) {
         CardView cardView = new CardView(card);
         getChildren().add(cardView);
 
@@ -77,16 +79,15 @@ public class CardSetView extends HBox {
             fireEvent(cardView, CardEvent.CARD_ADDED);
         }
 
-        if (!card.isHidden()) {
+        if (interactive) {
             assignEvents(cardView);
-            markValidity();
-            if (!snapshot.getCards().contains(card)) {
-                cardView.setNewcomer(true);
-            }
             if (!silent) {
+                markValidity();
+                cardView.setNewcomer(true);
                 sort();
             }
         }
+        return cardView;
     }
 
     public void removeCard(CardView cardView) {
@@ -106,6 +107,10 @@ public class CardSetView extends HBox {
     }
 
     private void markValidity() {
+        if(!interactive){
+            return;
+        }
+
         boolean validMeld = true;
         if (checkForValidity) {
             validMeld = cardSet.isAValidMeld(3);
@@ -180,7 +185,19 @@ public class CardSetView extends HBox {
         this.checkForValidity = checkForValidity;
     }
 
+    public void setInteractive(boolean interactive) {
+        this.interactive = interactive;
+    }
+
+    private void resetCardStates() {
+        // Clear newcomers
+        for (CardView cardView : cardViews) {
+            cardView.setNewcomer(false);
+        }
+    }
+
     public CardSet takeSnapshot() {
+        resetCardStates();
         this.snapshot = cardSet.getSnapshot();
         return this.snapshot;
     }

@@ -34,9 +34,10 @@ public class PlayArea implements EventHandler<CardEvent> {
 
     }
 
-    private void addSet(CardSet cardSet) {
+    private CardSetView addSet(CardSet cardSet) {
         CardSetView cardSetView = new CardSetView(cardSet);
         addSet(cardSetView);
+        return cardSetView;
     }
 
     private void addSet(CardSetView cardSetView) {
@@ -112,12 +113,12 @@ public class PlayArea implements EventHandler<CardEvent> {
         }
 
         setViews.clear();
-//        snapshot.clear();
 
+        CardSetView newSet = null;
         for (CardSet cardSet : table) {
-            addSet(cardSet);
+             newSet = addSet(cardSet);
+             newSet.takeSnapshot();
         }
         createPlaceholderSet();
     }
-
 }

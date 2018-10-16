@@ -23,7 +23,7 @@ public class ViewEffects {
         ColorAdjust colorAdjust3 = new ColorAdjust();
         colorAdjust3.setHue(0.1);
         colorAdjust3.setSaturation(0.2);
-        newCardInSetEffect = colorAdjust2;
+        newCardInSetEffect = colorAdjust3;
 
         defaultEffect = null;
     }

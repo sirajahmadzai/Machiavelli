@@ -79,11 +79,13 @@ public class GameSeats {
         for (Player p : players) {
             seats.put(seatNo, p);
             p.setSeatNumber(seatNo);
+            p.getHand().setInteractive(false);
             seatNo++;
             if (seatNo > numberOfPlayers) {
                 seatNo = 1;
             }
         }
+        ownerPlayer.getHand().setInteractive(true);
     }
 
     public void setPlayerInfo(int seatNumber, String playerName, int playerId) {

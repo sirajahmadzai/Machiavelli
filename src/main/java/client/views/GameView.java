@@ -4,6 +4,7 @@ import client.ClientManager;
 import client.GameSeats;
 import client.ViewHelper;
 import client.views.components.CardSetView;
+import client.views.components.CardView;
 import client.views.components.PlayArea;
 import client.views.components.Player;
 import javafx.event.ActionEvent;
@@ -117,9 +118,9 @@ public class GameView extends View {
     /***********************************************
      *************************HANDS******************
      ************************************************/
-    public void addCardToHand(int seatNumber, Card card) {
+    public CardView addCardToHand(int seatNumber, Card card) {
         Player player = seats.getPlayer(seatNumber);
-        player.addCardToHand(card);
+        return player.addCardToHand(card);
     }
 
     /**

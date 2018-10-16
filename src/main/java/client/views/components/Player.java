@@ -29,9 +29,10 @@ public class Player extends VBox implements EventHandler<CardEvent> {
 //        setBackground(new Background(new BackgroundFill(Color.color(1,0,0,0.7),null,null)));
     }
 
-    public void addCardToHand(Card card) {
-        hand.addCard(card);
+    public CardView addCardToHand(Card card) {
+        CardView newCardView = hand.addCard(card);
         updateInfoText();
+        return newCardView;
     }
 
     public PlayerPosition getPosition() {
