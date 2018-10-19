@@ -5,10 +5,7 @@ import client.PlayerPosition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import server.models.cards.Card;
 
 import java.util.Random;
@@ -35,9 +32,11 @@ public class Player extends Group implements EventHandler<CardEvent> {
         Random r = new Random();
         container.setAlignment(Pos.CENTER);
         container.setPrefHeight(CardView.CARD_PREF_HEIGHT);
-        container.setBackground(new Background(new BackgroundFill(
-                Color.color(r.nextDouble(), r.nextDouble(), r.nextDouble(), 0.7)
-                , null, null)));
+
+//        Random bg color for debugging.
+//        container.setBackground(new Background(new BackgroundFill(
+//                Color.color(r.nextDouble(), r.nextDouble(), r.nextDouble(), 0.7)
+//                , null, null)));
         container.setSpacing(5);
         container.getChildren().add(playerInfo);
         container.getChildren().add(hand);

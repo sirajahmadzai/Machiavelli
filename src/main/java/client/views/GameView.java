@@ -10,6 +10,7 @@ import client.views.components.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -33,6 +34,9 @@ public class GameView extends View {
 
     @FXML
     private FlowPane setsArea;
+
+    @FXML
+    private ScrollPane scrollArea;
 
     @FXML
     private Button revertButton;

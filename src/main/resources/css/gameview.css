@@ -8,3 +8,10 @@
 #setView{
     -fx-background-color: white;
 }
+
+#scrollArea{
+    -fx-background-color: transparent;
+}
+#scrollArea > .viewport {
+    -fx-background-color: transparent;
+}

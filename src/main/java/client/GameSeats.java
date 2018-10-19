@@ -3,6 +3,7 @@ package client;
 import client.views.components.CardSetView;
 import client.views.components.CardView;
 import client.views.components.Player;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 
@@ -56,8 +57,8 @@ public class GameSeats {
                 case TOP:
                     board.setTop(player);
                     player.container.prefWidthProperty().bind(board.widthProperty().subtract(cardHeight));
-                    player.setTranslateY(-translatePlayer);
                     BorderPane.setAlignment(player, Pos.CENTER);
+                    BorderPane.setMargin(player, new Insets(-translatePlayer,0,0,0));
                     break;
                 case BOTTOM:
                     board.setBottom(player);
@@ -67,13 +68,13 @@ public class GameSeats {
                 case LEFT:
                     board.setLeft(player);
                     player.container.prefWidthProperty().bind(board.heightProperty().subtract(cardHeight));
-                    player.setTranslateX(-translatePlayer);
                     BorderPane.setAlignment(player, Pos.CENTER_LEFT);
+                    BorderPane.setMargin(player, new Insets(0,0,0,-translatePlayer));
                     break;
                 case RIGHT:
                     board.setRight(player);
                     player.container.prefWidthProperty().bind(board.heightProperty().subtract(cardHeight));
-                    player.setTranslateX(translatePlayer);
+                    BorderPane.setMargin(player, new Insets(0,-translatePlayer,0,0));
                     BorderPane.setAlignment(player, Pos.CENTER_RIGHT);
                     break;
             }
