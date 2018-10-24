@@ -11,14 +11,24 @@ import server.models.cards.Card;
 import java.util.Random;
 
 public class Player extends Group implements EventHandler<CardEvent> {
+    /**
+     * PRIVATES
+     */
     private PlayerPosition position;
     private String name;
     private int playerId;
     private int seatNumber;
     private PlayerInfo playerInfo;
     private CardSetView hand;
+
+    /**
+     * PUBLICS
+     */
     public VBox container = new VBox();
 
+    /**
+     * CONSTRUCTOR
+     */
     public Player() {
         this.playerInfo = new PlayerInfo("Not joined yet!");
         this.hand = new CardSetView();
@@ -27,6 +37,9 @@ public class Player extends Group implements EventHandler<CardEvent> {
         initContainer();
     }
 
+    /**
+     * sets up this player's container
+     */
     private void initContainer() {
         this.getChildren().add(container);
         Random r = new Random();
@@ -42,16 +55,56 @@ public class Player extends Group implements EventHandler<CardEvent> {
         container.getChildren().add(hand);
     }
 
-    public CardView addCardToHand(Card card) {
-        CardView newCardView = hand.addCard(card);
-        updateInfoText();
-        return newCardView;
-    }
-
+    /**
+     * gets this player's position
+     *
+     * @return
+     */
     public PlayerPosition getPosition() {
         return position;
     }
 
+    /**
+     * gets this player's name
+     *
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * gets this player's playerId
+     *
+     * @return
+     */
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    /**
+     * gets this player's seatNumber
+     *
+     * @return
+     */
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    /**
+     * gets this player's hand
+     *
+     * @return
+     */
+    public CardSetView getHand() {
+        return hand;
+    }
+
+    /**
+     * sets this player's position
+     *
+     * @param position
+     */
     public void setPosition(PlayerPosition position) {
         this.position = position;
         switch (position) {
@@ -71,35 +124,75 @@ public class Player extends Group implements EventHandler<CardEvent> {
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
+    /**
+     * sets this player's name
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
         updateInfoText();
     }
 
-    public int getPlayerId() {
-        return playerId;
-    }
 
+    /**
+     * sets this player's playerId
+     *
+     * @param playerId
+     */
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 
+    /**
+     * sets this player's seatNumber
+     *
+     * @param seatNumber
+     */
     public void setSeatNumber(int seatNumber) {
         this.seatNumber = seatNumber;
     }
 
-    public int getSeatNumber() {
-        return seatNumber;
+
+    /**
+     * sets this player's active value
+     *
+     * @param active
+     */
+    public void setActive(boolean active) {
+        playerInfo.setActive(active);
     }
 
-    public CardSetView getHand() {
-        return hand;
+    /**
+     * When the {@code hand} scaled parent container doesn't update it's height automatically.
+     * So after the hand is scaled we move it close back to the playerInfo.
+     *
+     * @param scale
+     */
+    public void setScale(double scale) {
+        hand.setScaleX(scale);
+        hand.setScaleY(scale);
+
+        double translateCards = CardView.CARD_PREF_HEIGHT / 2 * (1 - scale);
+        hand.setTranslateY(-translateCards);
     }
 
+    /**
+     * adds a card to this player's CardSetView (hand)
+     *
+     * @param card
+     * @return CardSetView object newCardView
+     */
+    public CardView addCardToHand(Card card) {
+        CardView newCardView = hand.addCard(card);
+        updateInfoText();
+        return newCardView;
+    }
+
+
+    /**
+     * update player's infoText
+     */
     private void updateInfoText() {
         String infoText = this.name;
         int cardCount = hand.getCardCount();
@@ -110,25 +203,11 @@ public class Player extends Group implements EventHandler<CardEvent> {
         this.playerInfo.setInfoText(infoText);
     }
 
-    public void setActive(boolean active) {
-        playerInfo.setActive(active);
-    }
-
+    /**
+     * @param event
+     */
     @Override
     public void handle(CardEvent event) {
         updateInfoText();
-    }
-
-    /**
-     * When the {@code hand} scaled parent container doesn't update it's height automatically.
-     * So after the hand is scaled we move it close back to the playerInfo.
-     * @param scale
-     */
-    public void setScale(double scale) {
-        hand.setScaleX(scale);
-        hand.setScaleY(scale);
-
-        double translateCards = CardView.CARD_PREF_HEIGHT / 2 * (1 - scale);
-        hand.setTranslateY(-translateCards);
     }
 }

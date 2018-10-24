@@ -13,6 +13,8 @@ public class ViewHelper {
     private static Map<String, Image> imageCache = new HashMap<>();
 
     /**
+     * gets the image from resource
+     *
      * @param resource
      * @return Image
      */

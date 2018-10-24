@@ -18,26 +18,34 @@ import java.net.URL;
 
 public abstract class View {
 
+    /*******************
+     ***** PROTECTS ****
+     *******************/
     protected String fxml;
     protected Parent root;
 
 
-    /*******************************************************************
-     * *************************PRIVATE STATIC FINALS*******************
-     ******************************************************************/
+    /*****************************
+     ****PRIVATE STATIC FINALS****
+     *****************************/
     private static final String HOME_BACKGROUND_FILENAME = "game.jpg";
     private static final String GREY_BTN_STYLE = "-fx-base: orange; -fx-text-fill: black;";
 
     private static final int BTN_MAX_WIDTH = 120;
     private static final int BTN_MAX_HEIGHT = 60;
 
-    /*******************************************************************
-     * *************************PRIVATES*******************
-     ******************************************************************/
+    /********************
+     ****** PRIVATES *****
+     ********************/
     private App mainApp;
 
+    /**
+     * loads the fxml
+     *
+     * @throws Exception
+     */
     protected void loadFxml() throws Exception {
-        if(fxml == null || fxml.isEmpty()){
+        if (fxml == null || fxml.isEmpty()) {
             throw new InvalidObjectException("The fxml field should be set before calling loadFxml method.");
         }
 
@@ -53,9 +61,11 @@ public abstract class View {
         this.root = loader.getRoot();
     }
 
-
     /**
-     * get the background
+     * GETTERS
+     */
+    /**
+     * gets the background
      *
      * @param fileName
      * @return
@@ -91,7 +101,19 @@ public abstract class View {
         return mainApp;
     }
 
+    /**
+     * gets this view's root
+     *
+     * @return
+     */
+    public Parent getRoot() {
 
+        return root;
+    }
+
+    /**
+     * SETTERS
+     */
     /**
      * Is called by the main application to give a reference back to itself.
      *
@@ -102,8 +124,10 @@ public abstract class View {
     }
 
     /**
+     * creates a button with the given text and the default style, height and width
+     *
      * @param text
-     * @return
+     * @return Button
      */
     public Button createBtn(String text) {
         Button btn = new Button(text);
@@ -114,9 +138,11 @@ public abstract class View {
     }
 
     /**
+     * creates a VBox with the given spacing, padding and the default alignment and homeBackground
+     *
      * @param spacing
      * @param padding
-     * @return
+     * @return VBox
      */
     public VBox createLayout(int spacing, int padding) {
         VBox layout = new VBox(spacing);
@@ -130,10 +156,5 @@ public abstract class View {
         }
 
         return layout;
-    }
-
-    public Parent getRoot() {
-
-        return root;
     }
 }

@@ -2,8 +2,14 @@ package server.models.cards;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
+/**
+ *
+ */
 public abstract class Changeable extends Card {
 
+    /**
+     * PRIVATES
+     */
     private int initialRank;
 
     /**

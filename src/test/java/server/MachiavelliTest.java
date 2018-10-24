@@ -6,7 +6,9 @@ import server.models.CardSet;
 import server.models.Machiavelli;
 import server.models.Player;
 import server.models.Table;
-import server.models.cards.*;
+import server.models.cards.Basic;
+import server.models.cards.Card;
+import server.models.cards.Suit;
 
 import java.util.ArrayList;
 

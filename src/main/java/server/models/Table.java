@@ -53,6 +53,9 @@ public class Table {
         return cardSets;
     }
 
+    /**
+     * @return
+     */
     public CardSet getAllCardsInASet() {
         CardSet fullSet = new CardSet();
         for (CardSet set : cardSets) {
@@ -171,5 +174,4 @@ public class Table {
         }
         return standardDeck;
     }
-
 }

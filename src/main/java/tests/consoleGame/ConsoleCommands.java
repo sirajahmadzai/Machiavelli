@@ -7,10 +7,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-//Simple class to test commands.
+/**
+ * Simple class to test commands.
+ */
 public class ConsoleCommands {
 
+    /**
+     * main method
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
+        //create a new BufferedReader using System.in as input
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
@@ -22,22 +31,4 @@ public class ConsoleCommands {
         }
 
     }
-
-//    public static void main(String[] args) {
-//        BufferedReader in;
-//        PrintWriter out;
-//        Socket socket;
-//        try {
-//            socket = new Socket("localhost", 9876);
-//            in = new BufferedReader(new InputStreamReader(
-//                    socket.getInputStream()));
-//            out = new PrintWriter(socket.getOutputStream(), true);
-
-
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-//    }
 }

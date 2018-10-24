@@ -23,36 +23,44 @@ import javafx.scene.text.Text;
 
 public class LoginView extends View {
 
-    /*******************************************************************
-     * *************************PRIVATE STATIC FINALS*******************
-     ******************************************************************/
+    /********************************
+     ***** PRIVATE STATIC FINALS *****
+     ********************************/
     private static final int LAYOUT_SPACING = 20;
     private static final int LAYOUT_PADDING = 20;
 
-    /*******************************************************************
-     * *************************FINALS*******************
-     ******************************************************************/
+    /*************************
+     ******* FINALS **********
+     *************************/
     final TextField txtIp;
     final TextField txtPort;
 
 
-    /*******************************************************************
-     * *************************PRIVATES*******************
-     ******************************************************************/
+    /********************
+     ***** PRIVATES *****
+     ********************/
     private VBox layout;
     private Label lblIp;
     private Label lblPort;
     private Button btnConnect;
     private Label lblMessage;
 
+    /**
+     * CONSTRUCTOR
+     */
     public LoginView() {
         super();
+        //create the layout
         layout = createLayout(LAYOUT_SPACING, LAYOUT_PADDING);
 
+        //align the layout
         layout.setAlignment(Pos.BOTTOM_CENTER);
 
+        //make a list of the layout's children
         ObservableList<Node> list = layout.getChildren();
+
         BorderPane bp = new BorderPane();
+
         bp.setPadding(new Insets(10, 50, 50, 50));
 
         //Adding HBox
@@ -107,10 +115,17 @@ public class LoginView extends View {
         bp.setTop(hb);
         bp.setCenter(gridPane);
         layout.getStylesheets().add("/css/login.css");
+
+        //add bp to the list
         list.add(bp);
     }
 
     /**
+     * GETTERS
+     */
+    /**
+     * gets the layout
+     *
      * @return
      */
     public VBox getLayout() {
@@ -118,6 +133,8 @@ public class LoginView extends View {
     }
 
     /**
+     * gets the ip
+     *
      * @return
      */
     public String getIp() {
@@ -125,6 +142,8 @@ public class LoginView extends View {
     }
 
     /**
+     * gets the port
+     *
      * @return
      */
     public int getPort() {
@@ -143,12 +162,17 @@ public class LoginView extends View {
     }
 
     /**
+     * get lblMessage
+     *
      * @return
      */
     public Label getLblMessage() {
         return lblMessage;
     }
 
+    /**
+     * SETTERS
+     */
     /**
      * sets reflection of the GridPane
      *

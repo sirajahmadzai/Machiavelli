@@ -8,16 +8,23 @@ import java.util.ArrayList;
 
 
 public class SelectionManager {
+    /**
+     * PRIVATES
+     */
     private ArrayList<CardView> selectedCards;
     private CardSet selectedCardsSet;
 
     /**
+     * CONSTRUCTOR
      */
     public SelectionManager() {
         selectedCards = new ArrayList<>();
         selectedCardsSet = new CardSet();
     }
 
+    /**
+     * @param cardView
+     */
     public void addCard(CardView cardView) {
         Card card = cardView.getCard();
 
@@ -35,18 +42,27 @@ public class SelectionManager {
         selectCard(cardView);
     }
 
+    /**
+     * @param cardView
+     */
     private void selectCard(CardView cardView) {
         selectedCards.add(cardView);
         selectedCardsSet.addCard(cardView.getCard());
         cardView.setSelected(true);
     }
 
+    /**
+     * @param cardView
+     */
     private void deselectCard(CardView cardView) {
         selectedCards.remove(cardView);
         selectedCardsSet.removeCard(cardView.getCard());
         cardView.setSelected(false);
     }
 
+    /**
+     *
+     */
     public void deselectAll() {
         while (!selectedCards.isEmpty()) {
             deselectCard(selectedCards.get(0));
@@ -54,6 +70,9 @@ public class SelectionManager {
     }
 
 
+    /**
+     *
+     */
     private void clearSelections() {
         for (CardView cardView : selectedCards) {
             cardView.setSelected(false);
@@ -62,14 +81,23 @@ public class SelectionManager {
         selectedCardsSet.removeAllCards();
     }
 
+    /**
+     * @return
+     */
     public boolean isEmpty() {
         return selectedCards.isEmpty();
     }
 
+    /**
+     * @return
+     */
     public CardSet getSelectedCardsSet() {
         return selectedCardsSet;
     }
 
+    /**
+     * @return
+     */
     public ArrayList<CardView> getSelectedCards() {
         return selectedCards;
     }

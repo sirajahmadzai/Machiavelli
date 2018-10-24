@@ -32,6 +32,11 @@ public class ClientHandler implements Runnable {
     private Server server;
     private Player player;
 
+    /**
+     * @param socket
+     * @param server
+     * @throws Exception
+     */
     public ClientHandler(Socket socket, Server server) throws Exception {
         this.socket = socket;
         this.server = server;
@@ -39,6 +44,26 @@ public class ClientHandler implements Runnable {
         in = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+    }
+
+    /**
+     * GETTERS
+     */
+    /**
+     * @return
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * SETTERS
+     */
+    /**
+     * @param player
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**
@@ -74,6 +99,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * @param cmd
+     */
     private void processCommand(Command cmd) {
         System.out.println("Command received: " + cmd.serialize());
         switch (cmd.getName()) {
@@ -97,19 +125,17 @@ public class ClientHandler implements Runnable {
         socket.close();
     }
 
+    /**
+     * @param command
+     */
     public void sendCommand(String command) {
         out.println(command);
     }
 
+    /**
+     * @param command
+     */
     public void sendCommand(Command.CommandNames command) {
         out.println(command);
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 }

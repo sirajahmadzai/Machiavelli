@@ -22,7 +22,7 @@ public class Card implements Comparable<Card> {
     public static final String DROP_TARGET_IMAGE = "images/dropTarget.png";
 
     /******************************
-     ********** PROTECTEDS ********
+     ********** PROTECTS ********
      ******************************/
     protected int rank;
 
@@ -44,6 +44,11 @@ public class Card implements Comparable<Card> {
         this.imgUrl = getImageUrl();
     }
 
+    /**
+     * @param cardText
+     * @return
+     * @throws InvalidArgumentException
+     */
     public static Card fromString(String cardText) throws InvalidArgumentException {
         Suit suit = Suit.JOKER;
         int rank = 0;
@@ -85,7 +90,10 @@ public class Card implements Comparable<Card> {
 
     }
 
-    //    Used to create a hidden card.
+
+    /**
+     * Used to create a hidden card.
+     */
     protected Card() {
         suit = Suit.HIDDEN;
         rank = 0;
@@ -99,10 +107,6 @@ public class Card implements Comparable<Card> {
      */
     public Suit getSuit() {
         return suit;
-    }
-
-    public void setSuit(Suit suit) {
-        this.suit = suit;
     }
 
     /**
@@ -187,18 +191,41 @@ public class Card implements Comparable<Card> {
         return imgUrl;
     }
 
+    /**
+     * SETTERS
+     */
+    /**
+     * @param suit
+     */
+    public void setSuit(Suit suit) {
+        this.suit = suit;
+    }
+
+    /**
+     * @return
+     */
     public boolean isHidden() {
         return hidden;
     }
 
+    /**
+     * @return
+     */
     public boolean isDropTarget() {
         return dropTarget;
     }
 
+    /**
+     * @return
+     */
     public boolean isJoker() {
         return joker;
     }
 
+    /**
+     * @param otherCard
+     * @return
+     */
     @Override
     public int compareTo(Card otherCard) {
         int diff = rank - otherCard.rank;
@@ -210,7 +237,13 @@ public class Card implements Comparable<Card> {
         return suit.compareTo(otherCard.suit);
     }
 
-    // Cards with same rank and suits are considered equal;
+
+    /**
+     * Cards with same rank and suits are considered equal
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -220,11 +253,17 @@ public class Card implements Comparable<Card> {
         return compareTo(card) == 0;
     }
 
+    /**
+     * @return
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getSuit(), getRank());
     }
 
+    /**
+     * @return
+     */
     @Override
     public String toString() {
         String rank = "";

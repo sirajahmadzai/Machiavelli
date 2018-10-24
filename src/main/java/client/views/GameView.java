@@ -42,13 +42,20 @@ public class GameView extends View {
     private Button revertButton;
 
     @FXML
-    public void onRevertClicked(ActionEvent ae){
+    public void onRevertClicked(ActionEvent ae) {
         resetMove();
     }
 
     /*************************************************************
      ************************END OF FXML INJECTIONS***************
      *************************************************************/
+
+    /**
+     * PRIVATE STATICS
+     */
+    // instance of GameView
+    private static GameView ourInstance = new GameView();
+
 
     /*************************************************************
      *****************************PRIVATES************************
@@ -59,12 +66,6 @@ public class GameView extends View {
     private GameSeats seats;
 
     private int playerCount = 0;
-
-    private static GameView ourInstance = new GameView();
-
-    public static GameView getInstance() {
-        return ourInstance;
-    }
 
     private GameView() {
         super();
@@ -77,14 +78,52 @@ public class GameView extends View {
         }
     }
 
+    /*******************
+     ***** GETTERS *****
+     *******************/
+    /**
+     * @return
+     */
+    public static GameView getInstance() {
+        return ourInstance;
+    }
+
     /**
      * Number of players the game set up for.
+     *
      * @return
      */
     public int getPlayerCount() {
         return playerCount;
     }
 
+    /**
+     * @return
+     */
+    public int getOwnerSeat() {
+        return seats.getOwnerPlayer().getSeatNumber();
+    }
+
+    /**
+     * @return
+     */
+    public PlayArea getPlayArea() {
+        return playArea;
+    }
+
+    /**
+     * @return
+     */
+    public CardSetView getHand() {
+        return seats.getOwnerPlayerHand();
+    }
+
+    /**********************
+     ******* SETTERS ******
+     **********************/
+    /**
+     * @param playerCount
+     */
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
         this.seats = new GameSeats(board, playerCount);
@@ -96,16 +135,6 @@ public class GameView extends View {
         setMessage("Waiting for other players to join.");
     }
 
-    @FXML
-        // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
-
-    }
-
-    /************************************************************
-     ********** MODIFIERS TO BE USED BY CONTROLLERS **************
-     *************************************************************/
-
     /**
      * set the text for messageBox
      *
@@ -115,6 +144,51 @@ public class GameView extends View {
         messageBox.setText(message);
     }
 
+    /**
+     * activates playArea
+     *
+     * @param active
+     */
+    public void setPlayAreaActive(boolean active) {
+        playArea.setActive(active);
+        seats.getOwnerPlayerHand().setReceiverMode(active);
+    }
+
+    /**
+     * activates playArea
+     *
+     * @param cardSet
+     */
+    public void setPlayAreaActive(CardSet cardSet) {
+        playArea.setActive(cardSet);
+        seats.getOwnerPlayerHand().setReceiverMode(cardSet);
+    }
+
+
+    /**
+     * Set the owner player id and seat number for this client.
+     *
+     * @param ownerPlayerId
+     * @param seatNumber
+     */
+    public void setOwnerPlayer(int ownerPlayerId, int seatNumber) {
+        seats.setOwnerSeat(seatNumber, ownerPlayerId);
+    }
+
+    /**
+     * This method is called by the FXMLLoader when initialization is complete
+     */
+    @FXML
+    void initialize() {
+
+    }
+
+    /************************************************************
+     ********** MODIFIERS TO BE USED BY CONTROLLERS **************
+     *************************************************************/
+    /**
+     * clears the messageBox
+     */
     public void clearMessage() {
         setMessage("");
     }
@@ -122,6 +196,14 @@ public class GameView extends View {
     /***********************************************
      *************************HANDS******************
      ************************************************/
+
+    /**
+     * adds the given card to the player at the given seatNumber
+     *
+     * @param seatNumber
+     * @param card
+     * @return
+     */
     public CardView addCardToHand(int seatNumber, Card card) {
         Player player = seats.getPlayer(seatNumber);
         return player.addCardToHand(card);
@@ -151,30 +233,20 @@ public class GameView extends View {
         deckImageView.setVisible(false);
     }
 
+    /**
+     * fills the deck
+     */
     public void fillDeck() {
         deckImageView.setVisible(true);
     }
 
 
-    /********************************************************
-     ************* HELPERS********************
-     *********************************************************************************/
-
-    /**
-     * Set the owner player id and seat number for this client.
-     * @param ownerPlayerId
-     * @param seatNumber
-     */
-    public void setOwnerPlayer(int ownerPlayerId, int seatNumber) {
-        seats.setOwnerSeat(seatNumber, ownerPlayerId);
-    }
-
-    public int getOwnerSeat() {
-        return seats.getOwnerPlayer().getSeatNumber();
-    }
-
-    /**
+    /****************************
+     ********* HELPERS **********
+     ****************************
+     /**
      * Add new player to specified seat.
+     *
      * @param playerName
      * @param playerId
      * @param seatNumber
@@ -183,50 +255,48 @@ public class GameView extends View {
         seats.setPlayerInfo(seatNumber, playerName, playerId);
     }
 
-    public void setPlayAreaActive(boolean active) {
-        playArea.setActive(active);
-        seats.getOwnerPlayerHand().setReceiverMode(active);
-    }
 
-    public void setPlayAreaActive(CardSet cardSet) {
-        playArea.setActive(cardSet);
-        seats.getOwnerPlayerHand().setReceiverMode(cardSet);
-    }
-
+    /**
+     *
+     */
     public void takeSnapshot() {
         playArea.takeSnapshot();
         seats.getOwnerPlayerHand().takeSnapshot();
     }
 
-    public PlayArea getPlayArea() {
-        return playArea;
-    }
-
-    public CardSetView getHand() {
-        return seats.getOwnerPlayerHand();
-    }
-
+    /**
+     * switches turn from current player to next player
+     *
+     * @param seatNumber
+     */
     public void switchTurn(int seatNumber) {
         for (int i = 1; i <= playerCount; i++) {
             seats.getPlayer(i).setActive(i == seatNumber);
         }
         if (seatNumber == getOwnerSeat()) {
             setMessage("It's your turn. Click on the deck when you're done.");
-        }else {
+        } else {
             setMessage("Please wait for your turn.");
         }
     }
 
+    /**
+     * resets the move
+     */
     private void resetMove() {
         playArea.rollbackMoves();
         getHand().rollbackMoves();
     }
 
+    /**
+     * gets the player by seatNumber then removes cards from the player's CardSet
+     *
+     * @param seatNumber
+     * @param playedCards
+     */
     public void removeCardsFrom(int seatNumber, CardSet playedCards) {
         Player player = seats.getPlayer(seatNumber);
 
         player.getHand().removeCards(playedCards.totalCount());
     }
-
-
 }

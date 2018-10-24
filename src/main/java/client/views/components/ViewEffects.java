@@ -4,11 +4,17 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Effect;
 
 public class ViewEffects {
+    /**
+     * PUBLIC STATIC FINALS
+     */
     public static final Effect selectedCardEffect;
     public static final Effect defaultEffect;
     public static final Effect invalidEffect;
     public static final Effect newCardInSetEffect;
 
+    /**
+     *
+     */
     static {
 
         ColorAdjust colorAdjust = new ColorAdjust();

@@ -11,7 +11,14 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class Server implements Runnable {
+    /**
+     * PRIVATE STATICS
+     */
     final static Logger log = Logger.getLogger(String.valueOf(Server.class));
+
+    /**
+     * PRIVATES
+     */
     private ArrayList<ClientHandler> playerClientHandlers = new ArrayList<>();
     private ServerSocket listener;
     private int numPlayers = -1;
@@ -19,6 +26,13 @@ public class Server implements Runnable {
     private int port;
     private Machiavelli machiavelli;
 
+    /**
+     * CONSTRUCTOR
+     *
+     * @param port
+     * @param numPlayers
+     * @throws IOException
+     */
     public Server(int port, int numPlayers) throws IOException {
         this.numPlayers = numPlayers;
         this.port = port;
@@ -31,11 +45,26 @@ public class Server implements Runnable {
         currentState = WaitingForPlayersState.getInstance();
     }
 
+    /**
+     * @return
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
+     * removes the given clientHandler
+     *
+     * @param clientHandler
+     */
     public void removeClientHandler(ClientHandler clientHandler) {
         machiavelli.removePlayer(clientHandler);
         playerClientHandlers.remove(clientHandler);
     }
 
+    /**
+     * @param clientHandler
+     */
     private void startClientThread(ClientHandler clientHandler) {
         Thread handlerThread = new Thread(clientHandler);
         handlerThread.setName("ClientHandlerThread " + clientHandler.getPlayer().getName());
@@ -44,7 +73,9 @@ public class Server implements Runnable {
         handlerThread.start();
     }
 
-
+    /**
+     *
+     */
     @Override
     public void run() {
         try {
@@ -82,9 +113,5 @@ public class Server implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    public int getPort() {
-        return port;
     }
 }

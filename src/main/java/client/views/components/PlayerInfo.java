@@ -13,16 +13,24 @@ import javafx.scene.shape.Circle;
 /**
  * Simple class to display user infoText and picture.
  */
-public class PlayerInfo extends HBox{
+public class PlayerInfo extends HBox {
+    /**
+     * PRIVATES
+     */
     private Label infoLabel;
     private Circle statusCircle;
 
-    public PlayerInfo(String name){
+    /**
+     * CONSTRUCTOR
+     *
+     * @param name
+     */
+    public PlayerInfo(String name) {
         infoLabel = new Label(name);
         statusCircle = new Circle();
         statusCircle.setRadius(5);
 
-        this.setBackground(new Background(new BackgroundFill(Color.color(0.8,1,0.8,0.6), new CornerRadii(5),null)));
+        this.setBackground(new Background(new BackgroundFill(Color.color(0.8, 1, 0.8, 0.6), new CornerRadii(5), null)));
         this.setAlignment(Pos.CENTER);
         this.setMaxWidth(200);
         this.setSpacing(10);
@@ -31,11 +39,21 @@ public class PlayerInfo extends HBox{
         setActive(false);
     }
 
+    /**
+     * sets this playerInfo's infoLabel
+     *
+     * @param infoText
+     */
     public void setInfoText(String infoText) {
         infoLabel.setText(infoText);
     }
 
-    public void setActive(boolean active){
+    /**
+     * sets this playerInfo's active value
+     *
+     * @param active
+     */
+    public void setActive(boolean active) {
         Paint fill = active ? Color.GREEN : Color.GRAY;
         statusCircle.setFill(fill);
     }

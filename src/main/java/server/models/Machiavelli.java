@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ *
+ */
 public class Machiavelli {
     /********************************
      ******** PRIVATES **************
@@ -23,9 +26,12 @@ public class Machiavelli {
     private int numOfPlayers;
     private boolean gameStarted = false;
     private ArrayList<Seat> seats;
-
-    private static Machiavelli ourInstance = new Machiavelli();
     private Seat currentSeat;
+
+    /**
+     * PRIVATE STATICS
+     */
+    private static Machiavelli ourInstance = new Machiavelli();
 
     public static Machiavelli getInstance() {
         return ourInstance;
@@ -43,14 +49,14 @@ public class Machiavelli {
     /**
      * gets table
      *
-     * @return
+     * @return table object
      */
     public Table getTable() {
         return table;
     }
 
     /**
-     * @return
+     * @return players ArrayList
      */
     public ArrayList<Player> getPlayers() {
         return players;
@@ -78,6 +84,16 @@ public class Machiavelli {
         this.table = table;
     }
 
+    /**
+     * @param players
+     */
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    /**
+     * @param numOfPlayers
+     */
     public void initialize(int numOfPlayers) {
         players = new ArrayList<>();
         table = new Table();
@@ -98,13 +114,6 @@ public class Machiavelli {
         }
         // Create the circle here.
         prevSeat.setNextSeat(seats.get(0));
-    }
-
-    /**
-     * @param players
-     */
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
     }
 
 
@@ -256,13 +265,10 @@ public class Machiavelli {
     /***************************************
      *************** PRIVATE HELPERS **************
      **************************************/
+
     /**
-     *
+     * @return
      */
-    private void verifyTable() {
-
-    }
-
     public Seat getNextEmptySeat() {
         for (Seat seat : seats) {
             if (!seat.isTaken()) {
@@ -272,11 +278,18 @@ public class Machiavelli {
         return null;
     }
 
+    /**
+     * @return
+     */
     public boolean isTableFull() {
         return numOfPlayers <= players.size();
     }
 
 
+    /**
+     * @param playerName
+     * @param player
+     */
     public void playerLogin(String playerName, Player player) {
         player.setName(playerName);
 
@@ -285,6 +298,9 @@ public class Machiavelli {
         sendCommandToAllPlayers(introduce);
     }
 
+    /**
+     * @param clientHandler
+     */
     public void addPlayer(ClientHandler clientHandler) {
         int playerId = players.size();
         Seat seat = getNextEmptySeat();
@@ -315,6 +331,9 @@ public class Machiavelli {
         players.add(player);
     }
 
+    /**
+     * @param clientHandler
+     */
     public void removePlayer(ClientHandler clientHandler) {
         Player player = null;
         for (Player p : players) {
@@ -329,6 +348,9 @@ public class Machiavelli {
         }
     }
 
+    /**
+     *
+     */
     public void startGame() {
         if (!gameStarted && isTableFull()) {
             dealHands(getRandomPlayer());
@@ -336,12 +358,19 @@ public class Machiavelli {
         }
     }
 
+    /**
+     * @param command
+     */
     private void sendCommandToAllPlayers(Command command) {
         for (Player player : players) {
             sendCommandToPlayer(command, player);
         }
     }
 
+    /**
+     * @param command
+     * @param playerSeatNumber
+     */
     private void sendCommandToAllPlayersExcept(Command command, int playerSeatNumber) {
         for (Player player : players) {
             if (player.getSeatNumber() != playerSeatNumber) {
@@ -350,24 +379,45 @@ public class Machiavelli {
         }
     }
 
+    /**
+     * @param command
+     * @param exceptPlayer
+     */
     private void sendCommandToAllPlayersExcept(Command command, Player exceptPlayer) {
         sendCommandToAllPlayersExcept(command, exceptPlayer.getSeatNumber());
     }
 
+    /**
+     * @param command
+     */
     private void sendCommandToAllPlayers(String command) {
         for (Player player : players) {
             sendCommandToPlayer(command, player);
         }
     }
 
+    /**
+     * @param command
+     * @param player
+     */
     private void sendCommandToPlayer(Command command, Player player) {
         player.getClientHandler().sendCommand(command.toString());
     }
 
+    /**
+     * @param command
+     * @param player
+     */
     private void sendCommandToPlayer(String command, Player player) {
         player.getClientHandler().sendCommand(command);
     }
 
+    /**
+     * @param seatNumber
+     * @param proposedSets
+     * @param playedCards
+     * @return
+     */
     private boolean validateMove(int seatNumber, List<CardSet> proposedSets, CardSet playedCards) {
         // TODO: Check if the turn is at the right player (seat number)
 
@@ -404,6 +454,10 @@ public class Machiavelli {
         return true;
     }
 
+    /**
+     * @param playerMove
+     * @return
+     */
     public boolean processMove(PlayerMove playerMove) {
         if (!validateMove(playerMove.getSeatNumber(), playerMove.getTable(), playerMove.getPlayedCards())) {
             return false;
@@ -428,6 +482,9 @@ public class Machiavelli {
         return true;
     }
 
+    /**
+     *
+     */
     public void passTurn() {
         try {
             Card card = drawCardFromDeck(currentSeat.getPlayer());
@@ -445,16 +502,26 @@ public class Machiavelli {
     }
 
 
+    /**
+     * @param seat
+     */
     private void switchTurn(Seat seat) {
         currentSeat = seat;
         sendCommandToAllPlayers(new SwitchTurn(currentSeat.getSeatNumber()));
     }
 
+    /**
+     *
+     */
     private void switchTurn() {
         switchTurn(currentSeat.getNextSeat());
     }
 
 
+    /**
+     * @param seatNumber
+     * @return
+     */
     private Seat getSeat(int seatNumber) {
         for (Seat seat : seats) {
             if (seat.getSeatNumber() == seatNumber) {
@@ -465,54 +532,108 @@ public class Machiavelli {
     }
 
 
+    /**
+     *
+     */
     public class EmptyDeckException extends Exception {
         public EmptyDeckException() {
             super("Deck is taken!");
         }
     }
 
+    /**
+     *
+     */
     private class Seat {
+        /**
+         * PRIVATES
+         */
         private int seatNumber;
         private Player player = null;
         private Boolean taken;
         private Seat nextSeat;
 
+        /**
+         * CONSTRUCTOR
+         *
+         * @param seatNumber
+         * @param taken
+         */
         public Seat(int seatNumber, Boolean taken) {
             this.taken = taken;
             this.seatNumber = seatNumber;
         }
 
-        public Boolean isTaken() {
-            return taken;
-        }
-
-        public void setTaken(Boolean taken) {
-            this.taken = taken;
-        }
-
+        /**
+         * GETTERS
+         */
+        /**
+         * gets the seatNumber
+         *
+         * @return int seatNumber
+         */
         public int getSeatNumber() {
             return seatNumber;
         }
 
-        public void setSeatNumber(int seatNumber) {
-            this.seatNumber = seatNumber;
-        }
-
+        /**
+         * gets the player
+         *
+         * @return Player object "player"
+         */
         public Player getPlayer() {
             return player;
         }
 
+        /**
+         * gets the next seat
+         *
+         * @return int nextSeat
+         */
+        public Seat getNextSeat() {
+            return nextSeat;
+        }
+
+        /**
+         * sets the boolean "taken"
+         *
+         * @param taken
+         */
+        public void setTaken(Boolean taken) {
+            this.taken = taken;
+        }
+
+        /**
+         * sets the seatNumber
+         *
+         * @param seatNumber
+         */
+        public void setSeatNumber(int seatNumber) {
+            this.seatNumber = seatNumber;
+        }
+
+        /**
+         * sets the player
+         *
+         * @param player
+         */
         public void setPlayer(Player player) {
             this.player = player;
             this.taken = player != null;
         }
 
-        public Seat getNextSeat() {
-            return nextSeat;
-        }
-
+        /**
+         * @param nextSeat
+         */
         public void setNextSeat(Seat nextSeat) {
             this.nextSeat = nextSeat;
+        }
+
+        /**
+         * @return
+         */
+        public Boolean isTaken() {
+            return taken;
         }
     }
 }

@@ -7,12 +7,14 @@ import server.models.cards.Suit;
 
 import java.util.*;
 
+/**
+ *
+ */
 public class CardSet {
-
-    private ArrayList<Card> allCards;
     /********************************
      ******** PRIVATES **************
      ********************************/
+    private ArrayList<Card> allCards;
     private ArrayList<Card> cards;
     private ArrayList<Card> jokers;
     private Map<Suit, ArrayList<Card>> suitCardMap = new HashMap<>();
@@ -29,11 +31,21 @@ public class CardSet {
         addCards(cards);
     }
 
+    /**
+     * CONSTRUCTOR
+     *
+     * @param card
+     */
     public CardSet(Card card) {
         this();
         this.addCard(card);
     }
 
+    /**
+     * CONSTRUCTOR
+     *
+     * @param setString
+     */
     public CardSet(String setString) {
         this();
         String[] cards = setString.split(",");
@@ -47,12 +59,20 @@ public class CardSet {
         }
     }
 
+    /**
+     * CONSTRUCTOR
+     */
     public CardSet() {
         this.cards = new ArrayList<>();
         this.allCards = new ArrayList<>();
         this.jokers = new ArrayList<>();
     }
 
+    /**
+     * adds a card to the ArrayList of allCards
+     *
+     * @param card
+     */
     public void addCard(Card card) {
         isSorted = false;
         allCards.add(card);
@@ -74,16 +94,26 @@ public class CardSet {
         cards.add(card);
     }
 
+    /**
+     * @param cardSet
+     */
     public void join(CardSet cardSet) {
         addCards(cardSet.allCards);
     }
 
+    /**
+     * @param cards
+     */
     public void addCards(Collection<Card> cards) {
         for (Card card : cards) {
             this.addCard(card);
         }
     }
 
+    /**
+     * @param card
+     * @return
+     */
     public boolean removeCard(Card card) {
         allCards.remove(card);
 
@@ -118,10 +148,17 @@ public class CardSet {
         return allCards;
     }
 
+    /**
+     * @return
+     */
     public boolean isAValidMeld() {
         return isAValidMeld(1);
     }
 
+    /**
+     * @param minSetSize
+     * @return
+     */
     public boolean isAValidMeld(int minSetSize) {
         // An empty set is always a valid meld regardless of minimum set size.
         if (totalCount() == 0) {
@@ -150,6 +187,9 @@ public class CardSet {
         return (isASet() || isAStraight());
     }
 
+    /**
+     * @return
+     */
     public boolean isAStraight() {
         sort();
 
@@ -173,6 +213,9 @@ public class CardSet {
         return true;
     }
 
+    /**
+     * @return
+     */
     public boolean isASet() {
         sort();
 
@@ -194,6 +237,9 @@ public class CardSet {
         return true;
     }
 
+    /**
+     *
+     */
     public void sort() {
         if (isSorted) {
             return;
@@ -203,6 +249,12 @@ public class CardSet {
         isSorted = true;
     }
 
+    /**
+     * checks if the given cardSet can be added to the card set
+     *
+     * @param cardSet
+     * @return true if the given cardSet can be joined with the card set of allCards, false otherwise
+     */
     public boolean canAcceptCards(CardSet cardSet) {
         CardSet proposedCardSet = new CardSet(allCards);
 
@@ -210,6 +262,10 @@ public class CardSet {
         return proposedCardSet.isAValidMeld();
     }
 
+    /**
+     * @param card
+     * @return true if the given card can be added to the set of allCards, false otherwise
+     */
     public boolean canAcceptCard(Card card) {
         if (card.isJoker()) {
             if (totalCount() < 4) {
@@ -234,18 +290,34 @@ public class CardSet {
         return proposedCardSet.isAValidMeld();
     }
 
+    /**
+     * determines the size of allCards ArrayList
+     *
+     * @return size of allCards ArrayList
+     */
     public int totalCount() {
         return allCards.size();
     }
 
+    /**
+     * @return
+     */
     private int cardCount() {
         return cards.size();
     }
 
+    /**
+     * determins the size of jokers ArrayList
+     *
+     * @return
+     */
     private int jokerCount() {
         return jokers.size();
     }
 
+    /**
+     * @return
+     */
     private int getMinRankDifference() {
         int minRank = cards.get(0).getRank();
         int maxRank = cards.get(cardCount() - 1).getRank();
@@ -263,11 +335,20 @@ public class CardSet {
         return rankDifference;
     }
 
+    /**
+     * @return
+     */
     public CardSet getSnapshot() {
         return new CardSet(allCards);
     }
 
-    // 2 Sets consisting of the same cards (rank,suit) considered equal regardless of the order of the cards.
+
+    /**
+     * 2 Sets consisting of the same cards (rank,suit) considered equal regardless of the order of the cards.
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this)
@@ -289,12 +370,18 @@ public class CardSet {
         return set.allCards.equals(allCards);
     }
 
+    /**
+     * @return
+     */
     @Override
     public int hashCode() {
         sort();
         return allCards.hashCode();
     }
 
+    /**
+     * @return
+     */
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(",");
@@ -305,6 +392,10 @@ public class CardSet {
     }
 
 
+    /**
+     * @param set
+     * @return
+     */
     public boolean superSetOf(CardSet set) {
         CardSet subSet = new CardSet(set.allCards);
         CardSet superSet = new CardSet(allCards);
@@ -317,6 +408,10 @@ public class CardSet {
         return true;
     }
 
+    /**
+     * @param set
+     * @return
+     */
     public CardSet diff(CardSet set) {
         CardSet diff = new CardSet(allCards);
 
@@ -327,16 +422,27 @@ public class CardSet {
         return diff;
     }
 
+    /**
+     * removes the given list of cards from this cardSet
+     *
+     * @param cards
+     */
     public void removeCards(ArrayList<Card> cards) {
         for (Card card : cards) {
             this.removeCard(card);
         }
     }
 
+    /**
+     * @param cardSet
+     */
     public void removeCards(CardSet cardSet) {
         removeCards(cardSet.allCards);
     }
 
+    /**
+     * removes all cards from allCards ArrayList
+     */
     public void removeAllCards() {
         while (!allCards.isEmpty()) {
             removeCard(allCards.get(0));

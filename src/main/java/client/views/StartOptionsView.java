@@ -6,25 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-
+/**
+ *
+ */
 public class StartOptionsView extends View {
-    private static StartOptionsView ourInstance = new StartOptionsView();
-
-    public static StartOptionsView getInstance() {
-        return ourInstance;
-    }
-
-    private StartOptionsView() {
-        super();
-        fxml = "/fxml/StartOptions.fxml";
-
-        try {
-            loadFxml();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * FXML INJECTIONS
+     */
     @FXML
     private TextField joinIp;
     @FXML
@@ -40,26 +28,68 @@ public class StartOptionsView extends View {
     @FXML
     private Text messageText;
 
+
+    /************************
+     **** PRIVATE STATICS ***
+     ************************/
+    private static StartOptionsView ourInstance = new StartOptionsView();
+
+
+    /***********************
+     ***** CONSTRUCTOR *****
+     ***********************/
+    private StartOptionsView() {
+        super();
+        fxml = "/fxml/StartOptions.fxml";
+
+        try {
+            loadFxml();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * GETTERS
+     */
+    /**
+     * get the instance
+     *
+     * @return
+     */
+    public static StartOptionsView getInstance() {
+        return ourInstance;
+    }
+
+    /**
+     * handles new game action event
+     *
+     * @param ae
+     */
     @FXML
-    public void onNewGame(ActionEvent ae){
+    public void onNewGame(ActionEvent ae) {
         int numberOfPlayers = Integer.parseInt(numOfPlayers.getText());
         int port = Integer.parseInt(newGamePort.getText());
 
         try {
-            ClientManager.getInstance().startServer(port,numberOfPlayers,adminUserName.getText());
-            messageText.setText("Started server at port "+ port);
+            ClientManager.getInstance().startServer(port, numberOfPlayers, adminUserName.getText());
+            messageText.setText("Started server at port " + port);
         } catch (Exception e) {
-            messageText.setText("Couldn't start server:"+ e.getMessage());
+            messageText.setText("Couldn't start server:" + e.getMessage());
         }
     }
 
+    /**
+     * handles join game action event
+     *
+     * @param ae
+     */
     @FXML
-    public void onJoinGame(ActionEvent ae){
+    public void onJoinGame(ActionEvent ae) {
         int port = Integer.parseInt(joinPort.getText());
         String ip = joinIp.getText();
 //        TODO: use the username
         String userNameText = userName.getText();
 
-        ClientManager.getInstance().loginServer(ip,port,userNameText);
+        ClientManager.getInstance().loginServer(ip, port, userNameText);
     }
 }

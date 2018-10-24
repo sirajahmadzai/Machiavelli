@@ -32,12 +32,16 @@ public class Player {
         pointValue = 0;
     }
 
+    /**
+     * GETTERS
+     */
+    /**
+     * gets the clientHandler object
+     *
+     * @return
+     */
     public ClientHandler getClientHandler() {
         return clientHandler;
-    }
-
-    public void setClientHandler(ClientHandler clientHandler) {
-        this.clientHandler = clientHandler;
     }
 
     /**
@@ -47,10 +51,6 @@ public class Player {
      */
     public int getSeatNumber() {
         return seatNumber;
-    }
-
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = seatNumber;
     }
 
     /**
@@ -90,7 +90,10 @@ public class Player {
     }
 
     /**
-     * sets hand
+     * SETTERS
+     */
+    /**
+     * sets this player's hand
      *
      * @param hand
      */
@@ -99,7 +102,7 @@ public class Player {
     }
 
     /**
-     * sets pointValue
+     * sets this player's pointValue
      *
      * @param pointValue
      */
@@ -107,7 +110,30 @@ public class Player {
         this.pointValue = pointValue;
     }
 
+    /**
+     * sets this player's name
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * sets this player's clientHandler object
+     *
+     * @param clientHandler
+     */
+    public void setClientHandler(ClientHandler clientHandler) {
+        this.clientHandler = clientHandler;
+    }
+
+    /**
+     * sets this player's seatNumber
+     *
+     * @param seatNumber
+     */
+    public void setSeatNumber(int seatNumber) {
+        this.seatNumber = seatNumber;
     }
 }

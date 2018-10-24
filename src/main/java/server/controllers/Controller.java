@@ -1,13 +1,18 @@
 package server.controllers;
 
 import server.models.Machiavelli;
-import server.models.cards.Card;
 
 public class Controller {
 
+    /**
+     * PRIVATES
+     */
     private Machiavelli machiavelli;
 
 
+    /**
+     * @param machiavelli
+     */
     public Controller(Machiavelli machiavelli) {
         this.machiavelli = machiavelli;
     }
