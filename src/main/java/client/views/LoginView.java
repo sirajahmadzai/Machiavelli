@@ -1,5 +1,6 @@
 package client.views;
 
+import interfaces.loginViewInterface;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,7 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class LoginView extends View {
+public class LoginView extends View implements loginViewInterface {
 
     /********************************
      ***** PRIVATE STATIC FINALS *****
@@ -178,7 +179,7 @@ public class LoginView extends View {
      *
      * @param gridPane
      */
-    private void setReflection(GridPane gridPane) {
+    public void setReflection(GridPane gridPane) {
         Reflection r = new Reflection();
         r.setFraction(0.7f);
         gridPane.setEffect(r);
@@ -190,7 +191,7 @@ public class LoginView extends View {
      *
      * @return
      */
-    private Effect dropShadowEffect() {
+    public Effect dropShadowEffect() {
         //DropShadow effect
         DropShadow dropShadow = new DropShadow();
         dropShadow.setOffsetX(5);

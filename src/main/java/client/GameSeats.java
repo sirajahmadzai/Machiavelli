@@ -42,8 +42,8 @@ public class GameSeats {
             positions[1] = PlayerPosition.TOP;
         }
 
-//        Place dummy players clockwise around the table.
-//        First one is the owner of this client's hand so it's placed at the bottom.
+        //Place dummy players clockwise around the table.
+        //First one is the owner of this client's hand so it's placed at the bottom.
         for (int i = 0; i < numberOfPlayers; i++) {
             Player player = new Player();
 

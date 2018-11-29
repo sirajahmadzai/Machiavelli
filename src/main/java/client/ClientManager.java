@@ -174,7 +174,7 @@ public class ClientManager {
      * @param port
      * @param name
      */
-    private void loginServer(int port, String name) {
+    public void loginServer(int port, String name) {
         try {
             loginServer(new Client(this, port, name));
         } catch (IOException e) {

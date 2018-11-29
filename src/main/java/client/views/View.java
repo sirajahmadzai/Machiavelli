@@ -8,12 +8,16 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import utils.constants;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.net.URL;
+
+import static utils.constants.HOME_BACKGROUND_FILENAME;
+import static utils.constants.GREY_BTN_STYLE;
 
 
 public abstract class View {
@@ -28,8 +32,7 @@ public abstract class View {
     /*****************************
      ****PRIVATE STATIC FINALS****
      *****************************/
-    private static final String HOME_BACKGROUND_FILENAME = "game.jpg";
-    private static final String GREY_BTN_STYLE = "-fx-base: orange; -fx-text-fill: black;";
+
 
     private static final int BTN_MAX_WIDTH = 120;
     private static final int BTN_MAX_HEIGHT = 60;

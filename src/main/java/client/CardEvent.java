@@ -2,10 +2,12 @@ package client;
 
 import client.views.components.CardSetView;
 import client.views.components.CardView;
+import interfaces.cardEventInterface;
 import javafx.event.Event;
 import javafx.event.EventType;
+import utils.constants;
 
-public class CardEvent extends Event {
+public class CardEvent extends Event implements cardEventInterface {
     /**
      * PRIVATES
      */
@@ -14,9 +16,9 @@ public class CardEvent extends Event {
     /**
      * PRIVATE STATIC FINALS
      */
-    public static final EventType<CardEvent> CARD_ADDED = new EventType<CardEvent>("CARD_ADDED");
-    public static final EventType<CardEvent> CARD_REMOVED = new EventType<CardEvent>("CARD_REMOVED");
-    public static final EventType<CardEvent> CARD_SELECTED = new EventType<CardEvent>("CARD_SELECTED");
+    public static final EventType<CardEvent> CARD_ADDED = new EventType<CardEvent>(constants.CARD_ADDED);
+    public static final EventType<CardEvent> CARD_REMOVED = new EventType<CardEvent>(constants.CARD_REMOVED);
+    public static final EventType<CardEvent> CARD_SELECTED = new EventType<CardEvent>(constants.CARD_SELECTED);
 
     /**
      * CONSTRUCTOR

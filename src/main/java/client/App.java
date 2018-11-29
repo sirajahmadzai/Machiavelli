@@ -5,6 +5,7 @@ import client.views.LoginView;
 import client.views.StartOptionsView;
 import client.views.View;
 import commands.Command;
+import interfaces.appInterface;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,17 +15,18 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tests.testController.LoginViewControllerTest;
+import utils.constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class App extends Application {
+public class App extends Application implements appInterface {
 
     /*******************************
      **** PRIVATE STATIC FINALS ****
      *******************************/
-    private static final String TITLE = "Machiavelli";
+
     private static final int MIN_WIDTH = 800;
     public static final int MIN_HEIGHT = (int) (MIN_WIDTH * 0.66);
 
@@ -102,7 +104,7 @@ public class App extends Application {
     /**
      * sets up the root layout
      */
-    private void initRootLayout() {
+    public void initRootLayout() {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
@@ -114,7 +116,7 @@ public class App extends Application {
             scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
 
-            primaryStage.setTitle(TITLE);
+            primaryStage.setTitle(constants.TITLE);
             primaryStage.setMaximized(true);
             // primaryStage.setResizable(false);
             primaryStage.show();
