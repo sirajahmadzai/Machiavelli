@@ -1,6 +1,5 @@
-package client;
+package interfaces;
 
-import interfaces.viewHelperInterface;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -10,16 +9,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ViewHelper implements viewHelperInterface {
-    private static Map<String, Image> imageCache = new HashMap<>();
+public interface viewHelperInterface {
+    static Map<String, Image> imageCache = new HashMap<>();
 
-    /**
-     * gets the image from resource
-     *
-     * @param resource
-     * @return Image
-     */
-    public static Image getImage(String resource) {
+    public static Image getImage(String resource)
+    {
         if (imageCache.containsKey(resource)) {
             return imageCache.get(resource);
         }
@@ -42,4 +36,5 @@ public class ViewHelper implements viewHelperInterface {
         imageCache.put(resource, thisImage);
         return thisImage;
     }
+
 }

@@ -4,6 +4,7 @@ import commands.Command;
 import commands.CommandFactory;
 import commands.server.PlayerLogin;
 import commands.server.PlayerMove;
+import interfaces.clientInterface;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
@@ -13,7 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client extends Task<Void>/* implements Runnable*/ {
+public class Client extends Task<Void> implements clientInterface/* implements Runnable*/ {
 
     /****************
      ****PRIVATES****

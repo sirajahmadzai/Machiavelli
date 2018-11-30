@@ -1,13 +1,14 @@
 package client;
 
 import client.views.components.CardView;
+import interfaces.selectionManagerInterface;
 import server.models.CardSet;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
 
 
-public class SelectionManager {
+public class SelectionManager implements selectionManagerInterface {
     /**
      * PRIVATES
      */
@@ -45,7 +46,7 @@ public class SelectionManager {
     /**
      * @param cardView
      */
-    private void selectCard(CardView cardView) {
+    public void selectCard(CardView cardView) {
         selectedCards.add(cardView);
         selectedCardsSet.addCard(cardView.getCard());
         cardView.setSelected(true);
@@ -54,7 +55,7 @@ public class SelectionManager {
     /**
      * @param cardView
      */
-    private void deselectCard(CardView cardView) {
+    public void deselectCard(CardView cardView) {
         selectedCards.remove(cardView);
         selectedCardsSet.removeCard(cardView.getCard());
         cardView.setSelected(false);
@@ -73,7 +74,7 @@ public class SelectionManager {
     /**
      *
      */
-    private void clearSelections() {
+    public void clearSelections() {
         for (CardView cardView : selectedCards) {
             cardView.setSelected(false);
         }

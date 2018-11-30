@@ -6,6 +6,7 @@ import client.views.components.CardSetView;
 import client.views.components.CardView;
 import commands.server.PassTurn;
 import commands.server.PlayerMove;
+import interfaces.clientManagerInterface;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -18,7 +19,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-public class ClientManager {
+import static utils.constants.PORT_ERROR_MESSAGE;
+
+public class ClientManager implements clientManagerInterface {
     /**
      * PRIVATE STATIC FINALS
      */
@@ -85,7 +88,7 @@ public class ClientManager {
      */
     public void startServer(int port, int numberOfPlayers, String adminName) throws Exception {
         if (serverStarted) {
-            throw new UnsupportedOperationException("A game server is already started at port " + server.getPort());
+            throw new UnsupportedOperationException(PORT_ERROR_MESSAGE + server.getPort());
         }
         try {
             //This is the admin of the game. The admin starts the server and waits for other players to join.
