@@ -131,6 +131,7 @@ public class Machiavelli {
             return card;
         } catch (EmptyStackException e) {
             throw new EmptyDeckException();
+
         }
     }
 

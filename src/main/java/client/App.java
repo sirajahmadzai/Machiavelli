@@ -7,6 +7,8 @@ import client.views.View;
 import commands.Command;
 import interfaces.appInterface;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import tests.testController.LoginViewControllerTest;
 import utils.constants;
 
@@ -82,6 +85,13 @@ public class App extends Application implements appInterface {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
+        this.primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         initRootLayout();
 
         ClientManager.getInstance().setStage(primaryStage);
@@ -89,16 +99,7 @@ public class App extends Application implements appInterface {
 
         ClientManager.getInstance().showView(StartOptionsView.getInstance());
 
-//        showView();
-//        showLoginView();
-//        showGameView(4);
-//        showWaitingView();
 
-        //this is for networked version
-//        loginView = new LoginView();
-//        loginView.addBtnLoginAction(event -> {
-//            ClientManager.getInstance().loginServer(loginView.getIp(), loginView.getPort());
-//        });
     }
 
     /**

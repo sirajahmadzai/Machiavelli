@@ -167,7 +167,7 @@ public class ClientManager implements clientManagerInterface {
 //        new GameViewControllerTest(this.app, gameView);
         gameView.setPlayerCount(numberOfPlayers);
         showView(gameView);
-        gameView.fillDeck();
+
 
         //TODO: Check if the table is full.
 //        pushView(WaitingForOtherPlayersView.getInstance());
@@ -224,6 +224,13 @@ public class ClientManager implements clientManagerInterface {
             gameView.setOwnerPlayer(playerId, seatNumber);
         }
         gameView.fillSeat(playerName, playerId, seatNumber);
+
+        if(gameView.getPlayerCount()>1)
+        {
+
+            gameView.fillDeck();
+
+        }
     }
 
     /**

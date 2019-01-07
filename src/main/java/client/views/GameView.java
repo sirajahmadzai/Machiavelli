@@ -132,6 +132,7 @@ public class GameView extends View {
         deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
         deckImageView.setVisible(false);
         deckImageView.setOnMouseClicked(event -> ClientManager.getInstance().endTurn(event));
+        revertButton.setVisible(false);
         setMessage("Waiting for other players to join.");
     }
 
@@ -252,6 +253,7 @@ public class GameView extends View {
      * @param seatNumber
      */
     public void fillSeat(String playerName, int playerId, int seatNumber) {
+
         seats.setPlayerInfo(seatNumber, playerName, playerId);
     }
 
@@ -273,6 +275,8 @@ public class GameView extends View {
         for (int i = 1; i <= playerCount; i++) {
             seats.getPlayer(i).setActive(i == seatNumber);
         }
+        if(!revertButton.isVisible())
+            revertButton.setVisible(true);
         if (seatNumber == getOwnerSeat()) {
             setMessage("It's your turn. Click on the deck when you're done.");
         } else {
