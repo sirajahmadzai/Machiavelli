@@ -131,6 +131,7 @@ public class GameSeats {
                 seatNo = 1;
             }
         }
+
         ownerPlayer.getHand().setInteractive(true);
     }
 
@@ -150,6 +151,12 @@ public class GameSeats {
      */
     public ArrayList<Player> getOpponents() {
         return opponents;
+    }
+
+    public ArrayList<Player> getTotalPlayers()
+    {
+
+        return  players;
     }
 
     /**

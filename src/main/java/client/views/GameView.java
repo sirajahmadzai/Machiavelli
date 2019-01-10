@@ -94,7 +94,7 @@ public class GameView extends View {
      * @return
      */
     public int getPlayerCount() {
-        return playerCount;
+        return seats.getTotalPlayers().size();
     }
 
     /**
@@ -136,11 +136,19 @@ public class GameView extends View {
         setMessage("Waiting for other players to join.");
     }
 
-    /**
-     * set the text for messageBox
-     *
-     * @param message
-     */
+
+
+    public int getTotalPlayers()
+    {
+
+        return seats.getOpponents().size();
+
+    }
+
+    public  void removePlayer()
+    {
+
+    }
     public void setMessage(String message) {
         messageBox.setText(message);
     }
@@ -287,8 +295,12 @@ public class GameView extends View {
         for (int i = 1; i <= playerCount; i++) {
             seats.getPlayer(i).setActive(i == seatNumber);
         }
-        if(!revertButton.isVisible())
+        if(!revertButton.isVisible()) {
             revertButton.setVisible(true);
+            fillDeck();
+        }
+
+
         if (seatNumber == getOwnerSeat()) {
             setMessage("It's your turn. Click on the deck when you're done.");
         } else {

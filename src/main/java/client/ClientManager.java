@@ -158,6 +158,9 @@ public class ClientManager implements clientManagerInterface {
         this.client = client;
         clientThread.start();
         joinedGame = true;
+
+        //gameView.fillDeck();
+
     }
 
     /**
@@ -220,17 +223,17 @@ public class ClientManager implements clientManagerInterface {
      * @param owner
      */
     public void introducePlayer(String playerName, int playerId, int seatNumber, boolean owner) {
+
         if (owner) {
             gameView.setOwnerPlayer(playerId, seatNumber);
         }
+        else
+        {
+
+        }
         gameView.fillSeat(playerName, playerId, seatNumber);
 
-//        if(gameView.getPlayerCount()>1)
-//        {
-//
-//            gameView.fillDeck();
-//
-//        }
+
     }
 
     /**
@@ -245,12 +248,7 @@ public class ClientManager implements clientManagerInterface {
         }
         gameView.removeSeat(playerName, playerId, seatNumber);
 
-//        if(gameView.getPlayerCount()>1)
-//        {
-//
-//            gameView.fillDeck();
-//
-//        }
+
     }
 
     /**
@@ -323,6 +321,12 @@ public class ClientManager implements clientManagerInterface {
 //      Can't make the move, invalid sets on table.
         if (!gameView.getPlayArea().isValid(MINIMUM_SET_SIZE)) {
             gameView.setMessage("Not a valid play!");
+
+            return true;
+        }
+        if(lastHand.totalCount()<=0)
+        {
+            gameView.setMessage("Hurray!!! You are the winner.");
             return false;
         }
 
