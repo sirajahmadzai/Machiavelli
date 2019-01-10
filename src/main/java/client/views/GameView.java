@@ -257,6 +257,18 @@ public class GameView extends View {
         seats.setPlayerInfo(seatNumber, playerName, playerId);
     }
 
+    /**
+     * Add new player to specified seat.
+     *
+     * @param playerName
+     * @param playerId
+     * @param seatNumber
+     */
+    public void removeSeat(String playerName, int playerId, int seatNumber) {
+
+        //seats.setPlayerInfo(seatNumber, playerName, playerId);
+    }
+
 
     /**
      *

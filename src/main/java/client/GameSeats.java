@@ -103,6 +103,16 @@ public class GameSeats {
     }
 
     /**
+     * gets the player at the specified seatNumber
+     *
+     * @param seatNumber
+     * @return
+     */
+    public Player removePlayer(int seatNumber) {
+        return seats.remove(seatNumber);
+    }
+
+    /**
      * @param ownerSeatNumber
      * @param ownerId
      */

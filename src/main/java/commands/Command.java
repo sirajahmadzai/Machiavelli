@@ -84,6 +84,8 @@ public abstract class Command {
         parameters.add(param);
     }
 
+    protected  void removeParameter (Object param){ parameters.remove(param);}
+
     /**
      * Creates a scanner for parsing the command and parses just the name of the command.
      * This behaviour is shared in all subclasses.
@@ -180,7 +182,8 @@ public abstract class Command {
         TABLE_IS_FULL(CLIENT_COMMAND),
         SWITCH_TURN(CLIENT_COMMAND, SwitchTurn.class),
         WHO_ARE_YOU(CLIENT_COMMAND),
-        DRAW_CARD(CLIENT_COMMAND, DrawCard.class);
+        DRAW_CARD(CLIENT_COMMAND, DrawCard.class),
+        REMOVE_PLAYER(CLIENT_COMMAND, RemovePlayer.class);
 
 
         /**

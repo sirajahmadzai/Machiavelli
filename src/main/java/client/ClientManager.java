@@ -225,12 +225,32 @@ public class ClientManager implements clientManagerInterface {
         }
         gameView.fillSeat(playerName, playerId, seatNumber);
 
-        if(gameView.getPlayerCount()>1)
-        {
+//        if(gameView.getPlayerCount()>1)
+//        {
+//
+//            gameView.fillDeck();
+//
+//        }
+    }
 
-            gameView.fillDeck();
-
+    /**
+     * @param playerName
+     * @param playerId
+     * @param seatNumber
+     * @param owner
+     */
+    public void removePlayer(String playerName, int playerId, int seatNumber, boolean owner) {
+        if (owner) {
+            gameView.setOwnerPlayer(playerId, seatNumber);
         }
+        gameView.removeSeat(playerName, playerId, seatNumber);
+
+//        if(gameView.getPlayerCount()>1)
+//        {
+//
+//            gameView.fillDeck();
+//
+//        }
     }
 
     /**
