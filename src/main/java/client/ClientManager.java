@@ -226,9 +226,7 @@ public class ClientManager implements clientManagerInterface {
 
         if (owner) {
             gameView.setOwnerPlayer(playerId, seatNumber);
-        }
-        else
-        {
+        } else {
 
         }
         gameView.fillSeat(playerName, playerId, seatNumber);
@@ -324,8 +322,7 @@ public class ClientManager implements clientManagerInterface {
 
             return true;
         }
-        if(lastHand.totalCount()<=0)
-        {
+        if (lastHand.totalCount() <= 0) {
             gameView.setMessage("Hurray!!! You are the winner.");
             return false;
         }

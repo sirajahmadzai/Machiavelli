@@ -36,7 +36,7 @@ public class IntroducePlayer extends ClientCommand {
      * CONSTUCTOR
      *
      * @param playerName name of the new player
-     * @param playerId id of the new player
+     * @param playerId   id of the new player
      * @param seatNumber the seat number of the new player.
      */
     public IntroducePlayer(String playerName, int playerId, int seatNumber) {

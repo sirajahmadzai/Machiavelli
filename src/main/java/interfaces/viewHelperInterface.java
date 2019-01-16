@@ -12,8 +12,7 @@ import java.util.Map;
 public interface viewHelperInterface {
     static Map<String, Image> imageCache = new HashMap<>();
 
-    public static Image getImage(String resource)
-    {
+    public static Image getImage(String resource) {
         if (imageCache.containsKey(resource)) {
             return imageCache.get(resource);
         }

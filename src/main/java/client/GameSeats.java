@@ -153,10 +153,9 @@ public class GameSeats {
         return opponents;
     }
 
-    public ArrayList<Player> getTotalPlayers()
-    {
+    public ArrayList<Player> getTotalPlayers() {
 
-        return  players;
+        return players;
     }
 
     /**

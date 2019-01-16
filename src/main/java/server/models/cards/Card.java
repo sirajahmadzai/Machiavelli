@@ -5,7 +5,7 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.Objects;
 
-public class  Card implements Comparable<Card> {
+public class Card implements Comparable<Card> {
 
     /***************************************
      ************ PRIVATES *****************

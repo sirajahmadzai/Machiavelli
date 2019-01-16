@@ -6,9 +6,9 @@ public class constants {
 
     //Card Events Constants
 
-    public static  final String CARD_ADDED = "CARD_ADDED";
-    public static  final String CARD_REMOVED = "CARD_REMOVED";
-    public static  final String CARD_SELECTED = "CARD_SELECTED";
+    public static final String CARD_ADDED = "CARD_ADDED";
+    public static final String CARD_REMOVED = "CARD_REMOVED";
+    public static final String CARD_SELECTED = "CARD_SELECTED";
 
     //View Constants
 

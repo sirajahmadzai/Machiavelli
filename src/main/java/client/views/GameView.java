@@ -137,18 +137,16 @@ public class GameView extends View {
     }
 
 
-
-    public int getTotalPlayers()
-    {
+    public int getTotalPlayers() {
 
         return seats.getOpponents().size();
 
     }
 
-    public  void removePlayer()
-    {
+    public void removePlayer() {
 
     }
+
     public void setMessage(String message) {
         messageBox.setText(message);
     }
@@ -295,7 +293,7 @@ public class GameView extends View {
         for (int i = 1; i <= playerCount; i++) {
             seats.getPlayer(i).setActive(i == seatNumber);
         }
-        if(!revertButton.isVisible()) {
+        if (!revertButton.isVisible()) {
             revertButton.setVisible(true);
             fillDeck();
         }

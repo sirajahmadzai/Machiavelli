@@ -38,9 +38,9 @@ public class PlayerMove extends BasicCommand {
     /**
      * CONSTRUCTOR
      *
-     * @param seatNumber the seat number of the player who made the move
+     * @param seatNumber  the seat number of the player who made the move
      * @param playedCards the cards player puts on the table from his hand.
-     * @param table resulting sets of cards that are on the table after the proposed move has been made.
+     * @param table       resulting sets of cards that are on the table after the proposed move has been made.
      */
     public PlayerMove(int seatNumber, CardSet playedCards, List<CardSet> table) {
         this();

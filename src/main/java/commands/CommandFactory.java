@@ -56,6 +56,7 @@ public class CommandFactory {
 
     /**
      * Parses the name part of the command string and creates a CommandName enum from that.
+     *
      * @return CommandName enum
      */
     private static Command.CommandNames parseName() {

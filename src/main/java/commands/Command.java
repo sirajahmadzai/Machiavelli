@@ -14,7 +14,6 @@ import static commands.Command.CommandTypes.SERVER_COMMAND;
 
 /**
  * Base class for both server and client commands.
- *
  */
 public abstract class Command {
 
@@ -78,17 +77,21 @@ public abstract class Command {
     /**
      * Adds a new parameter to the command.
      * These parameters are used when serializing the command.
+     *
      * @param param parameter to add.
      */
     protected void addParameter(Object param) {
         parameters.add(param);
     }
 
-    protected  void removeParameter (Object param){ parameters.remove(param);}
+    protected void removeParameter(Object param) {
+        parameters.remove(param);
+    }
 
     /**
      * Creates a scanner for parsing the command and parses just the name of the command.
      * This behaviour is shared in all subclasses.
+     *
      * @param commandStr
      */
     private void parseName(String commandStr) {
@@ -103,6 +106,7 @@ public abstract class Command {
 
     /**
      * Parses command string and adds all parameters to this command.
+     *
      * @param commandStr the string to be parsed.
      */
     void parse(String commandStr) {
@@ -119,6 +123,7 @@ public abstract class Command {
 
     /**
      * Serializes the command into string. This method is used while exchenging the commands between server and client.
+     *
      * @return
      */
     public String serialize() {
@@ -147,6 +152,7 @@ public abstract class Command {
 
     /**
      * Parse the given command string and initialize command parameters.
+     *
      * @param commandStr
      */
     public abstract void doParse(String commandStr);
@@ -194,7 +200,7 @@ public abstract class Command {
 
         /**
          * CONSTRUCTOR
-         *
+         * <p>
          * Initialize the command name using command type and command class.
          * The clazz is used to create concrete command instances from command strings.
          *
@@ -208,7 +214,7 @@ public abstract class Command {
 
         /**
          * CONSTRUCTOR
-         *
+         * <p>
          * Initialize the command name using only the command type.
          *
          * @param type

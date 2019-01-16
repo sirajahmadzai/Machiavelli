@@ -24,7 +24,7 @@ public class DealHands extends ClientCommand {
      * CONSTRUCTOR
      *
      * @param seatNumber the seat number of the player
-     * @param hand the cards dealt to the player.
+     * @param hand       the cards dealt to the player.
      */
     public DealHands(int seatNumber, CardSet hand) {
         this();

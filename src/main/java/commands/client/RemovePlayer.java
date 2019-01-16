@@ -37,7 +37,7 @@ public class RemovePlayer extends ClientCommand {
      * CONSTUCTOR
      *
      * @param playerName name of the new player
-     * @param playerId id of the new player
+     * @param playerId   id of the new player
      * @param seatNumber the seat number of the new player.
      */
     public RemovePlayer(String playerName, int playerId, int seatNumber) {

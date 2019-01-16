@@ -25,7 +25,7 @@ public class DrawCard extends ClientCommand {
      * CONSTRUCTOR
      *
      * @param seatNumber the seat number of the player who draws a card.
-     * @param card the card drawn from the deck.
+     * @param card       the card drawn from the deck.
      */
     public DrawCard(int seatNumber, String card) {
         this();
