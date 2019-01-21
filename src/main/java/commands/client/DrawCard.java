@@ -1,7 +1,6 @@
 package commands.client;
 
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import server.models.cards.Card;
 
 /**
@@ -51,7 +50,7 @@ public class DrawCard extends ClientCommand {
     protected void doExecute() {
         try {
             manager.drawCard(seatNumber, Card.fromString(card));
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

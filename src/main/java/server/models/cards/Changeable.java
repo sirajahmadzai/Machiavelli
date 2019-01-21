@@ -1,7 +1,5 @@
 package server.models.cards;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 /**
  *
  */
@@ -18,7 +16,7 @@ public abstract class Changeable extends Card {
      * @param suit
      * @param rank
      */
-    public Changeable(Suit suit, int rank, int id) throws InvalidArgumentException {
+    public Changeable(Suit suit, int rank, int id) throws IllegalArgumentException {
         super(suit, rank, id);
         initialRank = rank;
     }

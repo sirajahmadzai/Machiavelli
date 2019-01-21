@@ -4,6 +4,7 @@ import commands.BasicCommand;
 import commands.Command;
 import commands.client.*;
 import commands.server.PlayerMove;
+import commands.server.WinnerCommand;
 import server.ClientHandler;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
@@ -13,6 +14,8 @@ import java.util.EmptyStackException;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static commands.Command.CommandNames.SET_WINNER;
 
 /**
  *
@@ -475,6 +478,14 @@ public class Machiavelli {
         switchTurn();
 
         return true;
+    }
+
+    public void setWinner()
+    {
+
+        Command setWinner = new WinnerCommand(SET_WINNER);
+
+        sendCommandToAllPlayers(setWinner);
     }
 
     /**

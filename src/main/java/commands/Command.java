@@ -4,6 +4,7 @@ import commands.client.*;
 import commands.server.PassTurn;
 import commands.server.PlayerLogin;
 import commands.server.PlayerMove;
+import commands.server.WinnerCommand;
 
 import java.util.Scanner;
 import java.util.Stack;
@@ -181,6 +182,7 @@ public abstract class Command {
         PLAYER_MOVE(SERVER_COMMAND, PlayerMove.class),
         PASS_TURN(SERVER_COMMAND, PassTurn.class),
         PLAYER_LOGIN(SERVER_COMMAND, PlayerLogin.class),
+        SET_WINNER(SERVER_COMMAND, WinnerCommand.class),
 
         //      CLIENT_COMMANDS
         INTRODUCE_PLAYER(CLIENT_COMMAND, IntroducePlayer.class),
@@ -189,6 +191,7 @@ public abstract class Command {
         SWITCH_TURN(CLIENT_COMMAND, SwitchTurn.class),
         WHO_ARE_YOU(CLIENT_COMMAND),
         DRAW_CARD(CLIENT_COMMAND, DrawCard.class),
+
         REMOVE_PLAYER(CLIENT_COMMAND, RemovePlayer.class);
 
 

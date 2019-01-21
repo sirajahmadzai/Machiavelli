@@ -1,6 +1,5 @@
 package server;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 import server.models.Player;
 import server.models.cards.*;
@@ -76,7 +75,7 @@ public class PlayerTest {
             assertEquals("getHand() != PLAYER_HAND", PLAYER_HAND, PLAYER.getHand());
             assertEquals("getPointValue() != POINT_VALUE", POINT_VALUE, PLAYER.getPointValue());
 
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception!");
         }
     }
@@ -103,7 +102,7 @@ public class PlayerTest {
 
 
             assertEquals("getHand() != PLAYER_HAND", PLAYER_HAND, PLAYER.getHand());
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception!");
         }
 

@@ -88,6 +88,9 @@ public class Client extends Task<Void> implements clientInterface/* implements R
                     case WHO_ARE_YOU:
                         sendCommandToServer(new PlayerLogin(this.playerName));
                         break;
+                    case SET_WINNER:
+                        Platform.runLater(()->manager.setWinner());
+                        break;
                     default:
                         command.execute();
                 }

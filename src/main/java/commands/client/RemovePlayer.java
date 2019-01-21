@@ -1,8 +1,6 @@
 
 package commands.client;
 
-import commands.Command;
-
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 

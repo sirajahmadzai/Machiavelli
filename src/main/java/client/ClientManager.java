@@ -4,8 +4,10 @@ import client.views.GameView;
 import client.views.View;
 import client.views.components.CardSetView;
 import client.views.components.CardView;
+import commands.Command;
 import commands.server.PassTurn;
 import commands.server.PlayerMove;
+import commands.server.WinnerCommand;
 import interfaces.clientManagerInterface;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -300,6 +302,8 @@ public class ClientManager implements clientManagerInterface {
     }
 
     public boolean endTurn(MouseEvent event) {
+
+
         if (!isOwnerTurn()) {
             return false;
         }
@@ -321,8 +325,12 @@ public class ClientManager implements clientManagerInterface {
 
             return true;
         }
+
+        // User is the winner
         if (lastHand.totalCount() <= 0) {
             gameView.setMessage("Hurray!!! You are the winner.");
+            WinnerCommand win = new WinnerCommand(Command.CommandNames.SET_WINNER);
+            client.sendCommandToServer(win);
             return false;
         }
 
@@ -331,9 +339,15 @@ public class ClientManager implements clientManagerInterface {
         CardSet playedCards = prevHand.diff(lastHand);
         PlayerMove move = new PlayerMove(gameView.getOwnerSeat(), playedCards, table);
 
+
         client.sendCommandToServer(move);
 
         return true;
+    }
+
+    public void setWinner()
+    {
+        gameView.setMessage("You've lost the game, better luck next time :)");
     }
 
     public void switchTurn(int seatNumber) {

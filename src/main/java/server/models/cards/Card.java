@@ -1,8 +1,6 @@
 package server.models.cards;
 
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 import java.util.Objects;
 
 public class Card implements Comparable<Card> {
@@ -20,6 +18,7 @@ public class Card implements Comparable<Card> {
     protected boolean joker = false;
     public static final String BACK_OF_CARD_IMAGE = "images/b.png";
     public static final String DROP_TARGET_IMAGE = "images/dropTarget.png";
+    public static final String NO_CARD_IMAGE = "images/nocards.png";
 
     /******************************
      ********** PROTECTS ********
@@ -33,9 +32,9 @@ public class Card implements Comparable<Card> {
      * @param rank
      * @param id
      */
-    public Card(Suit suit, int rank, int id) throws InvalidArgumentException {
-        if (id < 0) throw new InvalidArgumentException(new String[]{"Invalid id"});
-        if (suit == null) throw new InvalidArgumentException(new String[]{"Suit was null"});
+    public Card(Suit suit, int rank, int id) throws IllegalArgumentException {
+        if (id < 0) throw new IllegalArgumentException("Invalid id");
+        if (suit == null) throw new IllegalArgumentException("Suit was null");
         this.suit = suit;
         this.pointValue = getCardValueByInitialRank(rank);
         this.name = getCardNameByInitialRank(rank);
@@ -47,9 +46,9 @@ public class Card implements Comparable<Card> {
     /**
      * @param cardText
      * @return
-     * @throws InvalidArgumentException
+     * @throws IllegalArgumentException
      */
-    public static Card fromString(String cardText) throws InvalidArgumentException {
+    public static Card fromString(String cardText) throws IllegalArgumentException {
         Suit suit = Suit.JOKER;
         int rank = 0;
 
@@ -149,16 +148,16 @@ public class Card implements Comparable<Card> {
      *
      * @param rank
      * @return
-     * @throws InvalidArgumentException
+     * @throws IllegalArgumentException
      */
-    private String getCardNameByInitialRank(int rank) throws InvalidArgumentException {
+    private String getCardNameByInitialRank(int rank) throws IllegalArgumentException {
         if (rank >= 2 && rank <= 10) return String.valueOf(rank);
         if (rank == 11) return "Jack";
         else if (rank == 12) return "Queen";
         else if (rank == 13) return "King";
         else if (rank == 1 || rank == 14) return "Ace";
         else if (rank == 15) return "Joker";
-        else throw new InvalidArgumentException(new String[]{"invalid rank"});
+        else throw new IllegalArgumentException("invalid rank");
     }
 
     /**
@@ -166,14 +165,14 @@ public class Card implements Comparable<Card> {
      *
      * @param rank
      * @return
-     * @throws InvalidArgumentException
+     * @throws IllegalArgumentException
      */
-    private int getCardValueByInitialRank(int rank) throws InvalidArgumentException {
+    private int getCardValueByInitialRank(int rank) throws IllegalArgumentException {
         if (rank >= 2 && rank <= 10) return rank;
         else if (rank > 10 && rank < 14) return 10;
         else if (rank == 1 || rank == 14) return 15;
         else if (rank == 15) return 20;
-        else throw new InvalidArgumentException(new String[]{"invalid rank"});
+        else throw new IllegalArgumentException("invalid rank");
     }
 
     /**

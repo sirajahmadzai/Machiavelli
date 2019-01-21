@@ -1,6 +1,5 @@
 package server;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 import server.models.CardSet;
 import server.models.Machiavelli;
@@ -114,7 +113,7 @@ public class MachiavelliTest {
 
             assertEquals("drawCardFromDeck() != CARD1", -1, TABLE.getDeck().indexOf(CARD2));
 //            assertEquals("", CARD2, GAME.getPlayers().get(PLAYER1_ID).getHand().get(GAME.getPlayers().get(PLAYER1_ID).getHand().size() - 1));
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }
@@ -163,7 +162,7 @@ public class MachiavelliTest {
 //            assertEquals(EXPECTED_CARD, CARD_REMOVED);
 //
 //            assertEquals("", -1, GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().indexOf(EXPECTED_CARD));
-//        } catch (InvalidArgumentException e) {
+//        } catch (IllegalArgumentException e) {
 //            fail("Unexpected Exception");
 //        }
 
@@ -228,7 +227,7 @@ public class MachiavelliTest {
 //
 //            GAME.getPlayers().get(INDEX_OF_PLAYER1).getHand().add(TABLE.getCardSets().get(INDEX_OF_SET).getCards().get(INDEX_OF_EXPECTED_CARD));
 //            assertEquals("playCardFromPlayArea() != CARD_ADDED", EXPECTED_CARD, );
-//        } catch (InvalidArgumentException e) {
+//        } catch (IllegalArgumentException e) {
 //            fail("Unexpected Exception");
 //        }
 //
@@ -321,7 +320,7 @@ public class MachiavelliTest {
             assertEquals("CARD4 != last card in CARD_SET_TO_KEEP", CARD8, TABLE.getCardSets().get(INDEX_OF_CARD_SET_TO_KEEP).getCards().get(EXPECTED_INDEX_OF_CARD8));
 
 
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }
@@ -383,7 +382,7 @@ public class MachiavelliTest {
             assertEquals("card at INDEX_OF_CARD2 != CARD2", CARD2, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD2));
             assertEquals("card at INDEX_OF_CARD3 != CARD3", CARD3, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD3));
             assertEquals("card at INDEX_OF_CARD4 != CARD4", CARD4, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD4));
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }
@@ -450,7 +449,7 @@ public class MachiavelliTest {
             assertEquals("card at INDEX_OF_CARD3 != CARD3", CARD3, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD3));
             assertEquals("card at INDEX_OF_CARD4 != CARD4", CARD4, GAME.getTable().getCardSets().get(INDEX_OF_SET2).getCards().get(INDEX_OF_CARD4));
             assertEquals("", CARD_TO_REMOVE, TABLE.getCardsInPlay().get(TABLE.getCardsInPlay().size() - 1));
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
 
@@ -502,7 +501,7 @@ public class MachiavelliTest {
             assertEquals("CARD1 != card after CARD_TO_PREPEND", 2, CARD_SET.getCards().get(1).getId());
 
 
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }
@@ -553,7 +552,7 @@ public class MachiavelliTest {
 
             assertEquals("last card in CARD_SET != CARD_TO_APPEND ", CARD_TO_APPEND, CARD_SET.getCards().get(CARD_SET.getCards().size() - 1));
             assertEquals("CARD != second last card in CARD_SET", 4, CARD_SET.getCards().get(CARD_SET.getCards().size() - 2).getId());
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }

@@ -1,6 +1,5 @@
 package server.models.cards;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -26,7 +25,7 @@ public class JokerTest {
             assertEquals("getName() != EXPECTED_NAME", EXPECTED_NAME, JOKER_CARD.getName());
             assertEquals("getRank() != RANK", RANK, JOKER_CARD.getRank());
             assertEquals("getId() != CARD_ID", CARD_ID, JOKER_CARD.getId());
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
 
@@ -61,7 +60,7 @@ public class JokerTest {
             } catch (Card.InvalidCardRankException e) {
                 //passed
             }
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }

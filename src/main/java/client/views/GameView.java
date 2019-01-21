@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import server.models.CardSet;
+import server.models.Machiavelli;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
 
@@ -55,6 +56,8 @@ public class GameView extends View {
      */
     // instance of GameView
     private static GameView ourInstance = new GameView();
+
+    private static Machiavelli machiavelli = Machiavelli.getInstance();
 
 
     /*************************************************************
@@ -290,12 +293,25 @@ public class GameView extends View {
      * @param seatNumber
      */
     public void switchTurn(int seatNumber) {
+
+
+
         for (int i = 1; i <= playerCount; i++) {
             seats.getPlayer(i).setActive(i == seatNumber);
         }
         if (!revertButton.isVisible()) {
             revertButton.setVisible(true);
             fillDeck();
+        }
+
+        if(machiavelli.getTable().getDeck().size()<=0)
+        {
+            deckImageView.setImage(ViewHelper.getImage(Card.NO_CARD_IMAGE));
+        }
+        else
+
+        {
+            deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
         }
 
 

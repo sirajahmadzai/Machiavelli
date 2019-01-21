@@ -1,6 +1,5 @@
 package server.models;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import server.models.cards.Ace;
 import server.models.cards.Card;
 import server.models.cards.Suit;
@@ -54,7 +53,7 @@ public class CardSet {
             for (String c : cards) {
                 this.addCard(Card.fromString(c));
             }
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

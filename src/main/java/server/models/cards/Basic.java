@@ -1,7 +1,5 @@
 package server.models.cards;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 public class Basic extends Card {
 
     /**
@@ -10,7 +8,7 @@ public class Basic extends Card {
      * @param suit
      * @param rank
      */
-    public Basic(Suit suit, int rank, int id) throws InvalidArgumentException {
+    public Basic(Suit suit, int rank, int id) throws IllegalArgumentException {
         super(suit, rank, id);
     }
 }

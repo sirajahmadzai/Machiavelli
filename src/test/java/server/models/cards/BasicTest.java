@@ -1,6 +1,5 @@
 package server.models.cards;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +19,7 @@ public class BasicTest {
 
             assertEquals(SUIT, BASIC_CARD.getSuit());
             assertEquals(RANK, BASIC_CARD.getRank());
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }
@@ -44,13 +43,13 @@ public class BasicTest {
 //
 //                try {
 //                    assertEquals(CARD_NAME, INITIAL_CARD.getCardNameByInitialRank(INITIAL_RANK));
-//                } catch (InvalidArgumentException e) {
+//                } catch (IllegalArgumentException e) {
 //                    fail("Unexpected Exception");
 //                }
-//            } catch (InvalidArgumentException e) {
+//            } catch (IllegalArgumentException e) {
 //                fail("Unexpected Exception");
 //            }
-//        } catch (InvalidArgumentException e) {
+//        } catch (IllegalArgumentException e) {
 //            fail("Unexpected Exception");
 //        }
 //    }
@@ -73,13 +72,13 @@ public class BasicTest {
 //
 //                try {
 //                    assertEquals(CARD_RANK, INITIAL_CARD.getCardValueByInitialRank(CARD_RANK));
-//                } catch (InvalidArgumentException e) {
+//                } catch (IllegalArgumentException e) {
 //                    fail("Unexpected Exception");
 //                }
-//            } catch (InvalidArgumentException e) {
+//            } catch (IllegalArgumentException e) {
 //                fail("Unexpected Exception");
 //            }
-//        } catch (InvalidArgumentException e) {
+//        } catch (IllegalArgumentException e) {
 //            fail("Unexpected Exception");
 //        }
 //    }

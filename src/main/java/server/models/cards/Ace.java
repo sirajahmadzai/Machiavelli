@@ -1,14 +1,12 @@
 package server.models.cards;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 public class Ace extends Changeable {
     /**
      * CONSTRUCTOR
      *
      * @param suit
      */
-    public Ace(Suit suit, int id) throws InvalidArgumentException {
+    public Ace(Suit suit, int id) throws IllegalArgumentException {
         super(suit, 1, id);
     }
 

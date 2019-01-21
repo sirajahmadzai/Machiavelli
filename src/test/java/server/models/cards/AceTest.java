@@ -1,6 +1,5 @@
 package server.models.cards;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +27,7 @@ public class AceTest {
             assertEquals("getRank() != INITIAL", VALID_RANK, ACE_CARD.getRank());
             assertEquals("getId() != INITIAL", VALID_CARD_ID, ACE_CARD.getId());
 
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Invalid Argument");
         }
 
@@ -37,7 +36,7 @@ public class AceTest {
             final Ace ACE_CARD = new Ace(null, VALID_CARD_ID);
             fail("null suit did not throw an exception");
 
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             //passed
         }
 
@@ -47,7 +46,7 @@ public class AceTest {
             final Ace ACE_CARD = new Ace(VALID_SUIT, VALID_CARD_ID);
             fail("Invalid rank did not throw an exception");
 
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             //passed
         }
 
@@ -56,7 +55,7 @@ public class AceTest {
             final int INVALID_ID = 2;
             final Ace ACE_CARD = new Ace(VALID_SUIT, INVALID_ID);
             fail("Invalid Id did not throw an exception");
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             //passed
         }
     }
@@ -139,7 +138,7 @@ public class AceTest {
                 //passed
             }
 
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("the constructor screwed up");
         }
 

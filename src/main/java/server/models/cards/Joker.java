@@ -1,7 +1,5 @@
 package server.models.cards;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 /**
  *
  */
@@ -11,7 +9,7 @@ public class Joker extends Changeable {
      *
      * @param suit
      */
-    public Joker(Suit suit, int id) throws InvalidArgumentException {
+    public Joker(Suit suit, int id) throws IllegalArgumentException {
         super(suit, 15, id);
         joker = true;
     }

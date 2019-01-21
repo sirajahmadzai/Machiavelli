@@ -1,6 +1,5 @@
 package server.models;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import server.models.cards.*;
 
 import java.util.ArrayList;
@@ -145,7 +144,7 @@ public class Table {
             cardID++;
             standardDeck.add(new Ace(Suit.SPADES, cardID));
             cardID++;
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         for (int rank = 2; rank < 14; rank++) {
@@ -158,7 +157,7 @@ public class Table {
                 cardID++;
                 standardDeck.add(new Basic(Suit.SPADES, rank, cardID));
                 cardID++;
-            } catch (InvalidArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
@@ -169,7 +168,7 @@ public class Table {
             standardDeck.add(new Joker(Suit.JOKER, cardID));
             cardID++;
             standardDeck.add(new Joker(Suit.JOKER, cardID));
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         return standardDeck;

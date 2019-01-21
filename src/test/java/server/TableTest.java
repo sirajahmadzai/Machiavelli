@@ -1,6 +1,5 @@
 package server;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 import server.models.CardSet;
 import server.models.Table;
@@ -51,7 +50,7 @@ public class TableTest {
             TABLE.setDeck(DECK);
 
             assertEquals("getDeck() != DECK", DECK, TABLE.getDeck());
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception!");
         }
     }
@@ -79,7 +78,7 @@ public class TableTest {
             TABLE.setCardSets(LIST_OF_CARD_SETS);
 
             assertEquals("getCardSets() != LIST_OF_CARD_SETS", LIST_OF_CARD_SETS, TABLE.getCardSets());
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception");
         }
     }
@@ -104,7 +103,7 @@ public class TableTest {
             TABLE.setCardsInPlay(LIST_OF_CARDS);
 
             assertEquals("getCardsInPlay() != LIST_OF_CARDS", LIST_OF_CARDS, TABLE.getCardsInPlay());
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             fail("Unexpected Exception!");
         }
     }
