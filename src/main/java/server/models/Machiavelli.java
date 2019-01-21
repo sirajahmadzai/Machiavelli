@@ -468,7 +468,6 @@ public class Machiavelli {
         }
 
 
-
         Player player = currentSeat.getPlayer();
         player.getHand().removeCards(playerMove.getPlayedCards());
 
@@ -480,8 +479,7 @@ public class Machiavelli {
         return true;
     }
 
-    public void setWinner()
-    {
+    public void setWinner() {
 
         Command setWinner = new WinnerCommand(SET_WINNER);
 

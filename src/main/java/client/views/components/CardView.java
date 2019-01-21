@@ -5,6 +5,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import server.models.cards.Card;
 
+
+import javax.swing.*;
+import java.net.URL;
+
 public class CardView extends ImageView implements Comparable<CardView> {
     /**
      * PUBLIC STATIC FINALS
@@ -28,7 +32,14 @@ public class CardView extends ImageView implements Comparable<CardView> {
      */
     public CardView(Card card) {
         super();
-        Image image = ViewHelper.getImage(card.getImgUrl());
+
+        String tem_url = card.getImgUrl();
+        System.out.println(tem_url);
+
+//        Image image = ViewHelper.getImage(tem_url);
+        URL url = getClass().getClassLoader().getResource(tem_url);
+        Image image = new Image(url.toString());
+
         setImage(image);
 
         setCard(card);

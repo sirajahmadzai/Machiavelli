@@ -11,8 +11,7 @@ public class WinnerCommand extends BasicCommand {
 
 
     @Override
-    public void doParse(String commandString)
-    {
+    public void doParse(String commandString) {
 
     }
 

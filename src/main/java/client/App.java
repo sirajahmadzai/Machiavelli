@@ -61,8 +61,11 @@ public class App extends Application implements appInterface {
 
     private LoginView loginView;
 
+    private boolean isSizeChanged;
+
     @FXML
     private StackPane rootLayout;
+
 
     /***************
      ****PROTECTS****
@@ -88,6 +91,7 @@ public class App extends Application implements appInterface {
         this.primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+                GameView gameView = (GameView) getActiveView();
 
                 Platform.exit();
                 System.exit(0);
@@ -120,8 +124,32 @@ public class App extends Application implements appInterface {
 
             primaryStage.setTitle(constants.TITLE);
             primaryStage.setMaximized(true);
+            primaryStage.setMinWidth(MIN_WIDTH);
+            primaryStage.setMinHeight(MIN_HEIGHT);
             // primaryStage.setResizable(false);
             primaryStage.show();
+            isSizeChanged = false;
+            primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+                // Do whatever you want
+                if (isSizeChanged) {
+                    primaryStage.show();
+                    isSizeChanged = false;
+                    return;
+                }
+                isSizeChanged = true;
+                primaryStage.setHeight(((double) newVal) * 0.66);
+
+            });
+            primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+                // Do whatever you want
+                if (isSizeChanged) {
+                    primaryStage.show();
+                    isSizeChanged = false;
+                    return;
+                }
+                isSizeChanged = true;
+                primaryStage.setWidth(((double) newVal) / 0.66);
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

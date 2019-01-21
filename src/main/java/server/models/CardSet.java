@@ -76,9 +76,12 @@ public class CardSet {
         isSorted = false;
         allCards.add(card);
         if (card.isJoker()) {
+            //if(jokerCount()<=1)
             jokers.add(card);
+
             return;
         }
+        System.out.println(jokerCount());
 
         // Update suit map
         ArrayList<Card> suit = suitCardMap.getOrDefault(card.getSuit(), new ArrayList<>());
@@ -179,7 +182,7 @@ public class CardSet {
             return false;
         }
 
-        if (jokerCount() > 1) {
+        if (jokerCount() <= 2) {
             return false;
         }
 

@@ -94,6 +94,8 @@ public class PlayerMove extends BasicCommand {
      */
     @Override
     public void doParse(String commandStr) {
+
+
         table.clear();
         int count = 0;
 

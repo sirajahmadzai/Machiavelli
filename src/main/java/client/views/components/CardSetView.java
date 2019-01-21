@@ -38,6 +38,8 @@ public class CardSetView extends HBox {
 
     private CardSet snapshot;
 
+    private ArrayList<CardSet> snapshots;
+
     /**
      * CONSTRUCTOR
      */
@@ -55,6 +57,7 @@ public class CardSetView extends HBox {
         initLayout();
         cardViews = new ArrayList<>();
         snapshot = new CardSet();
+        snapshots = new ArrayList<>();
         this.cardSet = new CardSet();
 
         for (Card card : cardSet.getCards()) {
@@ -64,9 +67,11 @@ public class CardSetView extends HBox {
         this.dropTarget = new CardView(new DropTargetCard(this));
         this.getChildren().add(dropTarget);
         this.dropTarget.setVisible(false);
+        /*  MF */
         this.dropTarget.setOnMouseClicked(event -> {
             ClientManager.getInstance().droppedToTarget(this);
         });
+        /* End */
     }
 
     /**
@@ -94,7 +99,9 @@ public class CardSetView extends HBox {
      * @return
      */
     public CardSet getSnapshot() {
-        return snapshot;
+
+        return snapshots.get(snapshots.size() - 1);
+//        return snapshot;
     }
 
     /**
@@ -336,19 +343,30 @@ public class CardSetView extends HBox {
     public CardSet takeSnapshot() {
         resetCardStates();
         this.snapshot = cardSet.getSnapshot();
+
+        snapshots.add(0, this.snapshot);
         return this.snapshot;
     }
 
+    public void init_snapshots() {
+        snapshots.clear();
+    }
 
     /**
      * reverse any cards taken from this CardSetView's cardSet
      */
     public void rollbackMoves() {
+
+        if (snapshots.size() <= 1) return;
+
         while (!cardViews.isEmpty()) {
             removeCard(cardViews.get(0), true);
         }
 
-        for (Card card : snapshot.getCards()) {
+        CardSet tem_snapshot = (CardSet) snapshots.get(0);
+        snapshots.remove(0);
+
+        for (Card card : tem_snapshot.getCards()) {
             addCard(card, true);
         }
 

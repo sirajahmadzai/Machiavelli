@@ -33,7 +33,7 @@ public class Player extends Group implements EventHandler<CardEvent> {
         this.playerInfo = new PlayerInfo("Not joined yet!");
         this.hand = new CardSetView();
         hand.setCardEventHandler(this);
-        hand.setCheckForValidity(false);
+        hand.setCheckForValidity(true);
         initContainer();
     }
 

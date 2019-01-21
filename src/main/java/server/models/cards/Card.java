@@ -26,7 +26,7 @@ public class Card implements Comparable<Card> {
     protected int rank;
 
     /**
-     * CONSTRUCTOR
+     * CONSTRUCTO
      *
      * @param suit
      * @param rank

@@ -28,7 +28,6 @@ public class LoginViewControllerTest {
             int port = loginView.getPort();
 
 
-
             if (false) {
 
             } else {
