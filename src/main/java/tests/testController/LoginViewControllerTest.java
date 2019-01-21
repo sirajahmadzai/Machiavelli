@@ -27,7 +27,7 @@ public class LoginViewControllerTest {
             String ip = loginView.getIp();
             int port = loginView.getPort();
 
-            //todo: use this ip and port to connect, if it connects you're connected, if not show an error message.
+
 
             if (false) {
 

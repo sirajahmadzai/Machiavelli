@@ -47,7 +47,7 @@ public class GameSeats {
         for (int i = 0; i < numberOfPlayers; i++) {
             Player player = new Player();
 
-            player.setPlayerId(i);  //TODO: Get this id from server!
+            player.setPlayerId(i);
             player.setPosition(positions[i]);
 
             players.add(player);

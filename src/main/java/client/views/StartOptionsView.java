@@ -87,7 +87,7 @@ public class StartOptionsView extends View {
     public void onJoinGame(ActionEvent ae) {
         int port = Integer.parseInt(joinPort.getText());
         String ip = joinIp.getText();
-//        TODO: use the username
+
         String userNameText = userName.getText();
 
         ClientManager.getInstance().loginServer(ip, port, userNameText);

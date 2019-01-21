@@ -24,7 +24,7 @@ public class MachiavelliTest {
         final Machiavelli GAME = Machiavelli.getInstance();
         GAME.initialize(NUM_OF_PLAYERS);
 
-//        TODO: prove the game has players, table and deals hannds
+
     }
 
 

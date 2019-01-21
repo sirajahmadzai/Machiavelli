@@ -420,7 +420,7 @@ public class Machiavelli {
      * @return
      */
     private boolean validateMove(int seatNumber, List<CardSet> proposedSets, CardSet playedCards) {
-        // TODO: Check if the turn is at the right player (seat number)
+
 
         CardSet currentTable = table.getAllCardsInASet();
         CardSet proposedTable = new CardSet();
@@ -464,13 +464,7 @@ public class Machiavelli {
             return false;
         }
 
-        /** TODO
-         * + Validate move.
-         * + Remove played cards from player hand.
-         * + Replace the table sets with the proposed sets.
-         * + Send new table to all players.
-         * + Send Switch Turn to all players.
-         */
+
 
         Player player = currentSeat.getPlayer();
         player.getHand().removeCards(playerMove.getPlayedCards());

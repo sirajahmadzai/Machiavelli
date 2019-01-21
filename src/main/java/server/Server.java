@@ -94,7 +94,6 @@ public class Server implements Runnable {
 
                     machiavelli.startGame();
                 }
-//              TODO: implement a way to stop server.
             }
 
         } catch (Exception e) {

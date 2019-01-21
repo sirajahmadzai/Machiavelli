@@ -172,8 +172,7 @@ public class ClientManager implements clientManagerInterface {
         showView(gameView);
 
 
-        //TODO: Check if the table is full.
-//        pushView(WaitingForOtherPlayersView.getInstance());
+
     }
 
     /**
@@ -297,7 +296,7 @@ public class ClientManager implements clientManagerInterface {
     }
 
     public void resetMove() {
-//        TODO: Replace this snapshot.
+
     }
 
     public boolean endTurn(MouseEvent event) {
