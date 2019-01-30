@@ -81,7 +81,7 @@ public class CardSet {
 
             return;
         }
-        System.out.println(jokerCount());
+        //System.out.println(jokerCount());
 
         // Update suit map
         ArrayList<Card> suit = suitCardMap.getOrDefault(card.getSuit(), new ArrayList<>());
@@ -182,7 +182,8 @@ public class CardSet {
             return false;
         }
 
-        if (jokerCount() <= 2) {
+        //A valid meld may contain at most one Joker.
+        if (jokerCount() > 1) {
             return false;
         }
 

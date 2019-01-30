@@ -111,10 +111,6 @@ public class ClientHandler implements Runnable {
             case PLAYER_LOGIN:
                 machiavelli.playerLogin(((PlayerLogin) cmd).getPlayerName(), player);
                 break;
-            case SET_WINNER:
-                machiavelli.setWinner();
-                break;
-
             default:
                 cmd.execute();
                 break;

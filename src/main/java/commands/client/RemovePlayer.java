@@ -5,7 +5,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
- * When a player joins to the server, server introduces the new player to all other players with this command.
+ * 
  */
 public class RemovePlayer extends ClientCommand {
     /**
@@ -48,8 +48,6 @@ public class RemovePlayer extends ClientCommand {
         this.addParameter(playerName);
         this.addParameter(playerId);
         this.addParameter(seatNumber);
-
-
     }
 
     /**

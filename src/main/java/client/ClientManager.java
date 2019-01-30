@@ -4,10 +4,8 @@ import client.views.GameView;
 import client.views.View;
 import client.views.components.CardSetView;
 import client.views.components.CardView;
-import commands.Command;
 import commands.server.PassTurn;
 import commands.server.PlayerMove;
-import commands.server.WinnerCommand;
 import interfaces.clientManagerInterface;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -281,7 +279,6 @@ public class ClientManager implements clientManagerInterface {
         }
         selectionManager.addCard(selectedCard);
 
-
         if (!selectionManager.isEmpty()) {
             gameView.setPlayAreaActive(selectionManager.getSelectedCardsSet());
         } else {
@@ -315,9 +312,7 @@ public class ClientManager implements clientManagerInterface {
 
 //      No card played. Just pass the turn.
         if (prevHand.equals(lastHand)) {
-            /*My Code */
             gameView.init_snapstate();
-            /*End */
             client.sendCommandToServer(new PassTurn());
             return true;
         }
@@ -326,17 +321,10 @@ public class ClientManager implements clientManagerInterface {
         if (!gameView.getPlayArea().isValid(MINIMUM_SET_SIZE)) {
             gameView.setMessage("Not a valid play!");
 
-            return true;
-        }
-
-        // User is the winner
-        if (lastHand.totalCount() <= 0) {
-            gameView.setMessage("Hurray!!! You are the winner.");
-            WinnerCommand win = new WinnerCommand(Command.CommandNames.SET_WINNER);
-            client.sendCommandToServer(win);
             return false;
         }
 
+        gameView.init_snapstate();
         List<CardSet> table = gameView.getPlayArea().takeSnapshot();
 
         CardSet playedCards = prevHand.diff(lastHand);
@@ -348,8 +336,12 @@ public class ClientManager implements clientManagerInterface {
         return true;
     }
 
-    public void setWinner() {
-        gameView.setMessage("You've lost the game, better luck next time :)");
+    public void setWinner(int winnerSeatNumber) {
+        if(GameView.getInstance().getOwnerSeat() == winnerSeatNumber){
+            gameView.setMessage("Hurray!!! You are the winner.");
+        }else {
+            gameView.setMessage("You've lost the game, better luck next time :)");
+        }
     }
 
     public void switchTurn(int seatNumber) {

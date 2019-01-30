@@ -33,7 +33,8 @@ public class Player extends Group implements EventHandler<CardEvent> {
         this.playerInfo = new PlayerInfo("Not joined yet!");
         this.hand = new CardSetView();
         hand.setCardEventHandler(this);
-        hand.setCheckForValidity(true);
+        // Player hand doesn't need to be a valid meld. So don't check its validity.
+        hand.setCheckForValidity(false);
         initContainer();
     }
 
@@ -190,6 +191,7 @@ public class Player extends Group implements EventHandler<CardEvent> {
     }
 
 
+
     /**
      * update player's infoText
      */
@@ -204,6 +206,7 @@ public class Player extends Group implements EventHandler<CardEvent> {
     }
 
     /**
+     * Update the player info text whenever the player hand changes.
      * @param event
      */
     @Override

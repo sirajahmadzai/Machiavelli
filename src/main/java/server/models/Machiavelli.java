@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static commands.Command.CommandNames.SET_WINNER;
-
 /**
  *
  */
@@ -250,6 +248,7 @@ public class Machiavelli {
 
                     currPlayerID = 0;
                 }
+
                 players.get(currPlayerID).getHand().addCard(table.getDeck().pop());
 
                 currPlayerID++;
@@ -474,15 +473,17 @@ public class Machiavelli {
         table.setCardSets(playerMove.getTable());
 
         sendCommandToAllPlayersExcept(playerMove, playerMove.getSeatNumber());
-        switchTurn();
+        if(player.getHand().totalCount() <= 0){
+            setWinner(player);
+        }else {
+            switchTurn();
+        }
 
         return true;
     }
 
-    public void setWinner() {
-
-        Command setWinner = new WinnerCommand(SET_WINNER);
-
+    public void setWinner(Player winner) {
+        Command setWinner = new WinnerCommand(winner.getSeatNumber());
         sendCommandToAllPlayers(setWinner);
     }
 
