@@ -76,14 +76,22 @@ public class ClientHandler implements Runnable {
         try {
             while (true) {
                 String cmdString = in.readLine();
-                Command cmd = CommandFactory.buildCommand(cmdString);
-                processCommand(cmd);
+
+                if (cmdString != null) {
+                    Command cmd = CommandFactory.buildCommand(cmdString);
+                    processCommand(cmd);
+                }else {
+                    // Client connection closed
+                    System.out.println("The player " + player.getName() + " at seat number " + player.getSeatNumber() + " has disconnected!");
+                    break;
+                }
             }
 
         } catch (SocketException e) {
-            System.out.println("a Client disconnected!");
+            System.out.println("The player " + player.getName() + " at seat number " + player.getSeatNumber() + " has unexpectedly disconnected!");
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println("The player " + player.getName() + " at seat number " + player.getSeatNumber() + " has unexpectedly disconnected!!");
             e.printStackTrace();
         } finally {
             // This client is going down!  Remove its name and its print

@@ -30,8 +30,6 @@ public interface clientManagerInterface {
 
     public void cardSelected(CardView selectedCard);
 
-    public void resetMove();
-
     public boolean endTurn(MouseEvent event);
 
     public void switchTurn(int seatNumber);

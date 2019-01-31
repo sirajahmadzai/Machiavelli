@@ -72,9 +72,9 @@ public class StartOptionsView extends View {
 
         try {
             ClientManager.getInstance().startServer(port, numberOfPlayers, adminUserName.getText());
-            messageText.setText("Started server at port " + port);
+            setMessageText("Started server at port " + port);
         } catch (Exception e) {
-            messageText.setText("Couldn't start server:" + e.getMessage());
+            setMessageText("Couldn't start server:" + e.getMessage());
         }
     }
 
@@ -91,5 +91,9 @@ public class StartOptionsView extends View {
         String userNameText = userName.getText();
 
         ClientManager.getInstance().loginServer(ip, port, userNameText);
+    }
+
+    public void setMessageText(String message){
+        messageText.setText(message);
     }
 }

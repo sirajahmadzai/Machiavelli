@@ -59,6 +59,7 @@ public class Server implements Runnable {
      */
     public void removeClientHandler(ClientHandler clientHandler) {
         machiavelli.removePlayer(clientHandler);
+        machiavelli.resetGame();
         playerClientHandlers.remove(clientHandler);
     }
 

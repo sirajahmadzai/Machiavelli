@@ -1,6 +1,7 @@
 package client;
 
 import client.views.GameView;
+import client.views.StartOptionsView;
 import client.views.View;
 import client.views.components.CardSetView;
 import client.views.components.CardView;
@@ -31,6 +32,8 @@ public class ClientManager implements clientManagerInterface {
      * PRIVATE FINALS
      */
     private final GameView gameView;
+    private final StartOptionsView startOptionsView;
+
 
     /**
      * PRIVATE STATICS
@@ -39,19 +42,11 @@ public class ClientManager implements clientManagerInterface {
     /**
      * CLASS VARIABLES
      */
-    Server server;
-    Thread serverThread;
-    boolean serverStarted = false;
-    boolean joinedGame = false;
+    private Server server;
+    private boolean serverStarted = false;
 
-    /**
-     * PRIVATES
-     */
-    private Thread clientThread;
-    private Stage stage;
     private StackPane root;
     private App app;
-    //  private CardSet selectedCards;
     private SelectionManager selectionManager = new SelectionManager();
     private Client client;
     private int currentTurn;
@@ -76,8 +71,8 @@ public class ClientManager implements clientManagerInterface {
      * CONSTRUCTOR
      */
     private ClientManager() {
-
         this.gameView = GameView.getInstance();
+        this.startOptionsView = StartOptionsView.getInstance();
     }
 
     /**
@@ -93,7 +88,8 @@ public class ClientManager implements clientManagerInterface {
         try {
             //This is the admin of the game. The admin starts the server and waits for other players to join.
             server = new Server(port, numberOfPlayers);
-            serverThread = new Thread(server);
+
+            Thread serverThread = new Thread(server);
             serverThread.setName("Server thread");
             serverThread.start();
             serverStarted = true;
@@ -104,15 +100,6 @@ public class ClientManager implements clientManagerInterface {
         } catch (Exception e) {
             throw e;
         }
-    }
-
-    /**
-     * gets the app
-     *
-     * @return
-     */
-    public App getApp() {
-        return app;
     }
 
     /**
@@ -130,7 +117,6 @@ public class ClientManager implements clientManagerInterface {
      * @param stage
      */
     public void setStage(Stage stage) {
-        this.stage = stage;
         this.root = (StackPane) stage.getScene().getRoot();
     }
 
@@ -154,24 +140,17 @@ public class ClientManager implements clientManagerInterface {
      * @param client
      */
     private void loginServer(Client client) {
-        clientThread = new Thread(client);
+        Thread clientThread = new Thread(client);
         this.client = client;
         clientThread.start();
-        joinedGame = true;
-
-        //gameView.fillDeck();
-
     }
 
     /**
      * @param numberOfPlayers
      */
     public void startGame(int numberOfPlayers) {
-//        new GameViewControllerTest(this.app, gameView);
         gameView.setPlayerCount(numberOfPlayers);
         showView(gameView);
-
-
     }
 
     /**
@@ -232,20 +211,31 @@ public class ClientManager implements clientManagerInterface {
 
     }
 
+    public void connectionLost() {
+        removePlayer(gameView.getOwnerSeat());
+    }
     /**
-     * @param playerName
-     * @param playerId
      * @param seatNumber
-     * @param owner
      */
-    public void removePlayer(String playerName, int playerId, int seatNumber, boolean owner) {
-        if (owner) {
-            gameView.setOwnerPlayer(playerId, seatNumber);
+    public void removePlayer(int seatNumber) {
+        if (seatNumber == gameView.getOwnerSeat()) {
+            showView(startOptionsView);
+            startOptionsView.setMessageText("You've disconnected from the game server.");
         }
-        gameView.removeSeat(playerName, playerId, seatNumber);
+        gameView.setMessage("One of the players is disconnected. Waiting for someone to join and game will restart!");
+        gameView.removePlayer(seatNumber);
+        resetGame();
 
 
     }
+
+    private void resetGame() {
+        gameView.resetView();
+        selectionManager.deselectAll();
+        selectionManager.clearSelections();
+        lastCardDrawn=null;
+    }
+
 
     /**
      * When user clicks a card target, we move the card from old set to the target set.
@@ -287,20 +277,14 @@ public class ClientManager implements clientManagerInterface {
     }
 
     private boolean isOwnerTurn() {
-        return currentTurn == GameView.getInstance().getOwnerSeat();
+        return currentTurn == gameView.getOwnerSeat();
     }
 
     private void startTurn() {
         gameView.takeSnapshot();
     }
 
-    public void resetMove() {
-
-    }
-
     public boolean endTurn(MouseEvent event) {
-
-
         if (!isOwnerTurn()) {
             return false;
         }
@@ -337,9 +321,9 @@ public class ClientManager implements clientManagerInterface {
     }
 
     public void setWinner(int winnerSeatNumber) {
-        if(GameView.getInstance().getOwnerSeat() == winnerSeatNumber){
+        if (gameView.getOwnerSeat() == winnerSeatNumber) {
             gameView.setMessage("Hurray!!! You are the winner.");
-        }else {
+        } else {
             gameView.setMessage("You've lost the game, better luck next time :)");
         }
     }
@@ -374,4 +358,6 @@ public class ClientManager implements clientManagerInterface {
 
 //        Remove cards from hand!
     }
+
+
 }

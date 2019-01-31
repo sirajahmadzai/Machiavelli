@@ -99,9 +99,7 @@ public class CardSetView extends HBox {
      * @return
      */
     public CardSet getSnapshot() {
-
         return snapshots.get(snapshots.size() - 1);
-//        return snapshot;
     }
 
     /**
@@ -197,6 +195,12 @@ public class CardSetView extends HBox {
      */
     public void removeCard(CardView cardView) {
         removeCard(cardView, false);
+    }
+
+    public void removeAllCards() {
+        while (cardViews.size() > 0) {
+            removeCard(cardViews.get(0));
+        }
     }
 
     /**

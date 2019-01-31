@@ -1,23 +1,16 @@
 package client;
 
-import client.views.GameView;
-import client.views.LoginView;
 import client.views.StartOptionsView;
 import client.views.View;
 import commands.Command;
 import interfaces.appInterface;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import tests.testController.LoginViewControllerTest;
 import utils.constants;
 
 import java.io.BufferedReader;
@@ -47,19 +40,13 @@ public class App extends Application implements appInterface {
     /***************
      ****PRIVATES****
      ***************/
-    private Thread clientThread;
-
     //stage displayed
     private Stage primaryStage;
-
 
     private Scene scene;
 
     //view in display
     private View activeView;
-
-
-    private LoginView loginView;
 
     private boolean isSizeChanged;
 
@@ -88,14 +75,9 @@ public class App extends Application implements appInterface {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        this.primaryStage.setOnHidden(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                GameView gameView = (GameView) getActiveView();
-
-                Platform.exit();
-                System.exit(0);
-            }
+        this.primaryStage.setOnHidden(event -> {
+            Platform.exit();
+            System.exit(0);
         });
         initRootLayout();
 
@@ -103,8 +85,6 @@ public class App extends Application implements appInterface {
         ClientManager.getInstance().setApp(this);
 
         ClientManager.getInstance().showView(StartOptionsView.getInstance());
-
-
     }
 
     /**
@@ -115,8 +95,7 @@ public class App extends Application implements appInterface {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/fxml/RootLayout.fxml"));
-            rootLayout = (StackPane) loader.load();
-
+            rootLayout = loader.load();
 
             // Show the scene containing the root layout.
             scene = new Scene(rootLayout);
@@ -189,72 +168,6 @@ public class App extends Application implements appInterface {
         activeView = view;
         view.setMainApp(this);
     }
-
-
-    /**
-     * displays the gameView
-     *
-     * @param numOfPlayers
-     */
-    public synchronized void showGameView(int numOfPlayers) {
-        try {
-            if (!(activeView instanceof GameView)) {
-                // Load person overview.
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(App.class.getResource("/fxml/GameView.fxml"));
-                BorderPane gameViewLayout = (BorderPane) loader.load();
-
-                rootLayout.getChildren().add(gameViewLayout);
-
-                gameViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-                gameViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-
-                // Give the controller access to the main app.
-                GameView gameView = loader.getController();
-                activeView = gameView;
-
-                gameView.setMainApp(this);
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * displays the waiting view
-     */
-    public synchronized void showWaitingView() {
-//        WaitingForOtherPlayersView waitingForOthersView = new WaitingForOtherPlayersView();
-//        activeView = waitingForOthersView;
-//
-//        VBox waitingViewLayout = waitingForOthersView.getLayout();
-//
-//        rootLayout.getChildren().add(waitingViewLayout);
-//
-//        waitingViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-//        waitingViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-//
-//        waitingForOthersView.setMainApp(this);
-    }
-
-    /**
-     * displays the login view
-     */
-    public synchronized void showLoginView() {
-        activeView = loginView;
-        VBox loginViewLayout = loginView.getLayout();
-        rootLayout.getChildren().add(loginViewLayout);
-
-        loginViewLayout.prefWidthProperty().bind(rootLayout.widthProperty());
-        loginViewLayout.prefHeightProperty().bind(rootLayout.heightProperty());
-
-        new LoginViewControllerTest(this, loginView);
-
-        loginView.setMainApp(this);
-    }
-
-//TODO: uncomment for networked version
 
     public void sendCommandToServer(Command cmd) {
         this.out.println(cmd.serialize());

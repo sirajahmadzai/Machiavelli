@@ -204,4 +204,12 @@ public class PlayArea implements EventHandler<CardEvent> {
 
         return true;
     }
+
+    public void reset() {
+        init_history();
+        snapshot.clear();
+        setsArea.getChildren().removeAll(setViews);
+        setViews.clear();
+        createPlaceholderSet();
+    }
 }

@@ -11,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -20,8 +19,6 @@ import server.models.CardSet;
 import server.models.Machiavelli;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
-
-import java.net.URL;
 
 public class GameView extends View {
     /*************************************************************
@@ -95,15 +92,6 @@ public class GameView extends View {
     }
 
     /**
-     * Number of players the game set up for.
-     *
-     * @return
-     */
-    public int getPlayerCount() {
-        return seats.getTotalPlayers().size();
-    }
-
-    /**
      * @return
      */
     public int getOwnerSeat() {
@@ -132,30 +120,34 @@ public class GameView extends View {
      */
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
-        this.seats = new GameSeats(board, playerCount);
-        this.playArea = new PlayArea(setsArea);
-
-        URL url = getClass().getClassLoader().getResource(Card.BACK_OF_CARD_IMAGE);
-        Image image = new Image(url.toString());
-
-//        deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
-        deckImageView.setImage(image);
-        deckImageView.setVisible(false);
-        deckImageView.setOnMouseClicked(event -> ClientManager.getInstance().endTurn(event));
-        revertButton.setVisible(false);
+        initializeView();
         setMessage("Waiting for other players to join.");
     }
 
+    public void initializeView() {
+        this.seats = new GameSeats(board, playerCount);
+        this.playArea = new PlayArea(setsArea);
 
-    public int getTotalPlayers() {
-
-        return seats.getOpponents().size();
-
+        deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
+        deckImageView.setOnMouseClicked(event -> ClientManager.getInstance().endTurn(event));
+        deckImageView.setVisible(false);
+        revertButton.setVisible(false);
     }
 
-    public void removePlayer() {
-
+    public void removePlayer(int seatNumber) {
+        Player player = seats.getPlayer(seatNumber);
+        player.setName("Player disconnected");
+        player.getHand().removeAllCards();
     }
+
+    public void resetView() {
+        this.seats.reset();
+        this.playArea.reset();
+
+        deckImageView.setVisible(false);
+        revertButton.setVisible(false);
+    }
+
 
     public void setMessage(String message) {
         messageBox.setText(message);
@@ -197,7 +189,6 @@ public class GameView extends View {
      */
     @FXML
     void initialize() {
-
     }
 
     /************************************************************
@@ -243,12 +234,6 @@ public class GameView extends View {
     /***********************************************
      ******************PLAY AREA*************************
      ************************************************/
-    /**
-     * empties deckOfCards
-     */
-    public void emptyDeck() {
-        deckImageView.setVisible(false);
-    }
 
     /**
      * fills the deck
@@ -269,22 +254,8 @@ public class GameView extends View {
      * @param seatNumber
      */
     public void fillSeat(String playerName, int playerId, int seatNumber) {
-
         seats.setPlayerInfo(seatNumber, playerName, playerId);
     }
-
-    /**
-     * Add new player to specified seat.
-     *
-     * @param playerName
-     * @param playerId
-     * @param seatNumber
-     */
-    public void removeSeat(String playerName, int playerId, int seatNumber) {
-
-        //seats.setPlayerInfo(seatNumber, playerName, playerId);
-    }
-
 
     /**
      *
@@ -352,4 +323,5 @@ public class GameView extends View {
 
         player.getHand().removeCards(playedCards.totalCount());
     }
+
 }

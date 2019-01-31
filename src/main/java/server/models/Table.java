@@ -26,7 +26,6 @@ public class Table {
     public Table() {
         deck = new Stack<>();
         cardSets = new ArrayList<>();
-        cardsInPlay = new ArrayList<>();
         initMachiavelliDeck();
     }
 
@@ -63,15 +62,6 @@ public class Table {
         return fullSet;
     }
 
-    /**
-     * gets cardsInPlay
-     *
-     * @return
-     */
-    public ArrayList<Card> getCardsInPlay() {
-        return cardsInPlay;
-    }
-
     /*******************************************
      ******************SETTERS******************
      ******************************************/
@@ -88,13 +78,6 @@ public class Table {
      */
     public void setCardSets(List<CardSet> cardSets) {
         this.cardSets = new ArrayList<>(cardSets);
-    }
-
-    /**
-     * @param cardsInPlay
-     */
-    public void setCardsInPlay(ArrayList<Card> cardsInPlay) {
-        this.cardsInPlay = cardsInPlay;
     }
 
     /***********************************************
@@ -114,7 +97,7 @@ public class Table {
     /**
      * creates a deck from two standard decks
      */
-    private void initMachiavelliDeck() {
+    public void initMachiavelliDeck() {
         //2 heart of 2s
         //2 spade of 2s
         //2 diamon of 2s
@@ -124,6 +107,7 @@ public class Table {
         deck.addAll(generateStandardDeck());
         shuffleDeck();
     }
+
 
     /**
      * generates a standard deck

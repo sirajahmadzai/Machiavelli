@@ -24,7 +24,6 @@ public class Client extends Task<Void> implements clientInterface/* implements R
     private PrintWriter out;
     private ClientManager manager;
     private String playerName;
-    private int seatNumber;
 
     /**
      * CONSTRUCTOR
@@ -96,7 +95,8 @@ public class Client extends Task<Void> implements clientInterface/* implements R
             }
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            Platform.runLater(manager::connectionLost);
+//            e.printStackTrace();
             return null;
         }
     }

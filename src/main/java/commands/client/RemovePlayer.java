@@ -1,18 +1,13 @@
 
 package commands.client;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 /**
- * 
+ *
  */
 public class RemovePlayer extends ClientCommand {
     /**
      * PROCTECTS
      */
-    protected String playerName;
-    protected int playerId;
     protected int seatNumber;
 
     /**
@@ -23,30 +18,13 @@ public class RemovePlayer extends ClientCommand {
     }
 
     /**
-     * CONSTRUCTOR
-     *
-     * @param name
-     */
-    public RemovePlayer(CommandNames name) {
-        super(name);
-    }
-
-    /**
      * CONSTUCTOR
      *
-     * @param playerName name of the new player
-     * @param playerId   id of the new player
      * @param seatNumber the seat number of the new player.
      */
-    public RemovePlayer(String playerName, int playerId, int seatNumber) {
+    public RemovePlayer(int seatNumber) {
         this();
-
         this.seatNumber = seatNumber;
-        this.playerName = URLEncoder.encode(playerName);
-        this.playerId = playerId;
-
-        this.addParameter(playerName);
-        this.addParameter(playerId);
         this.addParameter(seatNumber);
     }
 
@@ -55,8 +33,6 @@ public class RemovePlayer extends ClientCommand {
      */
     @Override
     public void doParse(String commandStr) {
-        playerName = URLDecoder.decode(scanner.next());
-        playerId = scanner.nextInt();
         seatNumber = scanner.nextInt();
     }
 
@@ -65,6 +41,6 @@ public class RemovePlayer extends ClientCommand {
      */
     @Override
     public void doExecute() {
-        manager.removePlayer(playerName, playerId, seatNumber, false);
+        manager.removePlayer(seatNumber);
     }
 }

@@ -103,16 +103,6 @@ public class GameSeats {
     }
 
     /**
-     * gets the player at the specified seatNumber
-     *
-     * @param seatNumber
-     * @return
-     */
-    public Player removePlayer(int seatNumber) {
-        return seats.remove(seatNumber);
-    }
-
-    /**
      * @param ownerSeatNumber
      * @param ownerId
      */
@@ -153,18 +143,6 @@ public class GameSeats {
         return opponents;
     }
 
-    public ArrayList<Player> getTotalPlayers() {
-
-        return players;
-    }
-
-    /**
-     * @param opponents
-     */
-    public void setOpponents(ArrayList<Player> opponents) {
-        this.opponents = opponents;
-    }
-
     /**
      * @return
      */
@@ -177,5 +155,11 @@ public class GameSeats {
      */
     public CardSetView getOwnerPlayerHand() {
         return ownerPlayer.getHand();
+    }
+
+    public void reset(){
+        for(Player player: players){
+            player.getHand().removeAllCards();
+        }
     }
 }

@@ -12,10 +12,6 @@ public interface appInterface {
 
     public Stage getPrimaryStage();
 
-    public void showGameView(int numOfPlayers);
-
-    public void showLoginView();
-
     public void sendCommandToServer(Command cmd);
 
 }
