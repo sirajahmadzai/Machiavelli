@@ -17,6 +17,7 @@ import server.models.cards.DropTargetCard;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Stack;
 
 public class CardSetView extends HBox {
     /**
@@ -36,9 +37,7 @@ public class CardSetView extends HBox {
 
     private boolean interactive = true;
 
-    private CardSet snapshot;
-
-    private ArrayList<CardSet> snapshots;
+    private Stack<CardSet> snapshots;
 
     /**
      * CONSTRUCTOR
@@ -56,8 +55,7 @@ public class CardSetView extends HBox {
     public CardSetView(CardSet cardSet) {
         initLayout();
         cardViews = new ArrayList<>();
-        snapshot = new CardSet();
-        snapshots = new ArrayList<>();
+        snapshots = new Stack<>();
         this.cardSet = new CardSet();
 
         for (Card card : cardSet.getCards()) {
@@ -98,8 +96,8 @@ public class CardSetView extends HBox {
     /**
      * @return
      */
-    public CardSet getSnapshot() {
-        return snapshots.get(snapshots.size() - 1);
+    public CardSet getLastSnapshot() {
+        return snapshots.peek();
     }
 
     /**
@@ -198,8 +196,12 @@ public class CardSetView extends HBox {
     }
 
     public void removeAllCards() {
-        while (cardViews.size() > 0) {
-            removeCard(cardViews.get(0));
+        removeAllCards(false);
+    }
+
+    private void removeAllCards(boolean silent) {
+        while (!cardViews.isEmpty()) {
+            removeCard(cardViews.get(0),silent);
         }
     }
 
@@ -346,10 +348,10 @@ public class CardSetView extends HBox {
      */
     public CardSet takeSnapshot() {
         resetCardStates();
-        this.snapshot = cardSet.getSnapshot();
 
-        snapshots.add(0, this.snapshot);
-        return this.snapshot;
+        CardSet snapshot = cardSet.getSnapshot();
+        snapshots.push(snapshot);
+        return snapshot;
     }
 
     public void init_snapshots() {
@@ -360,20 +362,14 @@ public class CardSetView extends HBox {
      * reverse any cards taken from this CardSetView's cardSet
      */
     public void rollbackMoves() {
-
         if (snapshots.size() <= 1) return;
 
-        while (!cardViews.isEmpty()) {
-            removeCard(cardViews.get(0), true);
-        }
+        removeAllCards(true);
+        CardSet lastSnapshot = snapshots.pop();
 
-        CardSet tem_snapshot = (CardSet) snapshots.get(0);
-        snapshots.remove(0);
-
-        for (Card card : tem_snapshot.getCards()) {
+        for (Card card : lastSnapshot.getCards()) {
             addCard(card, true);
         }
-
         sort();
     }
 

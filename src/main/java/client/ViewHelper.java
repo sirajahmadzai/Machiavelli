@@ -31,7 +31,7 @@ public class ViewHelper implements viewHelperInterface {
 
 
         /* My Code */
-        System.out.println(url.toString());
+//        System.out.println(url.toString());
 
         /* End */
         File file = null;

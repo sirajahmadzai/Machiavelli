@@ -281,6 +281,7 @@ public class ClientManager implements clientManagerInterface {
     }
 
     private void startTurn() {
+        gameView.init_snapstate();
         gameView.takeSnapshot();
     }
 
@@ -291,12 +292,11 @@ public class ClientManager implements clientManagerInterface {
         lastCardDrawn = null;
         selectionManager.deselectAll();
 
-        CardSet prevHand = gameView.getHand().getSnapshot();
+        CardSet prevHand = gameView.getHand().getLastSnapshot();
         CardSet lastHand = gameView.getHand().getCardSet();
 
 //      No card played. Just pass the turn.
         if (prevHand.equals(lastHand)) {
-            gameView.init_snapstate();
             client.sendCommandToServer(new PassTurn());
             return true;
         }
@@ -307,8 +307,6 @@ public class ClientManager implements clientManagerInterface {
 
             return false;
         }
-
-        gameView.init_snapstate();
         List<CardSet> table = gameView.getPlayArea().takeSnapshot();
 
         CardSet playedCards = prevHand.diff(lastHand);
@@ -347,16 +345,9 @@ public class ClientManager implements clientManagerInterface {
     }
 
     public void playMove(PlayerMove move) {
-//        List<CardSet> cardsOnTheTable = gameView.getPlayArea().getSnapshot();
         gameView.getPlayArea().setAllSets(move.getTable());
         gameView.removeCardsFrom(move.getSeatNumber(), move.getPlayedCards());
-        /*  My Code 2019-01-20-12-22*   At turn starting recorde the table */
-        gameView.init_snapstate();
-        gameView.takeSnapshot();
-        /*                */
         startTurn();
-
-//        Remove cards from hand!
     }
 
 
