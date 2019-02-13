@@ -78,9 +78,6 @@ public class Client extends Task<Void> implements clientInterface/* implements R
                 Command command = CommandFactory.buildCommand(response);
                 System.out.println("Client received command: " + command);
                 switch (command.getName()) {
-                    case SHOW_GAMEVIEW:
-                        Platform.runLater(() -> manager.startGame(Integer.parseInt(command.getParameter())));
-                        break;
                     case PLAYER_MOVE:
                         Platform.runLater(() -> manager.playMove((PlayerMove) command));
                         break;
@@ -96,7 +93,7 @@ public class Client extends Task<Void> implements clientInterface/* implements R
             return null;
         } catch (Exception e) {
             Platform.runLater(manager::connectionLost);
-//            e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }

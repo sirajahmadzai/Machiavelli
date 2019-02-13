@@ -37,7 +37,7 @@ public class CardSetView extends HBox {
 
     private boolean interactive = true;
 
-    private Stack<CardSet> snapshots;
+    public Stack<CardSet> snapshots;
 
     /**
      * CONSTRUCTOR
@@ -67,7 +67,7 @@ public class CardSetView extends HBox {
         this.dropTarget.setVisible(false);
         /*  MF */
         this.dropTarget.setOnMouseClicked(event -> {
-            ClientManager.getInstance().droppedToTarget(this);
+            ClientManager.getInstance().moveSelectedCards(this);
         });
         /* End */
     }
@@ -98,6 +98,13 @@ public class CardSetView extends HBox {
      */
     public CardSet getLastSnapshot() {
         return snapshots.peek();
+    }
+
+    public CardSet getFirstSnapshot() {
+        if (!snapshots.empty()) {
+            return snapshots.firstElement();
+        }
+        return null;
     }
 
     /**
@@ -201,7 +208,7 @@ public class CardSetView extends HBox {
 
     private void removeAllCards(boolean silent) {
         while (!cardViews.isEmpty()) {
-            removeCard(cardViews.get(0),silent);
+            removeCard(cardViews.get(0), silent);
         }
     }
 
@@ -362,10 +369,11 @@ public class CardSetView extends HBox {
      * reverse any cards taken from this CardSetView's cardSet
      */
     public void rollbackMoves() {
-        if (snapshots.size() <= 1) return;
+        if (snapshots.size() < 2) return;
 
         removeAllCards(true);
-        CardSet lastSnapshot = snapshots.pop();
+        snapshots.pop();
+        CardSet lastSnapshot = snapshots.peek();
 
         for (Card card : lastSnapshot.getCards()) {
             addCard(card, true);

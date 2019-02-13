@@ -7,6 +7,7 @@ import commands.server.WinnerCommand;
 import server.ClientHandler;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
+import utils.constants;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -156,7 +157,7 @@ public class Machiavelli {
     public void dealHands(Player dealer) {
         int currPlayerID = dealer.getPlayerID();
 
-        for (int cardCounter = 0; cardCounter < 15; cardCounter++) {
+        for (int cardCounter = 0; cardCounter < constants.HAND_SIZE; cardCounter++) {
 
             int playerCounter = 0;
 
@@ -377,9 +378,9 @@ public class Machiavelli {
      */
     public boolean processMove(PlayerMove playerMove) {
         if (!validateMove(playerMove.getSeatNumber(), playerMove.getTable(), playerMove.getPlayedCards())) {
+            sendCommandToPlayer(new ClientMessage(ClientMessage.MessageTypes.WARNING, "Invalid Move"), currentSeat.getPlayer());
             return false;
         }
-
 
         Player player = currentSeat.getPlayer();
         player.getHand().removeCards(playerMove.getPlayedCards());

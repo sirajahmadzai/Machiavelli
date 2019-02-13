@@ -192,7 +192,9 @@ public abstract class Command {
         WHO_ARE_YOU(CLIENT_COMMAND),
         DRAW_CARD(CLIENT_COMMAND, DrawCard.class),
 
-        REMOVE_PLAYER(CLIENT_COMMAND, RemovePlayer.class);
+        REMOVE_PLAYER(CLIENT_COMMAND, RemovePlayer.class),
+        CLIENT_MESSAGE(CLIENT_COMMAND,ClientMessage.class )
+        ;
 
 
         /**

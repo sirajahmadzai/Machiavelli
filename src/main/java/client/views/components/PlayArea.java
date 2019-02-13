@@ -7,6 +7,7 @@ import server.models.CardSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class PlayArea implements EventHandler<CardEvent> {
     /**
@@ -17,7 +18,7 @@ public class PlayArea implements EventHandler<CardEvent> {
     private ArrayList<CardSetView> setViews;
     private List<CardSet> snapshot;
 
-    private List<Object> snapshot_history;
+    public Stack<Object> snapshot_history;
 
     /**
      * CONSTRUCTOR
@@ -29,7 +30,7 @@ public class PlayArea implements EventHandler<CardEvent> {
 
         setViews = new ArrayList<>();
         snapshot = new ArrayList<>();
-        snapshot_history = new ArrayList<>();
+        snapshot_history = new Stack<>();
         createPlaceholderSet();
     }
 
@@ -142,10 +143,7 @@ public class PlayArea implements EventHandler<CardEvent> {
         }
 
         this.snapshot = snapshot;
-
-
-        snapshot_history.add(0, snapshot);
-
+        snapshot_history.push(snapshot);
         return this.snapshot;
     }
 
@@ -157,10 +155,10 @@ public class PlayArea implements EventHandler<CardEvent> {
      * rolls back any recent moves
      */
     public void rollbackMoves() {
-        if (snapshot_history.size() >= 2) {
-            List<CardSet> tem_snapshot = (List<CardSet>) snapshot_history.get(0);
+        if (snapshot_history.size() > 1) {
+            snapshot_history.pop();
+            List<CardSet> tem_snapshot = (List<CardSet>) snapshot_history.peek();
             setAllSets(tem_snapshot);
-            snapshot_history.remove(0);
         }
 //        setAllSets(snapshot);
     }

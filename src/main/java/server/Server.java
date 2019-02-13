@@ -1,8 +1,6 @@
 package server;
 
 import commands.Command;
-import server.gameLogic.GameState;
-import server.gameLogic.WaitingForPlayersState;
 import server.models.Machiavelli;
 
 import java.io.IOException;
@@ -22,7 +20,6 @@ public class Server implements Runnable {
     private ArrayList<ClientHandler> playerClientHandlers = new ArrayList<>();
     private ServerSocket listener;
     private int numPlayers = -1;
-    private GameState currentState;
     private int port;
     private Machiavelli machiavelli;
 
@@ -42,7 +39,6 @@ public class Server implements Runnable {
         log.info("starting server on: localhost at port " + port);
         System.out.println("starting server on: localhost at port " + port);
         listener = new ServerSocket(port);
-        currentState = WaitingForPlayersState.getInstance();
     }
 
     /**

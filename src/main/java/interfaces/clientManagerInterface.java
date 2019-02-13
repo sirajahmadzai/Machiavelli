@@ -26,7 +26,7 @@ public interface clientManagerInterface {
 
     public void introducePlayer(String playerName, int playerId, int seatNumber, boolean owner);
 
-    public void droppedToTarget(CardSetView targetSet);
+    public void moveSelectedCards(CardSetView targetSet);
 
     public void cardSelected(CardView selectedCard);
 

@@ -5,7 +5,6 @@ import client.views.View;
 import commands.Command;
 import interfaces.appInterface;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -75,13 +74,9 @@ public class App extends Application implements appInterface {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        this.primaryStage.setOnHidden(event -> {
-            Platform.exit();
-            System.exit(0);
-        });
         initRootLayout();
 
-        ClientManager.getInstance().setStage(primaryStage);
+        ClientManager.getInstance().setStage(this.primaryStage);
         ClientManager.getInstance().setApp(this);
 
         ClientManager.getInstance().showView(StartOptionsView.getInstance());

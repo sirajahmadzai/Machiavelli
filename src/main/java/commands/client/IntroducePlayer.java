@@ -46,9 +46,9 @@ public class IntroducePlayer extends ClientCommand {
         this.playerName = URLEncoder.encode(playerName);
         this.playerId = playerId;
 
-        this.addParameter(playerName);
-        this.addParameter(playerId);
-        this.addParameter(seatNumber);
+        this.addParameter(this.playerName);
+        this.addParameter(this.playerId);
+        this.addParameter(this.seatNumber);
     }
 
     /**
@@ -56,7 +56,7 @@ public class IntroducePlayer extends ClientCommand {
      */
     @Override
     public void doParse(String commandStr) {
-        playerName = URLDecoder.decode(scanner.next());
+        playerName = scanner.next();
         playerId = scanner.nextInt();
         seatNumber = scanner.nextInt();
     }
@@ -66,6 +66,6 @@ public class IntroducePlayer extends ClientCommand {
      */
     @Override
     public void doExecute() {
-        manager.introducePlayer(playerName, playerId, seatNumber, false);
+        manager.introducePlayer(URLDecoder.decode(playerName), playerId, seatNumber, false);
     }
 }

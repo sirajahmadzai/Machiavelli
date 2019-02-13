@@ -18,4 +18,8 @@ public class constants {
     //Client Manager Constants
 
     public static final String PORT_ERROR_MESSAGE = "A game server is already started at port ";
+
+    public static final int HAND_SIZE = 15;
+
+    public static final int MINIMUM_SET_SIZE = 3;
 }

@@ -42,7 +42,7 @@ public class Welcome extends IntroducePlayer {
      */
     @Override
     public void doExecute() {
-        manager.startGame(numOfPlayers);
+        manager.joinTable(numOfPlayers);
         manager.introducePlayer(playerName, playerId, seatNumber, true);
     }
 

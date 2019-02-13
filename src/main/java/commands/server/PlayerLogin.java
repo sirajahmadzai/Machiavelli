@@ -1,5 +1,6 @@
 package commands.server;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
@@ -25,9 +26,8 @@ public class PlayerLogin extends ServerCommand {
      */
     public PlayerLogin(String playerName) {
         this();
-        this.playerName = playerName;
-
-        this.addParameter(playerName);
+        this.playerName = URLEncoder.encode(playerName);
+        this.addParameter(this.playerName);
     }
 
     /**
@@ -35,7 +35,7 @@ public class PlayerLogin extends ServerCommand {
      */
     @Override
     public void doParse(String commandStr) {
-        playerName = URLEncoder.encode(scanner.nextLine());
+        playerName = scanner.next();
     }
 
     /**
@@ -50,6 +50,6 @@ public class PlayerLogin extends ServerCommand {
      * @return
      */
     public String getPlayerName() {
-        return playerName;
+        return URLDecoder.decode(playerName);
     }
 }

@@ -5,28 +5,37 @@ import client.views.StartOptionsView;
 import client.views.View;
 import client.views.components.CardSetView;
 import client.views.components.CardView;
+import commands.client.ClientMessage;
 import commands.server.PassTurn;
 import commands.server.PlayerMove;
 import interfaces.clientManagerInterface;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import server.Server;
 import server.models.CardSet;
 import server.models.cards.Card;
+import utils.constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-
-import static utils.constants.PORT_ERROR_MESSAGE;
+import java.util.Optional;
 
 public class ClientManager implements clientManagerInterface {
-    /**
-     * PRIVATE STATIC FINALS
-     */
-    private static final int MINIMUM_SET_SIZE = 3;
+    public void serverMessage(ClientMessage.MessageTypes messageType, String messageText) {
+        gameView.setMessage(messageText);
+    }
+
+    enum GameState {
+        JOIN_GAME,
+        WAITING_FOR_PLAYERS,
+        PLAYING, GAME_FINISHED,
+    }
 
     /**
      * PRIVATE FINALS
@@ -51,6 +60,7 @@ public class ClientManager implements clientManagerInterface {
     private Client client;
     private int currentTurn;
     private CardView lastCardDrawn;
+    private GameState gameState = GameState.JOIN_GAME;
 
     /**
      * PUBLICS
@@ -83,7 +93,7 @@ public class ClientManager implements clientManagerInterface {
      */
     public void startServer(int port, int numberOfPlayers, String adminName) throws Exception {
         if (serverStarted) {
-            throw new UnsupportedOperationException(PORT_ERROR_MESSAGE + server.getPort());
+            throw new UnsupportedOperationException(constants.PORT_ERROR_MESSAGE + server.getPort());
         }
         try {
             //This is the admin of the game. The admin starts the server and waits for other players to join.
@@ -118,6 +128,25 @@ public class ClientManager implements clientManagerInterface {
      */
     public void setStage(Stage stage) {
         this.root = (StackPane) stage.getScene().getRoot();
+
+        stage.setOnHidden(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
+        stage.setOnCloseRequest(event -> {
+            if (gameState != GameState.JOIN_GAME) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Exit game?");
+                alert.setHeaderText("You are leaving the game.");
+                alert.setContentText("Are sure you want to do this?");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() != ButtonType.OK) {
+                    event.consume();
+                }
+            }
+        });
     }
 
     /**
@@ -126,14 +155,6 @@ public class ClientManager implements clientManagerInterface {
     public synchronized void showView(View view) {
         root.getChildren().clear();
         root.getChildren().add(view.getRoot());
-    }
-
-    /**
-     * @param view
-     */
-    public synchronized void pushView(View view) {
-        root.getChildren().add(view.getRoot());
-        view.setMainApp(this.app);
     }
 
     /**
@@ -148,7 +169,8 @@ public class ClientManager implements clientManagerInterface {
     /**
      * @param numberOfPlayers
      */
-    public void startGame(int numberOfPlayers) {
+    public void joinTable(int numberOfPlayers) {
+        this.gameState = GameState.WAITING_FOR_PLAYERS;
         gameView.setPlayerCount(numberOfPlayers);
         showView(gameView);
     }
@@ -190,6 +212,7 @@ public class ClientManager implements clientManagerInterface {
             // 1 hidden card to each opponent.
             gameView.dealHands();
         }
+        this.gameState = GameState.PLAYING;
         startTurn();
     }
 
@@ -214,6 +237,7 @@ public class ClientManager implements clientManagerInterface {
     public void connectionLost() {
         removePlayer(gameView.getOwnerSeat());
     }
+
     /**
      * @param seatNumber
      */
@@ -225,15 +249,14 @@ public class ClientManager implements clientManagerInterface {
         gameView.setMessage("One of the players is disconnected. Waiting for someone to join and game will restart!");
         gameView.removePlayer(seatNumber);
         resetGame();
-
-
     }
 
     private void resetGame() {
         gameView.resetView();
         selectionManager.deselectAll();
         selectionManager.clearSelections();
-        lastCardDrawn=null;
+        lastCardDrawn = null;
+        gameState = GameState.WAITING_FOR_PLAYERS;
     }
 
 
@@ -242,11 +265,10 @@ public class ClientManager implements clientManagerInterface {
      *
      * @param targetSet
      */
-    public void droppedToTarget(CardSetView targetSet) {
+    public void moveSelectedCards(CardSetView targetSet) {
         if (!isOwnerTurn()) {
             return;
         }
-        gameView.takeSnapshot();
 
         if (!selectionManager.isEmpty()) {
             // Move all selected cards to the new set.
@@ -258,6 +280,8 @@ public class ClientManager implements clientManagerInterface {
             // Clear selections.
             selectionManager.deselectAll();
         }
+
+        gameView.takeSnapshot();
         gameView.clearMessage();
     }
 
@@ -289,29 +313,29 @@ public class ClientManager implements clientManagerInterface {
         if (!isOwnerTurn()) {
             return false;
         }
+
         lastCardDrawn = null;
         selectionManager.deselectAll();
 
-        CardSet prevHand = gameView.getHand().getLastSnapshot();
-        CardSet lastHand = gameView.getHand().getCardSet();
+        CardSet prevHand = gameView.getHand().getFirstSnapshot();
+        CardSet lastHand = gameView.getHand().getLastSnapshot();
 
 //      No card played. Just pass the turn.
-        if (prevHand.equals(lastHand)) {
+        if (prevHand == null || prevHand.equals(lastHand)) {
             client.sendCommandToServer(new PassTurn());
             return true;
         }
 
 //      Can't make the move, invalid sets on table.
-        if (!gameView.getPlayArea().isValid(MINIMUM_SET_SIZE)) {
+        if (!gameView.getPlayArea().isValid(constants.MINIMUM_SET_SIZE)) {
             gameView.setMessage("Not a valid play!");
 
             return false;
         }
-        List<CardSet> table = gameView.getPlayArea().takeSnapshot();
+        List<CardSet> table = gameView.getPlayArea().getSnapshot();
 
         CardSet playedCards = prevHand.diff(lastHand);
         PlayerMove move = new PlayerMove(gameView.getOwnerSeat(), playedCards, table);
-
 
         client.sendCommandToServer(move);
 
@@ -324,6 +348,7 @@ public class ClientManager implements clientManagerInterface {
         } else {
             gameView.setMessage("You've lost the game, better luck next time :)");
         }
+        gameState = GameState.GAME_FINISHED;
     }
 
     public void switchTurn(int seatNumber) {
