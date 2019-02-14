@@ -1,7 +1,5 @@
 package commands;
 
-import java.util.Scanner;
-
 /**
  * Singleton factory class that creates concrete commands from command strings.
  */
@@ -9,7 +7,6 @@ public class CommandFactory {
     /**
      * PRIVATE STATICS
      */
-    private static Scanner scanner;
     private static CommandFactory ourInstance = new CommandFactory();
 
     /**
@@ -37,8 +34,7 @@ public class CommandFactory {
      * @return created concrete command.
      */
     public static Command buildCommand(String cmdString) {
-        scanner = new Scanner(cmdString);
-        Command.CommandNames cmdName = parseName();
+        Command.CommandNames cmdName = Command.parseName(cmdString);
 
         if (cmdName.getClazz() != null) {
             try {
@@ -47,27 +43,10 @@ public class CommandFactory {
                 return cmd;
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
-                return null;
+                return new BasicCommand(cmdString);
             }
         } else {
             return new BasicCommand(cmdString);
-        }
-    }
-
-    /**
-     * Parses the name part of the command string and creates a CommandName enum from that.
-     *
-     * @return CommandName enum
-     */
-    private static Command.CommandNames parseName() {
-        String nameStr = scanner.next();
-
-        try {
-            Command.CommandNames cmdName = Command.CommandNames.valueOf(nameStr);
-            return cmdName;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Unknown command name: " + nameStr);
-            return null;
         }
     }
 }

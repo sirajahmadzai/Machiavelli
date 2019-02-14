@@ -146,11 +146,8 @@ public class Table {
             }
         }
 
-
         try {
             int rank = 15;
-            standardDeck.add(new Joker(Suit.JOKER, cardID));
-            cardID++;
             standardDeck.add(new Joker(Suit.JOKER, cardID));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

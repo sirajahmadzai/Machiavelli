@@ -211,7 +211,7 @@ public class Machiavelli {
     /**
      * @param clientHandler
      */
-    public void addPlayer(ClientHandler clientHandler) {
+    public Player addPlayer(ClientHandler clientHandler) {
         // Create new player
         int playerId = players.size();
         String playerName = "Player" + playerId;
@@ -237,6 +237,7 @@ public class Machiavelli {
             // Welcome the new player
             sendCommandToPlayer(new IntroducePlayer(p.getName(), p.getPlayerID(), p.getSeatNumber()), player);
         }
+        return player;
     }
 
     /**
@@ -320,7 +321,7 @@ public class Machiavelli {
      * @param player
      */
     private void sendCommandToPlayer(Command command, Player player) {
-        player.getClientHandler().sendCommand(command.toString());
+        sendCommandToPlayer(command.toString(),player);
     }
 
     /**

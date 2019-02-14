@@ -16,9 +16,7 @@ public class PlayArea implements EventHandler<CardEvent> {
     private FlowPane setsArea;
     private CardSetView placeholderSet;
     private ArrayList<CardSetView> setViews;
-    private List<CardSet> snapshot;
-
-    public Stack<Object> snapshot_history;
+    public Stack<List<CardSet>> snapshot_history;
 
     /**
      * CONSTRUCTOR
@@ -27,9 +25,7 @@ public class PlayArea implements EventHandler<CardEvent> {
      */
     public PlayArea(FlowPane setsArea) {
         this.setsArea = setsArea;
-
         setViews = new ArrayList<>();
-        snapshot = new ArrayList<>();
         snapshot_history = new Stack<>();
         createPlaceholderSet();
     }
@@ -37,11 +33,8 @@ public class PlayArea implements EventHandler<CardEvent> {
     /**
      * GETTERS
      */
-    /**
-     * @return
-     */
-    public List<CardSet> getSnapshot() {
-        return snapshot;
+    public List<CardSet> getLastSnapshot() {
+        return snapshot_history.peek();
     }
 
     /**
@@ -142,9 +135,8 @@ public class PlayArea implements EventHandler<CardEvent> {
             }
         }
 
-        this.snapshot = snapshot;
         snapshot_history.push(snapshot);
-        return this.snapshot;
+        return snapshot;
     }
 
     public void init_history() {
@@ -205,7 +197,6 @@ public class PlayArea implements EventHandler<CardEvent> {
 
     public void reset() {
         init_history();
-        snapshot.clear();
         setsArea.getChildren().removeAll(setViews);
         setViews.clear();
         createPlaceholderSet();

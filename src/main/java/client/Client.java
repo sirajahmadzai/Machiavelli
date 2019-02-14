@@ -1,5 +1,6 @@
 package client;
 
+import client.views.StartOptionsView;
 import commands.Command;
 import commands.CommandFactory;
 import commands.server.PlayerLogin;
@@ -8,20 +9,17 @@ import interfaces.clientInterface;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 public class Client extends Task<Void> implements clientInterface/* implements Runnable*/ {
 
     /****************
      ****PRIVATES****
      ****************/
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private SocketChannel socket;
     private ClientManager manager;
     private String playerName;
 
@@ -37,17 +35,15 @@ public class Client extends Task<Void> implements clientInterface/* implements R
         this.manager = manager;
         this.playerName = playerName;
 
-        if (ip.equals("") && port == 0) {
-            socket = new Socket("localhost", 9876);
-        } else {
-            socket = new Socket(ip, port);
+        try {
+            if (ip.equals("") && port == 0) {
+                socket = SocketChannel.open(new InetSocketAddress("localhost", 9876));
+            } else {
+                socket = SocketChannel.open(new InetSocketAddress(ip, port));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
-
-        manager.in = in;
-        manager.out = out;
     }
 
     /**
@@ -65,36 +61,64 @@ public class Client extends Task<Void> implements clientInterface/* implements R
     /**
      * Processes all messages from server, according to the protocol.
      *
-     * @return
+     * Reads data from the socket and accumulates the data in a string builder.
+     * Because the commands may arrive partially or more then one command can be received in a single read.
+     * Then we parse the accumulated string, when a full command is found it's deleted from the builder.
+     * For example commands CMD1| and CMD2| may arrive like the following:
+     *
+     * CMD1| + CMD2|
+     * CM + D1| + CMD2|
+     * CMD1|CMD2|
+     *
+     * @return Void
      * @throws Exception
      */
     @Override
     protected Void call() throws Exception {
 
         try {
-
             String response;
-            while ((response = in.readLine()) != null) {
-                Command command = CommandFactory.buildCommand(response);
-                System.out.println("Client received command: " + command);
-                switch (command.getName()) {
-                    case PLAYER_MOVE:
-                        Platform.runLater(() -> manager.playMove((PlayerMove) command));
-                        break;
-                    case WHO_ARE_YOU:
-                        sendCommandToServer(new PlayerLogin(this.playerName));
-                        break;
-                    default:
-                        command.execute();
-                }
+            StringBuilder builder = new StringBuilder();
 
-//                System.out.println("Command processed " + command);
+            while (true) {
+                ByteBuffer buffer = ByteBuffer.allocate(64);
+                socket.read(buffer);
+                buffer.flip();
+                response = new String(buffer.array()).trim();
+                builder.append(response);
+                buffer.clear();
+
+                String[] commands = builder.toString().split("(?<=\\|)");
+                for (String command : commands) {
+                    if (command.endsWith(Command.EOC)) {
+                        builder.delete(0, command.length());
+                        processCommand(command);
+                    }
+                }
             }
-            return null;
         } catch (Exception e) {
             Platform.runLater(manager::connectionLost);
             e.printStackTrace();
-            return null;
+        }
+        return null;
+    }
+
+    private void processCommand(String commandStr){
+        System.out.println("Command received at client: " + commandStr);
+
+        Command command = CommandFactory.buildCommand(commandStr);
+        switch (command.getName()) {
+            case PLAYER_MOVE:
+                Platform.runLater(() -> manager.playMove((PlayerMove) command));
+                break;
+            case WHO_ARE_YOU:
+                sendCommandToServer(new PlayerLogin(this.playerName));
+                break;
+            case TABLE_IS_FULL:
+                StartOptionsView.getInstance().setMessageText("Sorry you can not join the game. The table is full.");
+                break;
+            default:
+                command.execute();
         }
     }
 
@@ -104,6 +128,11 @@ public class Client extends Task<Void> implements clientInterface/* implements R
      * @param cmd
      */
     public void sendCommandToServer(Command cmd) {
-        this.out.println(cmd.serialize());
+        ByteBuffer buffer = ByteBuffer.wrap(cmd.serialize().getBytes());
+        try {
+            socket.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

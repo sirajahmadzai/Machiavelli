@@ -7,43 +7,30 @@ import commands.server.PlayerMove;
 import server.models.Machiavelli;
 import server.models.Player;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 
-public class ClientHandler implements Runnable {
+public class ClientHandler {
 
     /*******************************************************************
      **************************PRIVATE STATICS********************************
      ******************************************************************/
-    private static int nextId = 0;
     private final Machiavelli machiavelli = Machiavelli.getInstance();
 
     /*******************************************************************
      **************************PRIVATES********************************
      ******************************************************************/
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
-    private Server server;
+    private SocketChannel clientSocket;
     private Player player;
 
     /**
-     * @param socket
-     * @param server
+     * @param clientSocket
      * @throws Exception
      */
-    public ClientHandler(Socket socket, Server server) throws Exception {
-        this.socket = socket;
-        this.server = server;
-
-        in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(), true);
+    public ClientHandler(SocketChannel clientSocket){
+        this.clientSocket = clientSocket;
     }
 
     /**
@@ -56,6 +43,9 @@ public class ClientHandler implements Runnable {
         return player;
     }
 
+    public SocketChannel getClientSocket() {
+        return clientSocket;
+    }
     /**
      * SETTERS
      */
@@ -69,42 +59,17 @@ public class ClientHandler implements Runnable {
     /**
      *
      */
-    @Override
-    public void run() {
-        sendCommand(Command.CommandNames.WHO_ARE_YOU);
-
-        try {
-            while (true) {
-                String cmdString = in.readLine();
-
-                if (cmdString != null) {
-                    Command cmd = CommandFactory.buildCommand(cmdString);
-                    processCommand(cmd);
-                }else {
-                    // Client connection closed
-                    System.out.println("The player " + player.getName() + " at seat number " + player.getSeatNumber() + " has disconnected!");
-                    break;
-                }
-            }
-
-        } catch (SocketException e) {
-            System.out.println("The player " + player.getName() + " at seat number " + player.getSeatNumber() + " has unexpectedly disconnected!");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("The player " + player.getName() + " at seat number " + player.getSeatNumber() + " has unexpectedly disconnected!!");
-            e.printStackTrace();
-        } finally {
-            // This client is going down!  Remove its name and its print
-            // writer from the sets, and close its socket.
-            if (out != null) {
-                server.removeClientHandler(this);
-            }
-            try {
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void processCommand() throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(256);
+        int readByteCount = clientSocket.read(buffer);
+        if(readByteCount == -1){
+            throw new IOException("Client disconnected!");
         }
+        String cmdString = new String(buffer.array()).trim();
+        buffer.clear();
+
+        Command cmd = CommandFactory.buildCommand(cmdString);
+        processCommand(cmd);
     }
 
     /**
@@ -126,23 +91,31 @@ public class ClientHandler implements Runnable {
     }
 
     /**
-     * @throws IOException
-     */
-    public void closeSocket() throws IOException {
-        socket.close();
-    }
-
-    /**
      * @param command
      */
     public void sendCommand(String command) {
-        out.println(command);
+        ByteBuffer buffer = ByteBuffer.wrap(command.getBytes());
+        System.out.println();
+        System.out.println("SERVER: sending cmd("+buffer.remaining()+","+command.length()+ ")"+command);
+
+        try {
+            int writtenBytes = 0;
+            int totalBytes = buffer.limit();
+            while (writtenBytes < totalBytes) {
+                writtenBytes += clientSocket.write(buffer);
+                System.out.println("SERVER: written"+  writtenBytes+"bytes");
+            }
+            buffer.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * @param command
      */
     public void sendCommand(Command.CommandNames command) {
-        out.println(command);
+        sendCommand(command.toString());
     }
+
 }

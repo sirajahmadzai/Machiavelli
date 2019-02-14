@@ -20,11 +20,10 @@ import server.models.CardSet;
 import server.models.cards.Card;
 import utils.constants;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CyclicBarrier;
 
 public class ClientManager implements clientManagerInterface {
     public void serverMessage(ClientMessage.MessageTypes messageType, String messageText) {
@@ -65,8 +64,6 @@ public class ClientManager implements clientManagerInterface {
     /**
      * PUBLICS
      */
-    public BufferedReader in;
-    public PrintWriter out;
 
     /**
      * gets the instance
@@ -96,13 +93,17 @@ public class ClientManager implements clientManagerInterface {
             throw new UnsupportedOperationException(constants.PORT_ERROR_MESSAGE + server.getPort());
         }
         try {
+            //
+            CyclicBarrier barrier = new CyclicBarrier(2);
             //This is the admin of the game. The admin starts the server and waits for other players to join.
-            server = new Server(port, numberOfPlayers);
+            server = new Server(port, numberOfPlayers,barrier);
 
             Thread serverThread = new Thread(server);
             serverThread.setName("Server thread");
             serverThread.start();
             serverStarted = true;
+
+            barrier.await();
 
             //Admin joins the game first.
             loginServer(port, adminName);
@@ -332,7 +333,7 @@ public class ClientManager implements clientManagerInterface {
 
             return false;
         }
-        List<CardSet> table = gameView.getPlayArea().getSnapshot();
+        List<CardSet> table = gameView.getPlayArea().getLastSnapshot();
 
         CardSet playedCards = prevHand.diff(lastHand);
         PlayerMove move = new PlayerMove(gameView.getOwnerSeat(), playedCards, table);

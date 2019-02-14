@@ -1,5 +1,6 @@
 package commands;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import commands.client.*;
 import commands.server.PassTurn;
 import commands.server.PlayerLogin;
@@ -17,6 +18,9 @@ import static commands.Command.CommandTypes.SERVER_COMMAND;
  * Base class for both server and client commands.
  */
 public abstract class Command {
+    // End Of Command
+    public static final String EOC = "|";
+    public static final String PARAMETER_SEPERATOR = "&";
 
     /**
      * PROTECTS
@@ -24,6 +28,7 @@ public abstract class Command {
     protected CommandNames name;
     protected Stack<Object> parameters = new Stack<>();
     protected Scanner scanner;
+    private String commandString;
 
     /**
      * CONSTRUCTOR
@@ -48,6 +53,7 @@ public abstract class Command {
      */
     public Command(String commandStr) {
         this();
+        this.commandString = commandStr;
         parse(commandStr);
     }
 
@@ -92,16 +98,30 @@ public abstract class Command {
     /**
      * Creates a scanner for parsing the command and parses just the name of the command.
      * This behaviour is shared in all subclasses.
-     *
-     * @param commandStr
      */
-    private void parseName(String commandStr) {
-        scanner = new Scanner(commandStr);
+    CommandNames parseName() {
+        scanner = getScanner(this.commandString);
+        return parseName(scanner);
+    }
+
+    // For external use
+    static CommandNames parseName(String commandStr) {
+        return parseName(getScanner(commandStr));
+    }
+
+    private static CommandNames parseName(Scanner scanner) {
         String name = scanner.next();
+        return CommandNames.valueOf(name);
+    }
+
+    private static Scanner getScanner(String cmdString) {
         try {
-            this.name = CommandNames.valueOf(name);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Unknown command name: " + name);
+            Scanner s = new Scanner(unwrapCommandString(cmdString));
+            s.useDelimiter(PARAMETER_SEPERATOR);
+            return s;
+        } catch (InvalidArgumentException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -111,14 +131,15 @@ public abstract class Command {
      * @param commandStr the string to be parsed.
      */
     void parse(String commandStr) {
-        parseName(commandStr);
+        this.commandString = commandStr;
+        this.name = parseName();
 
         while (scanner.hasNext()) {
             addParameter(scanner.next());
         }
 
-//      Restart scanning so that subclasses can use the scanner.
-        parseName(commandStr);
+        // Restart scanning so that subclasses can use the scanner.
+        parseName();
         doParse(commandStr);
     }
 
@@ -128,13 +149,13 @@ public abstract class Command {
      * @return
      */
     public String serialize() {
-        StringJoiner joiner = new StringJoiner(" ");
-        joiner.add(name.toString());
+        StringJoiner joiner = new StringJoiner(PARAMETER_SEPERATOR);
+        joiner.add(name.toPlainString());
 
         for (Object parameter : parameters) {
             joiner.add(parameter.toString());
         }
-        return joiner.toString();
+        return wrapCommandString(joiner.toString());
     }
 
     /**
@@ -143,6 +164,20 @@ public abstract class Command {
     @Override
     public String toString() {
         return serialize();
+    }
+
+    public static String wrapCommandString(String str) {
+        return str + EOC;
+    }
+
+    public static String unwrapCommandString(String str) throws InvalidArgumentException {
+        if (str.endsWith(EOC)) {
+            return str.substring(0, str.length() - EOC.length());
+        } else {
+            String[] args = new String[1];
+            args[0] = "Command format is invalid: "+ str;
+            throw new InvalidArgumentException(args);
+        }
     }
 
     /**
@@ -162,6 +197,7 @@ public abstract class Command {
      * Concrete implementation of command execution.
      */
     protected abstract void doExecute();
+
 
     /**
      *
@@ -193,8 +229,7 @@ public abstract class Command {
         DRAW_CARD(CLIENT_COMMAND, DrawCard.class),
 
         REMOVE_PLAYER(CLIENT_COMMAND, RemovePlayer.class),
-        CLIENT_MESSAGE(CLIENT_COMMAND,ClientMessage.class )
-        ;
+        CLIENT_MESSAGE(CLIENT_COMMAND, ClientMessage.class);
 
 
         /**
@@ -242,5 +277,16 @@ public abstract class Command {
         public Class getClazz() {
             return clazz;
         }
+
+        @Override
+        public String toString() {
+            String str = super.toString();
+            return Command.wrapCommandString(str);
+        }
+
+        protected String toPlainString() {
+            return super.toString();
+        }
+
     }
 }
