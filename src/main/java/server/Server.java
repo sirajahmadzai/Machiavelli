@@ -2,6 +2,7 @@ package server;
 
 import server.models.Machiavelli;
 import server.reactor.AcceptEventHandler;
+import server.reactor.ClientEventHandler;
 import server.reactor.Reactor;
 
 import java.io.IOException;
@@ -60,7 +61,7 @@ public class Server implements Runnable {
 
             reactor.registerChannel(SelectionKey.OP_ACCEPT, serverSocket);
             reactor.registerEventHandler(SelectionKey.OP_ACCEPT, new AcceptEventHandler(reactor.getDemultiplexer()));
-            reactor.registerEventHandler(SelectionKey.OP_READ, new ClientHandler());
+            reactor.registerEventHandler(SelectionKey.OP_READ, new ClientEventHandler());
 
             // Server is ready to accept clients.
             barrier.await();

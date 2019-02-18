@@ -1,4 +1,4 @@
-package server;
+package server.reactor;
 
 import commands.Command;
 import commands.CommandFactory;
@@ -6,7 +6,6 @@ import commands.server.PlayerLogin;
 import commands.server.PlayerMove;
 import server.models.Machiavelli;
 import server.models.Player;
-import server.reactor.EventHandler;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -14,7 +13,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
 
-public class ClientHandler implements EventHandler {
+public class ClientEventHandler implements EventHandler {
 
     /*******************************************************************
      **************************PRIVATE STATICS********************************
