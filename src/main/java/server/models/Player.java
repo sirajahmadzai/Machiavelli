@@ -1,6 +1,5 @@
 package server.models;
 
-import server.ClientHandler;
 import server.models.cards.Card;
 
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ public class Player {
     private String name;
     private CardSet hand;
     private int pointValue;
-    private ClientHandler clientHandler;
     private int seatNumber;
 
     /**
@@ -35,14 +33,6 @@ public class Player {
     /**
      * GETTERS
      */
-    /**
-     * gets the clientHandler object
-     *
-     * @return
-     */
-    public ClientHandler getClientHandler() {
-        return clientHandler;
-    }
 
     /**
      * gets player id
@@ -117,15 +107,6 @@ public class Player {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * sets this player's clientHandler object
-     *
-     * @param clientHandler
-     */
-    public void setClientHandler(ClientHandler clientHandler) {
-        this.clientHandler = clientHandler;
     }
 
     /**

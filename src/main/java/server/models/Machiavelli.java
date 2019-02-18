@@ -4,7 +4,7 @@ import commands.Command;
 import commands.client.*;
 import commands.server.PlayerMove;
 import commands.server.WinnerCommand;
-import server.ClientHandler;
+import server.ClientMessageSender;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
 import utils.constants;
@@ -208,23 +208,22 @@ public class Machiavelli {
         sendCommandToAllPlayers(introduce);
     }
 
-    /**
-     * @param clientHandler
-     */
-    public Player addPlayer(ClientHandler clientHandler) {
+    public Player addPlayer() {
         // Create new player
         int playerId = players.size();
         String playerName = "Player" + playerId;
         Player player = new Player(playerId, playerName);
-        player.setClientHandler(clientHandler);
-        clientHandler.setPlayer(player);
         players.add(player);
 
         // Place the player in the next empty seat
         tableSeats.seatNewPlayer(player);
 
-        Command introduce = new IntroducePlayer(playerName, playerId, player.getSeatNumber());
-        Command welcome = new Welcome(playerName, playerId, player.getSeatNumber(), numOfPlayers);
+        return player;
+    }
+
+    public void introducePlayer(Player player){
+        Command introduce = new IntroducePlayer(player.getName(), player.getPlayerID(), player.getSeatNumber());
+        Command welcome = new Welcome(player.getName(), player.getPlayerID(), player.getSeatNumber(), numOfPlayers);
 
         // Welcome the new player
         sendCommandToPlayer(welcome, player);
@@ -237,33 +236,25 @@ public class Machiavelli {
             // Welcome the new player
             sendCommandToPlayer(new IntroducePlayer(p.getName(), p.getPlayerID(), p.getSeatNumber()), player);
         }
-        return player;
     }
 
     /**
-     * @param clientHandler
+     * @param player
      */
-    public void removePlayer(ClientHandler clientHandler) {
-        Player player = null;
-        for (Player p : players) {
-            if (p.getClientHandler() == clientHandler) {
-                player = p;
-                break;
-            }
-        }
-
+    public void playerLeftTheGame(Player player) {
         if (player != null) {
             players.remove(player);
             tableSeats.emptySeat(player.getSeatNumber());
             gameStarted = false;
 
             sendCommandToAllPlayers(new RemovePlayer(player.getSeatNumber()));
+            resetGame();
         }
     }
 
     public void resetGame() {
         table.initMachiavelliDeck();
-        for(Player player: players){
+        for (Player player : players) {
             player.getHand().removeAllCards();
         }
     }
@@ -321,7 +312,7 @@ public class Machiavelli {
      * @param player
      */
     private void sendCommandToPlayer(Command command, Player player) {
-        sendCommandToPlayer(command.toString(),player);
+        sendCommandToPlayer(command.toString(), player);
     }
 
     /**
@@ -329,7 +320,7 @@ public class Machiavelli {
      * @param player
      */
     private void sendCommandToPlayer(String command, Player player) {
-        player.getClientHandler().sendCommand(command);
+        ClientMessageSender.getInstance().sendCommand(player, command);
     }
 
     /**
