@@ -29,20 +29,19 @@ public class AcceptEventHandler implements EventHandler {
         try {
             ServerSocketChannel serverSocketChannel = (ServerSocketChannel) event.channel();
             SocketChannel clientSocket = serverSocketChannel.accept();
-            if(clientSocket == null){
+            if (clientSocket == null) {
                 return;
             }
-            SelectionKey key = registerClient(clientSocket);
 
             if (machiavelli.isTableFull()) {
                 ClientMessageSender.sendCommand(clientSocket, Command.CommandNames.TABLE_IS_FULL);
             } else {
+                SelectionKey key = registerClient(clientSocket);
                 Player player = machiavelli.addPlayer();
                 key.attach(player);
                 ClientMessageSender.getInstance().registerPlayer(player, clientSocket);
-
                 machiavelli.introducePlayer(player);
-                ClientMessageSender.sendCommand(clientSocket, Command.CommandNames.WHO_ARE_YOU);
+
                 machiavelli.startGame();
             }
         } catch (IOException e) {

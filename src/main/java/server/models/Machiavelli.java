@@ -203,6 +203,7 @@ public class Machiavelli {
     public void playerLogin(String playerName, Player player) {
         player.setName(playerName);
 
+        // Reintroduce the player with it's new name.
         Command introduce = new IntroducePlayer(player.getName(), player.getPlayerID(), player.getSeatNumber());
         // Let all players know this player's name.
         sendCommandToAllPlayers(introduce);
@@ -221,7 +222,7 @@ public class Machiavelli {
         return player;
     }
 
-    public void introducePlayer(Player player){
+    public void introducePlayer(Player player) {
         Command introduce = new IntroducePlayer(player.getName(), player.getPlayerID(), player.getSeatNumber());
         Command welcome = new Welcome(player.getName(), player.getPlayerID(), player.getSeatNumber(), numOfPlayers);
 
@@ -236,6 +237,9 @@ public class Machiavelli {
             // Welcome the new player
             sendCommandToPlayer(new IntroducePlayer(p.getName(), p.getPlayerID(), p.getSeatNumber()), player);
         }
+
+        // Request player's name. Once player responds we'll introduce him tto the table again.
+        sendCommandToPlayer(Command.CommandNames.WHO_ARE_YOU.toString(), player);
     }
 
     /**
@@ -252,7 +256,7 @@ public class Machiavelli {
         }
     }
 
-    public void resetGame() {
+    private void resetGame() {
         table.initMachiavelliDeck();
         for (Player player : players) {
             player.getHand().removeAllCards();
@@ -389,7 +393,7 @@ public class Machiavelli {
         return true;
     }
 
-    public void setWinner(Player winner) {
+    private void setWinner(Player winner) {
         Command setWinner = new WinnerCommand(winner.getSeatNumber());
         sendCommandToAllPlayers(setWinner);
     }

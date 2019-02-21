@@ -1,14 +1,11 @@
 package server;
 
 import server.models.Machiavelli;
-import server.reactor.AcceptEventHandler;
-import server.reactor.ClientEventHandler;
-import server.reactor.Reactor;
+import server.proactor.ProactorInitiator;
+import server.reactor.ReactorInitiator;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.ServerSocketChannel;
 import java.util.concurrent.CyclicBarrier;
 import java.util.logging.Logger;
 
@@ -25,6 +22,13 @@ public class Server implements Runnable {
      */
     private int port;
     private Machiavelli machiavelli;
+
+    enum OperationMode {
+        REACTIVE,
+        PROACTIVE
+    }
+
+    private OperationMode operationMode = OperationMode.PROACTIVE;
 
     /**
      * CONSTRUCTOR
@@ -44,6 +48,10 @@ public class Server implements Runnable {
         System.out.println("starting server on: localhost at port " + port);
     }
 
+    public void setOperationMode(OperationMode operationMode) {
+        this.operationMode = operationMode;
+    }
+
     /**
      * @return
      */
@@ -53,19 +61,22 @@ public class Server implements Runnable {
 
     public void run() {
         try {
-            ServerSocketChannel serverSocket = ServerSocketChannel.open();
-            serverSocket.bind(new InetSocketAddress(this.port));
-            serverSocket.configureBlocking(false);
+            ServerModeInitiator serverModeInitiator = null;
+            InetSocketAddress address = new InetSocketAddress(port);
+            switch (operationMode) {
+                case REACTIVE:
+                    serverModeInitiator = new ReactorInitiator(address);
+                    break;
+                case PROACTIVE:
+                    serverModeInitiator = new ProactorInitiator(address);
+                    break;
+            }
 
-            Reactor reactor = new Reactor();
-
-            reactor.registerChannel(SelectionKey.OP_ACCEPT, serverSocket);
-            reactor.registerEventHandler(SelectionKey.OP_ACCEPT, new AcceptEventHandler(reactor.getDemultiplexer()));
-            reactor.registerEventHandler(SelectionKey.OP_READ, new ClientEventHandler());
+            ServerModeRunner serverModeRunner = serverModeInitiator.initiateMode();
 
             // Server is ready to accept clients.
             barrier.await();
-            reactor.run();
+            serverModeRunner.run();
 
         } catch (Exception e) {
             e.printStackTrace();

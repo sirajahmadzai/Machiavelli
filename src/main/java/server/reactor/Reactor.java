@@ -1,5 +1,7 @@
 package server.reactor;
 
+import server.ServerModeRunner;
+
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
@@ -9,8 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Reactor {
-
+public class Reactor implements ServerModeRunner{
     private Map<Integer, EventHandler> registeredHandlers = new ConcurrentHashMap<Integer, EventHandler>();
     private Selector demultiplexer;
 

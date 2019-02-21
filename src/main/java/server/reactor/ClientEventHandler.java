@@ -1,9 +1,5 @@
 package server.reactor;
 
-import commands.Command;
-import commands.CommandFactory;
-import commands.server.PlayerLogin;
-import commands.server.PlayerMove;
 import server.models.Machiavelli;
 import server.models.Player;
 
@@ -24,24 +20,6 @@ public class ClientEventHandler implements EventHandler {
      **************************PRIVATES********************************
      ******************************************************************/
 
-    /**
-     * @param cmd
-     * @param player
-     */
-    private void processCommand(Command cmd, Player player) {
-        System.out.println("Command received: " + cmd.serialize());
-        switch (cmd.getName()) {
-            case PLAYER_MOVE:
-                machiavelli.processMove((PlayerMove) cmd);
-                break;
-            case PLAYER_LOGIN:
-                machiavelli.playerLogin(((PlayerLogin) cmd).getPlayerName(), player);
-                break;
-            default:
-                cmd.execute();
-                break;
-        }
-    }
 
     @Override
     public void handleEvent(SelectionKey key) throws IOException {
@@ -57,9 +35,7 @@ public class ClientEventHandler implements EventHandler {
             String cmdString = new String(buffer.array()).trim();
             buffer.clear();
 
-            Command cmd = CommandFactory.buildCommand(cmdString);
-            processCommand(cmd, player);
-
+            ClientCommandProcessor.processCommand(cmdString, player);
         } catch (IOException e) {
             clientSocket.close();
             machiavelli.playerLeftTheGame(player);
