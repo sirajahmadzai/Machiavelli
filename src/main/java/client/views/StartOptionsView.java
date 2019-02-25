@@ -3,12 +3,9 @@ package client.views;
 import client.ClientManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
-import server.Server;
+import utils.constants;
 
 /**
  *
@@ -37,6 +34,9 @@ public class StartOptionsView extends View {
     @FXML
     private ToggleButton modeProactive;
 
+    @FXML
+    private TabPane loginTabs;
+
     private constants.GameMode serverMode;
 
     /************************
@@ -54,7 +54,9 @@ public class StartOptionsView extends View {
 
         try {
             loadFxml();
+
             ToggleGroup toggleGroup = modeReactive.getToggleGroup();
+            setServerMode(toggleGroup.getSelectedToggle());
             toggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
                 if (newVal == null) {
                     oldVal.setSelected(true);
@@ -63,7 +65,14 @@ public class StartOptionsView extends View {
                 }
             });
 
-            setServerMode(toggleGroup.getSelectedToggle());
+            loginTabs.widthProperty().addListener((observable, oldValue, newValue) ->
+            {
+                double width=loginTabs.getWidth() / 2-25;
+                loginTabs.setTabMinWidth(width);
+                loginTabs.setTabMaxWidth(width);
+            });
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
