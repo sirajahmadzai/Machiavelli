@@ -54,3 +54,16 @@
 #port {
     -fx-font-size: 20;
 }
+
+.mode-buttons{
+    -fx-background-color: #FF0000;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.9), 3, 0, 1, 1);
+    -fx-background-radius: 10px 0 0 10px;
+}
+.proactive-button{
+    -fx-background-radius: 0 10px 10px 0 ;
+}
+
+.mode-buttons:selected{
+    -fx-background-color: #00FF00;
+}

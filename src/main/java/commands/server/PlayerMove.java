@@ -74,22 +74,6 @@ public class PlayerMove extends BasicCommand {
 
 
     /**
-     * SETTERS
-     */
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = seatNumber;
-    }
-
-    public void setTable(List<CardSet> table) {
-        this.table = table;
-    }
-
-    public void setPlayedCards(CardSet playedCards) {
-        this.playedCards = playedCards;
-    }
-
-
-    /**
      * @param commandStr
      */
     @Override

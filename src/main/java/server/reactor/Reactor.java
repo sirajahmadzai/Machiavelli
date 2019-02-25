@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Reactor implements ServerModeRunner{
+public class Reactor implements ServerModeRunner {
     private Map<Integer, EventHandler> registeredHandlers = new ConcurrentHashMap<Integer, EventHandler>();
     private Selector demultiplexer;
 
@@ -41,22 +41,22 @@ public class Reactor implements ServerModeRunner{
                 while (handleIterator.hasNext()) {
                     SelectionKey handle = handleIterator.next();
 
+                    EventHandler handler = null;
                     if (handle.isAcceptable()) {
-                        EventHandler handler = registeredHandlers.get(SelectionKey.OP_ACCEPT);
-                        handler.handleEvent(handle);
+                        handler = registeredHandlers.get(SelectionKey.OP_ACCEPT);
                     }
 
                     if (handle.isReadable()) {
-                        EventHandler handler = registeredHandlers.get(SelectionKey.OP_READ);
-                        handler.handleEvent(handle);
-                        handleIterator.remove();
+                        handler = registeredHandlers.get(SelectionKey.OP_READ);
                     }
 
                     if (handle.isWritable()) {
-                        EventHandler handler = registeredHandlers.get(SelectionKey.OP_WRITE);
-                        handler.handleEvent(handle);
-                        handleIterator.remove();
+                        handler = registeredHandlers.get(SelectionKey.OP_WRITE);
                     }
+                    if (handler != null) {
+                        handler.handleEvent(handle);
+                    }
+                    handleIterator.remove();
                 }
             }
         } catch (Exception e) {

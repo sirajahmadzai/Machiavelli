@@ -22,4 +22,9 @@ public class constants {
     public static final int HAND_SIZE = 15;
 
     public static final int MINIMUM_SET_SIZE = 3;
+
+    public enum GameMode {
+        REACTIVE,
+        PROACTIVE
+    }
 }

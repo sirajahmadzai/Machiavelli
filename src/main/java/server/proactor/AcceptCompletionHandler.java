@@ -4,6 +4,7 @@ import commands.Command;
 import server.ClientMessageSender;
 import server.models.Machiavelli;
 import server.models.Player;
+import utils.constants;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
@@ -46,7 +47,7 @@ public class AcceptCompletionHandler implements CompletionHandler<AsynchronousSo
             sessionState.setProperty("player",player);
 
             ClientMessageSender.getInstance().registerPlayer(player, clientSocket);
-            machiavelli.introducePlayer(player);
+            machiavelli.introducePlayer(player, constants.GameMode.PROACTIVE);
 
             machiavelli.startGame();
         }

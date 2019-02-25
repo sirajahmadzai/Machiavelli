@@ -8,7 +8,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
 
 public class ProactorInitiator implements ServerModeInitiator {
-    Proactor proactor = null;
+    private Proactor proactor = null;
 
     public ProactorInitiator(InetSocketAddress address) throws IOException {
         final AsynchronousServerSocketChannel listener = AsynchronousServerSocketChannel.open().bind(address);

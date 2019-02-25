@@ -1,5 +1,7 @@
 package commands.client;
 
+import utils.constants;
+
 /**
  * When a player joins the game server lets him know
  * 1- The number of players the game is set up for
@@ -12,6 +14,7 @@ public class Welcome extends IntroducePlayer {
      * PRIVATES
      */
     private int numOfPlayers;
+    private constants.GameMode gameMode;
 
 
     /**
@@ -29,12 +32,14 @@ public class Welcome extends IntroducePlayer {
      * @param seatNumber   the seat number of the new player.
      * @param numOfPlayers the number of players the game is set up for
      */
-    public Welcome(String playerName, int playerId, int seatNumber, int numOfPlayers) {
+    public Welcome(String playerName, int playerId, int seatNumber, int numOfPlayers, constants.GameMode gameMode) {
         super(playerName, playerId, seatNumber);
 
         this.name = CommandNames.WELCOME;
         this.numOfPlayers = numOfPlayers;
+        this.gameMode = gameMode;
         this.addParameter(numOfPlayers);
+        this.addParameter(gameMode);
     }
 
     /**
@@ -43,7 +48,7 @@ public class Welcome extends IntroducePlayer {
     @Override
     public void doExecute() {
         manager.joinTable(numOfPlayers);
-        manager.introducePlayer(playerName, playerId, seatNumber, true);
+        manager.welcomePlayer(playerName, playerId, seatNumber, gameMode);
     }
 
     /**
@@ -53,5 +58,6 @@ public class Welcome extends IntroducePlayer {
     public void doParse(String commandStr) {
         super.doParse(commandStr);
         numOfPlayers = scanner.nextInt();
+        gameMode = constants.GameMode.valueOf(scanner.next());
     }
 }

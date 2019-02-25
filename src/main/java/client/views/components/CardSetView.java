@@ -368,8 +368,8 @@ public class CardSetView extends HBox {
     /**
      * reverse any cards taken from this CardSetView's cardSet
      */
-    public void rollbackMoves() {
-        if (snapshots.size() < 2) return;
+    public boolean rollbackMoves() {
+        if (snapshots.size() < 2) return false;
 
         removeAllCards(true);
         snapshots.pop();
@@ -379,6 +379,11 @@ public class CardSetView extends HBox {
             addCard(card, true);
         }
         sort();
+        return true;
+    }
+
+    public void rollbackToStartOfTurn() {
+        while (rollbackMoves()) ;
     }
 
     /**

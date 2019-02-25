@@ -6,6 +6,7 @@ import commands.server.PassTurn;
 import commands.server.PlayerLogin;
 import commands.server.PlayerMove;
 import commands.server.WinnerCommand;
+import server.models.Player;
 
 import java.util.Scanner;
 import java.util.Stack;
@@ -29,6 +30,7 @@ public abstract class Command {
     protected Stack<Object> parameters = new Stack<>();
     protected Scanner scanner;
     private String commandString;
+    private Player player;
 
     /**
      * CONSTRUCTOR
@@ -198,6 +200,13 @@ public abstract class Command {
      */
     protected abstract void doExecute();
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
 
     /**
      *

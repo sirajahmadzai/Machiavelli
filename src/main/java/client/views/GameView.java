@@ -16,9 +16,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import server.models.CardSet;
-import server.models.Machiavelli;
 import server.models.cards.Card;
 import server.models.cards.HiddenCard;
+import utils.constants;
 
 public class GameView extends View {
     /*************************************************************
@@ -41,10 +41,11 @@ public class GameView extends View {
 
     @FXML
     private Button revertButton;
+    private constants.GameMode gameMode;
 
     @FXML
     public void onRevertClicked(ActionEvent ae) {
-        resetMove();
+        rollbackMove();
     }
 
     /*************************************************************
@@ -56,9 +57,6 @@ public class GameView extends View {
      */
     // instance of GameView
     private static GameView ourInstance = new GameView();
-
-    private static Machiavelli machiavelli = Machiavelli.getInstance();
-
 
     /*************************************************************
      *****************************PRIVATES************************
@@ -263,6 +261,7 @@ public class GameView extends View {
     public void takeSnapshot() {
         playArea.takeSnapshot();
         seats.getOwnerPlayerHand().takeSnapshot();
+        clearMessage();
     }
 
     public void init_snapstate() {
@@ -277,37 +276,34 @@ public class GameView extends View {
      * @param seatNumber
      */
     public void switchTurn(int seatNumber) {
+        if (gameMode == constants.GameMode.PROACTIVE) {
+            // All players are active in turnless mode.
+            for (int i = 1; i <= playerCount; i++) {
+                seats.getPlayer(i).setActive(true);
+            }
+            setMessage("Everybody can play, ther's no turn.");
+        } else {
+            for (int i = 1; i <= playerCount; i++) {
+                seats.getPlayer(i).setActive(i == seatNumber);
+            }
 
-
-        for (int i = 1; i <= playerCount; i++) {
-            seats.getPlayer(i).setActive(i == seatNumber);
+            if (seatNumber == getOwnerSeat()) {
+                setMessage("It's your turn. Click on the deck when you're done.");
+            } else {
+                setMessage("Please wait for your turn.");
+            }
         }
+
         if (!revertButton.isVisible()) {
             revertButton.setVisible(true);
             fillDeck();
         }
-
-
-        if (seatNumber == getOwnerSeat()) {
-            setMessage("It's your turn. Click on the deck when you're done.");
-        } else {
-            setMessage("Please wait for your turn.");
-        }
-        if (machiavelli != null)
-
-            if (machiavelli.getTable() != null)
-                if (machiavelli.getTable().getDeck() != null)
-                    if (machiavelli.getTable().getDeck().size() <= 0) {
-                        deckImageView.setImage(ViewHelper.getImage(Card.NO_CARD_IMAGE));
-                    } else {
-                        deckImageView.setImage(ViewHelper.getImage(Card.BACK_OF_CARD_IMAGE));
-                    }
     }
 
     /**
      * resets the move
      */
-    private void resetMove() {
+    private void rollbackMove() {
         playArea.rollbackMoves();
         getHand().rollbackMoves();
     }
@@ -324,4 +320,11 @@ public class GameView extends View {
         player.getHand().removeCards(playedCards.totalCount());
     }
 
+    public void setGameMode(constants.GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public constants.GameMode getGameMode() {
+        return gameMode;
+    }
 }

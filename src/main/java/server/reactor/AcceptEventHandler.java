@@ -4,6 +4,7 @@ import commands.Command;
 import server.ClientMessageSender;
 import server.models.Machiavelli;
 import server.models.Player;
+import utils.constants;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -40,7 +41,7 @@ public class AcceptEventHandler implements EventHandler {
                 Player player = machiavelli.addPlayer();
                 key.attach(player);
                 ClientMessageSender.getInstance().registerPlayer(player, clientSocket);
-                machiavelli.introducePlayer(player);
+                machiavelli.introducePlayer(player, constants.GameMode.REACTIVE);
 
                 machiavelli.startGame();
             }

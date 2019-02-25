@@ -12,7 +12,7 @@ public class ClientCommandProcessor {
      * Parses the command string and passes it to the next function.
      *
      * @param commandString Raw command string
-     * @param player player who sent the command.
+     * @param player        player who sent the command.
      */
     public static void processCommand(String commandString, Player player) {
         Command command = CommandFactory.buildCommand(commandString);
@@ -23,7 +23,7 @@ public class ClientCommandProcessor {
      * Executes the client command.
      *
      * @param command the command that client has sent.
-     * @param player player who sent the command.
+     * @param player  player who sent the command.
      */
     public static void processCommand(Command command, Player player) {
         System.out.println("Command received: " + command.serialize());
@@ -36,6 +36,7 @@ public class ClientCommandProcessor {
                 machiavelli.playerLogin(((PlayerLogin) command).getPlayerName(), player);
                 break;
             default:
+                command.setPlayer(player);
                 command.execute();
                 break;
         }

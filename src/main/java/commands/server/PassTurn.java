@@ -24,6 +24,6 @@ public class PassTurn extends ServerCommand {
      */
     @Override
     protected void doExecute() {
-        machiavelli.passTurn();
+        machiavelli.passTurn(getPlayer());
     }
 }

@@ -4,7 +4,11 @@ import client.ClientManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
+import server.Server;
 
 /**
  *
@@ -28,6 +32,12 @@ public class StartOptionsView extends View {
     @FXML
     private Text messageText;
 
+    @FXML
+    private ToggleButton modeReactive;
+    @FXML
+    private ToggleButton modeProactive;
+
+    private constants.GameMode serverMode;
 
     /************************
      **** PRIVATE STATICS ***
@@ -44,8 +54,26 @@ public class StartOptionsView extends View {
 
         try {
             loadFxml();
+            ToggleGroup toggleGroup = modeReactive.getToggleGroup();
+            toggleGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {
+                if (newVal == null) {
+                    oldVal.setSelected(true);
+                } else {
+                    setServerMode(newVal);
+                }
+            });
+
+            setServerMode(toggleGroup.getSelectedToggle());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setServerMode(Toggle selectedMode) {
+        if (selectedMode == modeReactive) {
+            serverMode = constants.GameMode.REACTIVE;
+        } else {
+            serverMode = constants.GameMode.PROACTIVE;
         }
     }
     /**
@@ -71,7 +99,7 @@ public class StartOptionsView extends View {
         int port = Integer.parseInt(newGamePort.getText());
 
         try {
-            ClientManager.getInstance().startServer(port, numberOfPlayers, adminUserName.getText());
+            ClientManager.getInstance().startServer(port, numberOfPlayers, adminUserName.getText(), serverMode);
             setMessageText("Started server at port " + port);
         } catch (Exception e) {
             setMessageText("Couldn't start server:" + e.getMessage());
@@ -93,7 +121,7 @@ public class StartOptionsView extends View {
         ClientManager.getInstance().loginServer(ip, port, userNameText);
     }
 
-    public void setMessageText(String message){
+    public void setMessageText(String message) {
         messageText.setText(message);
     }
 }

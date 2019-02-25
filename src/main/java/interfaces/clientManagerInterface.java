@@ -7,6 +7,7 @@ import commands.server.PlayerMove;
 import javafx.scene.input.MouseEvent;
 import server.models.CardSet;
 import server.models.cards.Card;
+import utils.constants;
 
 public interface clientManagerInterface {
 
@@ -16,7 +17,7 @@ public interface clientManagerInterface {
 
     ;
 
-    public void startServer(int port, int numberOfPlayers, String adminName) throws Exception;
+    public void startServer(int port, int numberOfPlayers, String adminName, constants.GameMode serverMode) throws Exception;
 
     public void loginServer(int port, String name);
 
@@ -24,7 +25,7 @@ public interface clientManagerInterface {
 
     public void dealHand(int seatNumber, CardSet hand);
 
-    public void introducePlayer(String playerName, int playerId, int seatNumber, boolean owner);
+    public void introducePlayer(String playerName, int playerId, int seatNumber);
 
     public void moveSelectedCards(CardSetView targetSet);
 

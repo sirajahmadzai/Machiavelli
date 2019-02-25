@@ -3,6 +3,7 @@ package server;
 import server.models.Machiavelli;
 import server.proactor.ProactorInitiator;
 import server.reactor.ReactorInitiator;
+import utils.constants;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,33 +24,26 @@ public class Server implements Runnable {
     private int port;
     private Machiavelli machiavelli;
 
-    enum OperationMode {
-        REACTIVE,
-        PROACTIVE
-    }
-
-    private OperationMode operationMode = OperationMode.PROACTIVE;
+    private constants.GameMode gameMode;
 
     /**
      * CONSTRUCTOR
      *
      * @param port
      * @param numPlayers
+     * @param serverMode
      * @param barrier
      * @throws IOException
      */
-    public Server(int port, int numPlayers, CyclicBarrier barrier) throws IOException {
+    public Server(int port, int numPlayers, constants.GameMode serverMode, CyclicBarrier barrier) throws IOException {
         this.barrier = barrier;
         this.port = port;
         machiavelli = Machiavelli.getInstance();
         machiavelli.initialize(numPlayers);
-
-        log.info("starting server on: localhost at port " + port);
-        System.out.println("starting server on: localhost at port " + port);
-    }
-
-    public void setOperationMode(OperationMode operationMode) {
-        this.operationMode = operationMode;
+        gameMode = serverMode;
+        String logText = "starting server on: localhost at port " + port + " in "+ gameMode + " mode";
+        log.info(logText);
+        System.out.println(logText);
     }
 
     /**
@@ -63,7 +57,7 @@ public class Server implements Runnable {
         try {
             ServerModeInitiator serverModeInitiator = null;
             InetSocketAddress address = new InetSocketAddress(port);
-            switch (operationMode) {
+            switch (gameMode) {
                 case REACTIVE:
                     serverModeInitiator = new ReactorInitiator(address);
                     break;

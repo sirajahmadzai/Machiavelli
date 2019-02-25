@@ -66,6 +66,6 @@ public class IntroducePlayer extends ClientCommand {
      */
     @Override
     public void doExecute() {
-        manager.introducePlayer(URLDecoder.decode(playerName), playerId, seatNumber, false);
+        manager.introducePlayer(URLDecoder.decode(playerName), playerId, seatNumber);
     }
 }

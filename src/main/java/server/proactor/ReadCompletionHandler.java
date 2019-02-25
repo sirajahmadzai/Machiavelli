@@ -23,7 +23,7 @@ public class ReadCompletionHandler implements CompletionHandler<Integer, Session
         // Get the player who sends this message, from the session.
         Player player = (Player) sessionState.getProperty("player");
 
-        if(bytesRead == -1){
+        if (bytesRead == -1) {
             //TODO: Use another ServerCommand to let the server know this client is disconnected. And don't use Machiavelli here.
             Machiavelli.getInstance().playerLeftTheGame(player);
             return;

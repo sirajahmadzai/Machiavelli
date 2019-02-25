@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.concurrent.CyclicBarrier;
 
 public class ClientManager implements clientManagerInterface {
+    private constants.GameMode gameMode;
     public void serverMessage(ClientMessage.MessageTypes messageType, String messageText) {
         gameView.setMessage(messageText);
     }
@@ -86,9 +87,10 @@ public class ClientManager implements clientManagerInterface {
      * @param port
      * @param numberOfPlayers
      * @param adminName
+     * @param serverMode
      * @throws Exception
      */
-    public void startServer(int port, int numberOfPlayers, String adminName) throws Exception {
+    public void startServer(int port, int numberOfPlayers, String adminName, constants.GameMode serverMode) throws Exception {
         if (serverStarted) {
             throw new UnsupportedOperationException(constants.PORT_ERROR_MESSAGE + server.getPort());
         }
@@ -96,7 +98,7 @@ public class ClientManager implements clientManagerInterface {
             //
             CyclicBarrier barrier = new CyclicBarrier(2);
             //This is the admin of the game. The admin starts the server and waits for other players to join.
-            server = new Server(port, numberOfPlayers,barrier);
+            server = new Server(port, numberOfPlayers, serverMode, barrier);
 
             Thread serverThread = new Thread(server);
             serverThread.setName("Server thread");
@@ -221,18 +223,22 @@ public class ClientManager implements clientManagerInterface {
      * @param playerName
      * @param playerId
      * @param seatNumber
-     * @param owner
      */
-    public void introducePlayer(String playerName, int playerId, int seatNumber, boolean owner) {
-
-        if (owner) {
-            gameView.setOwnerPlayer(playerId, seatNumber);
-        } else {
-
-        }
+    public void introducePlayer(String playerName, int playerId, int seatNumber) {
         gameView.fillSeat(playerName, playerId, seatNumber);
+    }
 
-
+    /**
+     * @param playerName
+     * @param playerId
+     * @param seatNumber
+     * @param gameMode
+     */
+    public void welcomePlayer(String playerName, int playerId, int seatNumber, constants.GameMode gameMode) {
+        this.gameMode = gameMode;
+        gameView.setGameMode(gameMode);
+        gameView.setOwnerPlayer(playerId, seatNumber);
+        introducePlayer(playerName, playerId, seatNumber);
     }
 
     public void connectionLost() {
@@ -267,29 +273,29 @@ public class ClientManager implements clientManagerInterface {
      * @param targetSet
      */
     public void moveSelectedCards(CardSetView targetSet) {
-        if (!isOwnerTurn()) {
+        if (!canPlay()) {
             return;
         }
 
-        if (!selectionManager.isEmpty()) {
-            // Move all selected cards to the new set.
-            for (CardView cardView : selectionManager.getSelectedCards()) {
-                targetSet.addCard(cardView.getCard());
-                cardView.removeFromParentSet();
-                gameView.setPlayAreaActive(false);
-            }
-            // Clear selections.
-            selectionManager.deselectAll();
+        if (selectionManager.isEmpty()) {
+            return;
+        }
+        // Move all selected cards to the new set.
+        for (CardView cardView : selectionManager.getSelectedCards()) {
+            targetSet.addCard(cardView.getCard());
+            cardView.removeFromParentSet();
+            gameView.setPlayAreaActive(false);
         }
 
+        // Clear selections.
+        selectionManager.deselectAll();
         gameView.takeSnapshot();
-        gameView.clearMessage();
     }
 
     //    Keep track of any card selected inside the views.
     //    Activate the play area so that the selected card can be moved to it.
     public void cardSelected(CardView selectedCard) {
-        if (!isOwnerTurn()) {
+        if (!canPlay()) {
             return;
         }
         selectionManager.addCard(selectedCard);
@@ -301,8 +307,8 @@ public class ClientManager implements clientManagerInterface {
         }
     }
 
-    private boolean isOwnerTurn() {
-        return currentTurn == gameView.getOwnerSeat();
+    private boolean canPlay() {
+        return gameMode == constants.GameMode.PROACTIVE || currentTurn == gameView.getOwnerSeat();
     }
 
     private void startTurn() {
@@ -311,7 +317,7 @@ public class ClientManager implements clientManagerInterface {
     }
 
     public boolean endTurn(MouseEvent event) {
-        if (!isOwnerTurn()) {
+        if (!canPlay()) {
             return false;
         }
 
@@ -371,8 +377,13 @@ public class ClientManager implements clientManagerInterface {
     }
 
     public void playMove(PlayerMove move) {
-        gameView.getPlayArea().setAllSets(move.getTable());
-        gameView.removeCardsFrom(move.getSeatNumber(), move.getPlayedCards());
+        if (move.getSeatNumber() != gameView.getOwnerSeat()) {
+
+            List<CardSet> table = move.getTable();
+            gameView.getPlayArea().setAllSets(table);
+            gameView.removeCardsFrom(move.getSeatNumber(), move.getPlayedCards());
+            gameView.getHand().rollbackToStartOfTurn();
+        }
         startTurn();
     }
 
