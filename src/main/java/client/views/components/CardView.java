@@ -1,10 +1,9 @@
 package client.views.components;
 
+import client.ViewHelper;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import server.models.cards.Card;
-
-import java.net.URL;
 
 public class CardView extends ImageView implements Comparable<CardView> {
     /**
@@ -29,14 +28,8 @@ public class CardView extends ImageView implements Comparable<CardView> {
      */
     public CardView(Card card) {
         super();
-
         String tem_url = card.getImgUrl();
-//        System.out.println(tem_url);
-
-//        Image image = ViewHelper.getImage(tem_url);
-        URL url = getClass().getClassLoader().getResource(tem_url);
-        Image image = new Image(url.toString());
-
+        Image image = ViewHelper.getImage(tem_url);
         setImage(image);
 
         setCard(card);

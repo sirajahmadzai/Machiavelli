@@ -1,6 +1,5 @@
 package commands;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import commands.client.*;
 import commands.server.PassTurn;
 import commands.server.PlayerLogin;
@@ -121,7 +120,7 @@ public abstract class Command {
             Scanner s = new Scanner(unwrapCommandString(cmdString));
             s.useDelimiter(PARAMETER_SEPERATOR);
             return s;
-        } catch (InvalidArgumentException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return null;
         }
@@ -172,13 +171,11 @@ public abstract class Command {
         return str + EOC;
     }
 
-    public static String unwrapCommandString(String str) throws InvalidArgumentException {
+    public static String unwrapCommandString(String str) throws IllegalArgumentException {
         if (str.endsWith(EOC)) {
             return str.substring(0, str.length() - EOC.length());
         } else {
-            String[] args = new String[1];
-            args[0] = "Command format is invalid: "+ str;
-            throw new InvalidArgumentException(args);
+            throw new IllegalArgumentException("Command format is invalid: " + str);
         }
     }
 

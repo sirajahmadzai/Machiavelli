@@ -3,51 +3,33 @@ package client;
 import interfaces.viewHelperInterface;
 import javafx.scene.image.Image;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ViewHelper implements viewHelperInterface {
     private static Map<String, Image> imageCache = new HashMap<>();
+    private static ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 
     /**
-     * gets the image from resourc
+     * Creates an image object using the resource path provided.
+     * This helper also catches the images to minimize the file IO.
      *
-     * @param resource
+     * @param resource the relative path to resource.
      * @return Image
      */
-//    public static Image getImage(String resource) {
     public static Image getImage(String resource) {
         if (imageCache.containsKey(resource)) {
             return imageCache.get(resource);
         }
 
-        ClassLoader classLoader = ViewHelper.class.getClassLoader();
-
         URL url = classLoader.getResource(resource);
-
-
-        /* My Code */
-//        System.out.println(url.toString());
-
-        /* End */
-        File file = null;
+        Image image = null;
         if (url != null) {
-            file = new File(url.getFile());
-        }
-        Image thisImage = null;
-        try {
-            if (file != null) {
-                thisImage = new Image(new FileInputStream(file));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            image = new Image(url.toString());
         }
 
-        imageCache.put(resource, thisImage);
-        return thisImage;
+        imageCache.put(resource, image);
+        return image;
     }
 }
