@@ -82,8 +82,9 @@ public class ClientMessageSender {
 
     public static void sendCommand(AsynchronousSocketChannel clientSocket, String command) {
         // Echo the message back to client
-        WriteCompletionHandler writeCompletionHandler = new WriteCompletionHandler(clientSocket);
+        WriteCompletionHandler writeCompletionHandler = WriteCompletionHandler.getHandler(clientSocket);
         ByteBuffer outputBuffer = ByteBuffer.wrap(command.toString().getBytes());
-        clientSocket.write(outputBuffer, new SessionState(), writeCompletionHandler);
+        
+        writeCompletionHandler.write(outputBuffer, new SessionState());
     }
 }
